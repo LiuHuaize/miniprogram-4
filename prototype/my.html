@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>我的订单</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script>
+    window.tailwind = {
+      config: {
+        theme: {
+          extend: {
+            colors: {
+              brand: '#2f7d75',
+              brandLight: '#e7f3f1',
+              muted: '#f6f7f9',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div class="phone">
+    <div class="h-full flex flex-col">
+      <div class="status-bar">
+        <div class="font-semibold">20:57</div>
+        <div class="status-icons">
+          <span>5G</span>
+          <span>LTE</span>
+          <span class="font-semibold">85%</span>
+        </div>
+      </div>
+
+      <div class="px-5 pt-2 pb-3 text-center text-base font-semibold">我的订单</div>
+
+      <div class="scroll-area flex-1 px-4 pb-24 space-y-4">
+        <div class="td-card p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="text-sm font-semibold">未来学习中心 · 26 年春季黑客松</div>
+            <span class="td-pill" style="background:#e8f6ee;color:#2ba471;">已支付</span>
+          </div>
+          <div class="flex items-center justify-between text-xs text-slate-500">
+            <span>订单号 QX202602210001</span>
+            <span>¥ 26800</span>
+          </div>
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span>报名时间 2026.02.18</span>
+            <span>查看详情 ></span>
+          </div>
+        </div>
+
+        <div class="td-card p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="text-sm font-semibold">IDEAS X SANYA: 2026 商业探索营</div>
+            <span class="td-pill" style="background:#f1f2f4;color:#6b7280;">未支付</span>
+          </div>
+          <div class="flex items-center justify-between text-xs text-slate-500">
+            <span>订单号 QX202601150021</span>
+            <span>¥ 19800</span>
+          </div>
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span>报名时间 2026.01.15</span>
+            <span>继续支付 ></span>
+          </div>
+        </div>
+
+        <div class="td-card p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="text-sm font-semibold">2025 IDEA 教育开放日</div>
+            <span class="td-pill" style="background:#fdf3d1;color:#b77a08;">已结束</span>
+          </div>
+          <div class="flex items-center justify-between text-xs text-slate-500">
+            <span>订单号 QX202512050080</span>
+            <span>¥ 0</span>
+          </div>
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span>报名时间 2025.12.05</span>
+            <span>查看详情 ></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-200 bg-white/90 px-6 py-3 backdrop-blur">
+        <div class="flex items-center justify-between text-xs">
+          <div class="flex flex-col items-center gap-1 text-slate-400">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 11l9-8 9 8v8a2 2 0 0 1-2 2h-4v-6H9v6H5a2 2 0 0 1-2-2z" />
+            </svg>
+            <span>活动</span>
+          </div>
+          <div class="flex flex-col items-center gap-1 text-brand">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            <span>我的</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="home-indicator"></div>
+  </div>
+</body>
+</html>

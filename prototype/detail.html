@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>活动详情</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script>
+    window.tailwind = {
+      config: {
+        theme: {
+          extend: {
+            colors: {
+              brand: '#2f7d75',
+              brandLight: '#e7f3f1',
+              muted: '#f6f7f9',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div class="phone">
+    <div class="h-full flex flex-col">
+      <div class="status-bar">
+        <div class="font-semibold">20:55</div>
+        <div class="status-icons">
+          <span>5G</span>
+          <span>LTE</span>
+          <span class="font-semibold">90%</span>
+        </div>
+      </div>
+
+      <div class="px-4 pt-1 pb-3 flex items-center justify-between text-sm">
+        <div class="flex items-center gap-2 text-slate-700">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+          <span class="font-medium">返回</span>
+        </div>
+        <div class="text-base font-semibold">活动详情</div>
+        <div class="flex items-center gap-2 text-slate-500">
+          <span class="text-lg">···</span>
+        </div>
+      </div>
+
+      <div class="scroll-area flex-1 px-4 pb-24 space-y-4">
+        <div class="td-card overflow-hidden">
+          <div class="relative h-52 bg-gradient-to-br from-slate-900 via-slate-700 to-slate-500">
+            <div class="absolute inset-0 bg-black/25"></div>
+            <div class="absolute left-4 top-4 text-xs text-white/80">未来学习中心 · 2026 春季</div>
+            <div class="absolute bottom-4 left-4 text-white">
+              <div class="text-lg font-semibold">AI HACKATHON</div>
+              <div class="text-xs opacity-80">黑客松 · 创意挑战</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="td-card p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-base font-semibold">未来学习中心 · 26 年春季黑客松</div>
+              <div class="text-xs text-slate-500">报名截止：2026.02.21</div>
+            </div>
+            <div class="text-brand text-lg font-semibold">¥ 26800</div>
+          </div>
+          <div class="grid grid-cols-3 gap-2 text-xs">
+            <div class="rounded-xl bg-muted px-3 py-2 text-slate-600">主题：AI 创新</div>
+            <div class="rounded-xl bg-muted px-3 py-2 text-slate-600">城市：北京</div>
+            <div class="rounded-xl bg-muted px-3 py-2 text-slate-600">时长：3 天</div>
+          </div>
+        </div>
+
+        <div class="td-card p-4 space-y-3 text-sm text-slate-600">
+          <div class="text-sm font-semibold text-slate-800">活动介绍</div>
+          <div class="rounded-2xl overflow-hidden border border-slate-100">
+            <div class="relative h-56 bg-gradient-to-br from-emerald-600 via-teal-500 to-cyan-400">
+              <div class="absolute inset-0 bg-black/15"></div>
+              <div class="absolute left-4 top-4 text-xs text-white/80">2026 暑期研究营</div>
+              <div class="absolute bottom-4 left-4 text-white">
+                <div class="text-xl font-semibold">IDEAS X 三亚</div>
+                <div class="text-xs opacity-80">商业探索 · 海岛成长体验</div>
+              </div>
+              <div class="absolute right-4 bottom-4 text-[10px] uppercase tracking-[0.2em] text-white/70">Poster</div>
+            </div>
+          </div>
+          <div class="rounded-xl bg-slate-50 px-3 py-2 text-xs text-slate-500">
+            图文详情以海报/长图展示（示意）。实际内容可替换为活动图文详情长图。
+          </div>
+        </div>
+
+        <div class="td-card p-4 space-y-2 text-sm text-slate-600">
+          <div class="text-sm font-semibold text-slate-800">报名须知</div>
+          <p>完成报名后请及时填写学员与监护人信息，支付成功后会收到短信与小程序消息提醒。</p>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-200 bg-white px-4 py-3 flex items-center justify-between">
+        <div>
+          <div class="text-xs text-slate-500">活动费用</div>
+          <div class="text-lg font-semibold text-slate-900">¥ 26800</div>
+        </div>
+        <button class="btn-primary px-6 py-2 text-sm font-semibold">我要报名</button>
+      </div>
+    </div>
+    <div class="home-indicator"></div>
+  </div>
+</body>
+</html>

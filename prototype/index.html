@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>启行活动报名 - 原型总览</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    window.tailwind = {
+      config: {
+        theme: {
+          extend: {
+            colors: {
+              brand: '#2f7d75',
+              brandLight: '#e7f3f1',
+            },
+            fontFamily: {
+              display: ['"ZCOOL XiaoWei"', 'serif'],
+              body: ['"Noto Sans SC"', 'sans-serif'],
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-[radial-gradient(circle_at_top,#eef6f4,transparent_55%),linear-gradient(120deg,#f7fafc,#eef2f7)] font-body text-slate-800">
+  <header class="max-w-6xl mx-auto px-6 pt-10 pb-6">
+    <div class="flex flex-col gap-2">
+      <div class="text-sm uppercase tracking-[0.3em] text-brand/70">Prototype Overview</div>
+      <h1 class="text-3xl font-semibold font-display">启行活动报名 · 小程序原型</h1>
+      <p class="text-sm text-slate-500">iPhone 15 Pro 尺寸 · TDesign 风格 · HTML + Tailwind CSS</p>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 pb-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+      <section class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-semibold">活动列表</h2>
+          <span class="text-xs text-slate-400">home.html</span>
+        </div>
+        <iframe src="home.html" class="w-[420px] h-[900px] rounded-[28px] border border-slate-200 shadow-xl bg-white"></iframe>
+      </section>
+
+      <section class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-semibold">活动详情</h2>
+          <span class="text-xs text-slate-400">detail.html</span>
+        </div>
+        <iframe src="detail.html" class="w-[420px] h-[900px] rounded-[28px] border border-slate-200 shadow-xl bg-white"></iframe>
+      </section>
+
+      <section class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-semibold">订单填写</h2>
+          <span class="text-xs text-slate-400">order-form.html</span>
+        </div>
+        <iframe src="order-form.html" class="w-[420px] h-[900px] rounded-[28px] border border-slate-200 shadow-xl bg-white"></iframe>
+      </section>
+
+      <section class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-semibold">支付成功</h2>
+          <span class="text-xs text-slate-400">pay-success.html</span>
+        </div>
+        <iframe src="pay-success.html" class="w-[420px] h-[900px] rounded-[28px] border border-slate-200 shadow-xl bg-white"></iframe>
+      </section>
+
+      <section class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-semibold">我的订单</h2>
+          <span class="text-xs text-slate-400">my.html</span>
+        </div>
+        <iframe src="my.html" class="w-[420px] h-[900px] rounded-[28px] border border-slate-200 shadow-xl bg-white"></iframe>
+      </section>
+
+      <section class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-semibold">订单详情</h2>
+          <span class="text-xs text-slate-400">order-detail.html</span>
+        </div>
+        <iframe src="order-detail.html" class="w-[420px] h-[900px] rounded-[28px] border border-slate-200 shadow-xl bg-white"></iframe>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

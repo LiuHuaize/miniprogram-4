@@ -1,0 +1,147 @@
+:root {
+  --td-brand: #2f7d75;
+  --td-brand-dark: #24665f;
+  --td-brand-light: #e7f3f1;
+  --td-success: #2ba471;
+  --td-danger: #e34d59;
+  --td-warning: #f6a347;
+  --td-text-1: #1f2a37;
+  --td-text-2: #4b5563;
+  --td-text-3: #94a3b8;
+  --td-border: #e5e7eb;
+  --td-bg: #f7f8fa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 12px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: transparent;
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  color: var(--td-text-1);
+}
+
+.phone {
+  width: 393px;
+  height: 852px;
+  border-radius: 36px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbfd 100%);
+  border: 1px solid #e6e9ee;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+  position: relative;
+}
+
+.phone::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 28px;
+  border-radius: 999px;
+  background: #0f172a;
+  opacity: 0.12;
+  z-index: 2;
+}
+
+.status-bar {
+  height: 44px;
+  padding: 10px 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #0f172a;
+  position: relative;
+  z-index: 3;
+}
+
+.status-icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.home-indicator {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 4px;
+  border-radius: 999px;
+  background: #0f172a;
+  opacity: 0.15;
+}
+
+.scroll-area {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll-area::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.td-card {
+  background: #ffffff;
+  border: 1px solid var(--td-border);
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+}
+
+.td-field {
+  border-bottom: 1px solid #edf0f3;
+}
+
+.td-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  background: var(--td-brand-light);
+  color: var(--td-brand);
+}
+
+.btn-primary {
+  background: var(--td-brand);
+  color: #ffffff;
+  border-radius: 999px;
+}
+
+.btn-primary:hover {
+  background: var(--td-brand-dark);
+}
+
+.btn-outline {
+  border: 1px solid var(--td-border);
+  border-radius: 999px;
+  color: var(--td-text-2);
+  background: #ffffff;
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-top-color: #ffffff;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

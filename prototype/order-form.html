@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>订单填写</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script>
+    window.tailwind = {
+      config: {
+        theme: {
+          extend: {
+            colors: {
+              brand: '#2f7d75',
+              brandLight: '#e7f3f1',
+              muted: '#f6f7f9',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div class="phone">
+    <div class="h-full flex flex-col">
+      <div class="status-bar">
+        <div class="font-semibold">20:55</div>
+        <div class="status-icons">
+          <span>5G</span>
+          <span>LTE</span>
+          <span class="font-semibold">88%</span>
+        </div>
+      </div>
+
+      <div class="px-4 pt-1 pb-3 flex items-center justify-between text-sm">
+        <div class="flex items-center gap-2 text-slate-700">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+          <span class="font-medium">返回</span>
+        </div>
+        <div class="text-base font-semibold">订单填写</div>
+        <div class="text-slate-400">···</div>
+      </div>
+
+      <div class="scroll-area flex-1 px-4 pb-24 space-y-4">
+        <div class="td-card p-4 flex gap-3">
+          <div class="h-16 w-20 rounded-xl bg-gradient-to-br from-slate-800 via-slate-700 to-slate-500"></div>
+          <div class="flex-1">
+            <div class="text-sm font-semibold">未来学习中心 · 26 年春季黑客松</div>
+            <div class="mt-1 text-xs text-slate-500">北京 · 3 天 · AI 创新营</div>
+          </div>
+          <div class="text-brand text-base font-semibold">¥ 26800</div>
+        </div>
+
+        <div class="space-y-3">
+          <div class="text-sm font-semibold text-slate-800">学员信息</div>
+          <div class="td-card px-4">
+            <div class="td-field flex items-center justify-between py-3 text-sm">
+              <span><span class="text-red-500">*</span> 学员姓名</span>
+              <span class="text-slate-400">请输入</span>
+            </div>
+            <div class="td-field flex items-center justify-between py-3 text-sm">
+              <span><span class="text-red-500">*</span> 学员身份证号</span>
+              <span class="text-slate-400">请输入</span>
+            </div>
+            <div class="mb-2 mt-1 flex items-center gap-2 rounded-lg bg-slate-50 px-2 py-1 text-[11px] text-slate-400">
+              <span class="h-1.5 w-1.5 rounded-full bg-rose-300"></span>
+              身份证号必填，请填写正确证件号
+            </div>
+            <div class="td-field flex items-center justify-between py-3 text-sm">
+              <span><span class="text-red-500">*</span> 身高(cm)</span>
+              <div class="flex items-center gap-2">
+                <span class="rounded-lg bg-muted px-3 py-1 text-xs text-slate-400">请输入</span>
+                <span class="text-xs text-slate-400">cm</span>
+              </div>
+            </div>
+            <div class="td-field flex items-center justify-between py-3 text-sm">
+              <span><span class="text-red-500">*</span> 体重(kg)</span>
+              <div class="flex items-center gap-2">
+                <span class="rounded-lg bg-muted px-3 py-1 text-xs text-slate-400">请输入</span>
+                <span class="text-xs text-slate-400">kg</span>
+              </div>
+            </div>
+            <div class="td-field flex items-center justify-between py-3 text-sm">
+              <span>忌口</span>
+              <span class="text-slate-400">选填</span>
+            </div>
+            <div class="td-field flex items-center justify-between py-3 text-sm">
+              <span>敏感源/过敏源</span>
+              <span class="text-slate-400">选填</span>
+            </div>
+            <div class="flex items-center justify-between py-3 text-sm">
+              <span><span class="text-red-500">*</span> 出行方式</span>
+              <div class="flex items-center gap-1 text-slate-400">
+                <span>请选择</span>
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div class="text-sm font-semibold text-slate-800">监护人信息</div>
+          <div class="td-card px-4">
+            <div class="td-field flex items-center justify-between py-3 text-sm">
+              <span><span class="text-red-500">*</span> 监护人姓名</span>
+              <span class="text-slate-400">请输入</span>
+            </div>
+            <div class="td-field flex items-center justify-between py-3 text-sm">
+              <span><span class="text-red-500">*</span> 监护人身份证号</span>
+              <span class="text-slate-400">请输入</span>
+            </div>
+            <div class="flex items-center justify-between py-3 text-sm">
+              <span><span class="text-red-500">*</span> 监护人电话</span>
+              <span class="text-slate-400">请输入</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="td-card p-4">
+          <div class="text-xs text-slate-500">提交订单后将调起蓝兔支付完成微信支付</div>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-200 bg-white px-4 py-3 flex items-center justify-between">
+        <div>
+          <div class="text-xs text-slate-500">合计金额</div>
+          <div class="text-lg font-semibold text-brand">¥ 26800</div>
+        </div>
+        <button class="btn-primary px-6 py-2 text-sm font-semibold flex items-center gap-2 opacity-60" disabled>
+          <span class="spinner"></span>
+          提交订单
+        </button>
+      </div>
+    </div>
+    <div class="home-indicator"></div>
+  </div>
+</body>
+</html>

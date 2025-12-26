@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>支付成功</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script>
+    window.tailwind = {
+      config: {
+        theme: {
+          extend: {
+            colors: {
+              brand: '#2f7d75',
+              brandLight: '#e7f3f1',
+              muted: '#f6f7f9',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div class="phone">
+    <div class="h-full flex flex-col">
+      <div class="status-bar">
+        <div class="font-semibold">20:56</div>
+        <div class="status-icons">
+          <span>5G</span>
+          <span>LTE</span>
+          <span class="font-semibold">86%</span>
+        </div>
+      </div>
+
+      <div class="px-4 pt-1 pb-3 flex items-center justify-between text-sm">
+        <div class="flex items-center gap-2 text-slate-700">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+          <span class="font-medium">返回</span>
+        </div>
+        <div class="text-base font-semibold">支付结果</div>
+        <div class="text-slate-400">···</div>
+      </div>
+
+      <div class="scroll-area flex-1 px-6 pb-20">
+        <div class="flex flex-col items-center text-center pt-6">
+          <div class="h-16 w-16 rounded-full bg-brandLight flex items-center justify-center">
+            <svg class="h-8 w-8 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+          </div>
+          <div class="mt-4 text-lg font-semibold">支付成功</div>
+          <div class="mt-1 text-sm text-slate-500">订单已完成，报名信息已提交</div>
+        </div>
+
+        <div class="td-card mt-6 p-4 space-y-3 text-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500">活动名称</span>
+            <span class="font-medium">未来学习中心 · 26 年春季黑客松</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500">订单号</span>
+            <span class="font-medium">QX202602210001</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500">支付金额</span>
+            <span class="font-semibold text-brand">¥ 26800</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500">支付状态</span>
+            <span class="text-emerald-600 font-medium">已支付</span>
+          </div>
+        </div>
+
+        <div class="mt-6 grid grid-cols-2 gap-3">
+          <button class="btn-outline px-4 py-2 text-sm font-medium">返回首页</button>
+          <button class="btn-primary px-4 py-2 text-sm font-semibold">查看订单</button>
+        </div>
+
+        <div class="mt-6 text-xs text-slate-400">如需修改信息，可前往“我的订单”联系老师协助。</div>
+      </div>
+    </div>
+    <div class="home-indicator"></div>
+  </div>
+</body>
+</html>
