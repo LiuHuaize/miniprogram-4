@@ -1,0 +1,337 @@
+<view class="page">
+  <view class="status-spacer"></view>
+
+  <view class="nav-bar">
+    <view class="nav-left" bindtap="onBack">
+      <view class="nav-icon-wrap">
+        <t-icon name="chevron-left" size="32rpx" />
+      </view>
+      <text class="nav-text">返回</text>
+    </view>
+    <text class="nav-title">营会详情</text>
+    <view class="nav-right">
+      <view class="nav-action">
+        <t-icon name="ellipsis" size="32rpx" />
+      </view>
+      <view class="nav-action">
+        <t-icon name="browse" size="32rpx" />
+      </view>
+    </view>
+  </view>
+
+  <scroll-view
+    class="scroll-area"
+    scroll-y
+    show-scrollbar="{{false}}"
+    scroll-top="{{scrollTop}}"
+    scroll-with-animation="true"
+  >
+    <view class="hero-card">
+      <view class="hero-image">
+        <image
+          class="hero-photo"
+          mode="aspectFill"
+          src="https://images.unsplash.com/photo-1747487492939-7f0357333c0a?fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=3000"
+        />
+        <view class="hero-mask"></view>
+        <view class="hero-badge">2026 IDEAS RESEARCH CAMP</view>
+        <view class="hero-title">IDEAS X SANYA</view>
+        <view class="hero-sub">商业探索 · 海岛成长体验</view>
+      </view>
+    </view>
+
+    <view class="info-card">
+      <view class="info-main">
+        <view class="info-left">
+          <text class="info-title">IDEAS X SANYA：2026 三亚商业 & 探险研学</text>
+          <text class="info-sub">报名截止：2026.02.21</text>
+        </view>
+        <view class="info-right">
+          <text class="info-price">¥ 17800.00 起</text>
+          <text class="info-tip">含食宿 · 6 天 5 晚</text>
+        </view>
+      </view>
+      <view class="info-meta">
+        <view class="meta-item">
+          <t-icon name="time" size="24rpx" />
+          <text>共 6 天</text>
+        </view>
+        <view class="meta-item">
+          <t-icon name="user" size="24rpx" />
+          <text>9-12 岁</text>
+        </view>
+        <view class="meta-item">
+          <t-icon name="location" size="24rpx" />
+          <text>三亚 · 海南</text>
+        </view>
+      </view>
+    </view>
+
+    <scroll-view class="tabs" scroll-x show-scrollbar="{{false}}">
+      <view class="tab-list">
+        <view class="tab-item {{activeTab === 'theme' ? 'active' : ''}}" data-key="theme" bindtap="onTab">主题</view>
+        <view class="tab-item {{activeTab === 'content' ? 'active' : ''}}" data-key="content" bindtap="onTab">内容</view>
+        <view class="tab-item {{activeTab === 'schedule' ? 'active' : ''}}" data-key="schedule" bindtap="onTab">课表</view>
+        <view class="tab-item {{activeTab === 'itinerary' ? 'active' : ''}}" data-key="itinerary" bindtap="onTab">行程</view>
+        <view class="tab-item {{activeTab === 'stay' ? 'active' : ''}}" data-key="stay" bindtap="onTab">食宿</view>
+        <view class="tab-item {{activeTab === 'service' ? 'active' : ''}}" data-key="service" bindtap="onTab">服务</view>
+      </view>
+    </scroll-view>
+
+    <view class="section-block" id="anchor-theme" wx:if="{{activeTab === 'theme'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">主题</text>
+          <text class="section-en">THEME</text>
+        </view>
+        <text class="section-brand">IDEAS EDUCATION</text>
+      </view>
+      <view class="section-card">
+        <view class="section-figure theme-figure">
+          <image
+            class="figure-photo"
+            mode="aspectFill"
+            src="https://images.pexels.com/photos/32556797/pexels-photo-32556797.jpeg?cs=srgb&dl=pexels-h-th-t-quyen-2153105414-32556797.jpg&fm=jpg"
+          />
+          <view class="figure-content">
+            <view class="figure-chip">商业探索</view>
+            <text class="figure-title">IDEAS X SANYA</text>
+            <text class="figure-sub">2026 研学季</text>
+          </view>
+        </view>
+        <view class="section-body">
+          <text class="section-subtitle">以真实场景驱动的商业创新主题</text>
+          <view class="chip-row">
+            <text class="chip">项目制学习</text>
+            <text class="chip">城市商业观察</text>
+            <text class="chip">团队共创</text>
+          </view>
+          <text class="section-desc">聚焦海岛文旅、可持续商业与青年创新，让孩子在真实场景中建立商业感知与表达力。</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-block" id="anchor-content" wx:if="{{activeTab === 'content'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">内容</text>
+          <text class="section-en">CONTENT</text>
+        </view>
+        <text class="section-brand">IDEAS EDUCATION</text>
+      </view>
+      <view class="section-card">
+        <view class="section-figure content-figure">
+          <image
+            class="figure-photo"
+            mode="aspectFill"
+            src="https://images.pexels.com/photos/32556802/pexels-photo-32556802.jpeg?cs=srgb&dl=pexels-h-th-t-quyen-2153105414-32556802.jpg&fm=jpg"
+          />
+          <view class="figure-content">
+            <view class="figure-chip">课程模块</view>
+            <text class="figure-title">主题课程</text>
+            <text class="figure-sub">从洞察到表达</text>
+          </view>
+        </view>
+        <view class="section-body">
+          <view class="list-item">
+            <view class="dot"></view>
+            <text>商业模型搭建：用画布快速理解商业逻辑。</text>
+          </view>
+          <view class="list-item">
+            <view class="dot"></view>
+            <text>品牌故事设计：训练定位、价值主张与用户画像。</text>
+          </view>
+          <view class="list-item">
+            <view class="dot"></view>
+            <text>路演表达训练：结构化表达 + 现场模拟。</text>
+          </view>
+          <text class="section-desc">配套企业参访、任务挑战、导师点评与作品展示，全程强调实践与输出。</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-block" id="anchor-schedule" wx:if="{{activeTab === 'schedule'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">课表</text>
+          <text class="section-en">SCHEDULE</text>
+        </view>
+        <text class="section-brand">IDEAS EDUCATION</text>
+      </view>
+      <view class="section-card">
+        <view class="section-figure schedule-figure">
+          <image
+            class="figure-photo"
+            mode="aspectFill"
+            src="https://images.unsplash.com/photo-1647782616397-010978c05e1e?fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=3000"
+          />
+          <view class="figure-content">
+            <view class="figure-chip">6 天课程节奏</view>
+            <text class="figure-title">上午 · 下午 · 晚间</text>
+            <text class="figure-sub">学习 + 实践 + 共创</text>
+          </view>
+        </view>
+        <view class="section-body">
+          <view class="schedule-grid">
+            <view class="schedule-item">
+              <text class="schedule-day">Day 1</text>
+              <text class="schedule-title">破冰 · 城市商业观察</text>
+              <text class="schedule-time">下午｜任务发布</text>
+            </view>
+            <view class="schedule-item">
+              <text class="schedule-day">Day 2-3</text>
+              <text class="schedule-title">主题课程 · 实地调研</text>
+              <text class="schedule-time">上午｜课程 晚间｜共创</text>
+            </view>
+            <view class="schedule-item">
+              <text class="schedule-day">Day 4-6</text>
+              <text class="schedule-title">方案成型 · 路演展示</text>
+              <text class="schedule-time">全天｜项目推进</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-block" id="anchor-itinerary" wx:if="{{activeTab === 'itinerary'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">行程</text>
+          <text class="section-en">ITINERARY</text>
+        </view>
+        <text class="section-brand">IDEAS EDUCATION</text>
+      </view>
+      <view class="section-card">
+        <view class="section-figure itinerary-figure">
+          <image
+            class="figure-photo"
+            mode="aspectFill"
+            src="https://images.pexels.com/photos/22719318/pexels-photo-22719318.jpeg?cs=srgb&dl=pexels-alexmoliski-22719318.jpg&fm=jpg"
+          />
+          <view class="figure-content">
+            <view class="figure-chip">城市探索</view>
+            <text class="figure-title">三亚湾 · 热带雨林</text>
+            <text class="figure-sub">行走中的课堂</text>
+          </view>
+        </view>
+        <view class="section-body">
+          <view class="timeline-item">
+            <view class="timeline-dot"></view>
+            <view class="timeline-content">
+              <text class="timeline-title">三亚湾 · 城市商业观察</text>
+              <text class="timeline-desc">走进地标商业区，完成调研与用户访谈任务。</text>
+            </view>
+          </view>
+          <view class="timeline-item">
+            <view class="timeline-dot"></view>
+            <view class="timeline-content">
+              <text class="timeline-title">海岛生态 · 可持续挑战</text>
+              <text class="timeline-desc">结合环保主题进行产品创意与解决方案设计。</text>
+            </view>
+          </view>
+          <view class="timeline-item">
+            <view class="timeline-dot"></view>
+            <view class="timeline-content">
+              <text class="timeline-title">企业参访 · 导师点评</text>
+              <text class="timeline-desc">与行业导师面对面交流，完成路演展示。</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-block" id="anchor-stay" wx:if="{{activeTab === 'stay'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">食宿</text>
+          <text class="section-en">STAY</text>
+        </view>
+        <text class="section-brand">IDEAS EDUCATION</text>
+      </view>
+      <view class="section-card">
+        <view class="section-figure stay-figure">
+          <image
+            class="figure-photo"
+            mode="aspectFill"
+            src="https://images.pexels.com/photos/35171524/pexels-photo-35171524.jpeg?cs=srgb&dl=pexels-magda-ehlers-pexels-35171524.jpg&fm=jpg"
+          />
+          <view class="figure-content">
+            <view class="figure-chip">安心食宿</view>
+            <text class="figure-title">度假酒店</text>
+            <text class="figure-sub">双人间 · 24 小时管理</text>
+          </view>
+        </view>
+        <view class="section-body">
+          <view class="stay-grid">
+            <view class="stay-card">
+              <text class="stay-title">住宿</text>
+              <text class="stay-desc">精选度假型酒店，双人间配置，晚上值班老师巡查。</text>
+            </view>
+            <view class="stay-card">
+              <text class="stay-title">餐食</text>
+              <text class="stay-desc">营养三餐 + 能量加餐，兼顾口味与均衡饮食。</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-block" id="anchor-service" wx:if="{{activeTab === 'service'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">服务</text>
+          <text class="section-en">SERVICE</text>
+        </view>
+        <text class="section-brand">IDEAS EDUCATION</text>
+      </view>
+      <view class="section-card">
+        <view class="section-figure service-figure">
+          <image
+            class="figure-photo"
+            mode="aspectFill"
+            src="https://images.pexels.com/photos/7875902/pexels-photo-7875902.jpeg?cs=srgb&dl=pexels-karola-g-7875902.jpg&fm=jpg"
+          />
+          <view class="figure-content">
+            <view class="figure-chip">全程守护</view>
+            <text class="figure-title">导师 + 班主任</text>
+            <text class="figure-sub">1:8 小组陪伴</text>
+          </view>
+        </view>
+        <view class="section-body">
+          <view class="service-grid">
+            <view class="service-item">
+              <view class="service-icon">导</view>
+              <text class="service-title">导师体系</text>
+              <text class="service-desc">行业导师带队，项目共创。</text>
+            </view>
+            <view class="service-item">
+              <view class="service-icon">安</view>
+              <text class="service-title">安全保障</text>
+              <text class="service-desc">保险 + 医务应急，全程报备。</text>
+            </view>
+            <view class="service-item">
+              <view class="service-icon">伴</view>
+              <text class="service-title">成长陪伴</text>
+              <text class="service-desc">每日成长记录，家长群同步。</text>
+            </view>
+            <view class="service-item">
+              <view class="service-icon">证</view>
+              <text class="service-title">结营证书</text>
+              <text class="service-desc">成果集 + 证书 + 作品展示。</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="bottom-bar">
+    <view>
+      <text class="bottom-label">活动费用</text>
+      <text class="bottom-price">¥ 17800</text>
+    </view>
+    <t-button class="apply-btn" theme="primary" shape="round" size="small" bindtap="onApply">我要报名</t-button>
+  </view>
+
+  <view class="home-indicator"></view>
+</view>

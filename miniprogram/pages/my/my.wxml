@@ -1,0 +1,56 @@
+<view class="page">
+  <view class="status-spacer"></view>
+
+  <view class="page-title">我的订单</view>
+
+  <scroll-view class="scroll-area" scroll-y show-scrollbar="{{false}}">
+    <view class="order-list">
+      <block wx:for="{{orders}}" wx:key="id">
+        <view class="order-card">
+          <view class="order-row order-row--title">
+            <text class="order-title">{{item.title}}</text>
+            <t-tag
+              class="order-tag"
+              size="small"
+              shape="round"
+              variant="light"
+              style="{{item.statusStyle}}"
+            >{{item.status}}</t-tag>
+          </view>
+          <view class="order-row order-row--meta">
+            <text>订单号 {{item.id}}</text>
+            <text>{{item.price}}</text>
+          </view>
+          <view class="order-row order-row--foot">
+            <text>{{item.time}}</text>
+            <text class="order-action">{{item.action}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
+
+  <t-tab-bar
+    class="bottom-bar"
+    value="{{tabValue}}"
+    fixed="{{true}}"
+    bordered="{{true}}"
+    safe-area-inset-bottom="{{true}}"
+    bindchange="onTabChange"
+  >
+    <t-tab-bar-item value="activity">
+      <view slot="icon" class="tab-icon">
+        <t-icon name="home" size="40rpx" />
+      </view>
+      活动
+    </t-tab-bar-item>
+    <t-tab-bar-item value="mine">
+      <view slot="icon" class="tab-icon">
+        <t-icon name="user-1" size="40rpx" />
+      </view>
+      我的
+    </t-tab-bar-item>
+  </t-tab-bar>
+
+  <view class="home-indicator"></view>
+</view>

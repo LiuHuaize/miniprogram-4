@@ -1,27 +1,69 @@
-<!--index.wxml-->
-<scroll-view class="scrollarea" scroll-y type="list">
-  <view class="container">
-    <view class="userinfo">
-      <block wx:if="{{canIUseNicknameComp && !hasUserInfo}}">
-        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-          <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
-        </button>
-        <view class="nickname-wrapper">
-          <text class="nickname-label">昵称</text>
-          <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" />
+<view class="page">
+  <view class="status-spacer"></view>
+
+  <view class="page-title">亿小步未来独角兽</view>
+
+  <view class="search-section">
+    <t-search
+      class="search"
+      shape="round"
+      placeholder="请输入活动名称"
+      clearable="{{false}}"
+      value=""
+    />
+  </view>
+
+  <scroll-view class="scroll-area" scroll-y show-scrollbar="{{false}}">
+    <view class="card-list">
+      <block wx:for="{{cards}}" wx:key="id">
+        <view class="card" bindtap="onCardTap" data-id="{{item.id}}">
+          <view class="card-hero {{item.themeClass}}" style="{{item.heroStyle}}">
+            <view class="card-hero-overlay" style="{{item.overlayStyle}}"></view>
+            <view class="card-hero-top">
+              <t-tag
+                class="card-tag"
+                size="small"
+                shape="round"
+                variant="light"
+                style="{{item.tagStyle}}"
+              >{{item.status}}</t-tag>
+              <text wx:if="{{item.subLabel}}" class="card-hero-sub">{{item.subLabel}}</text>
+            </view>
+            <view class="card-hero-bottom">
+              <text class="card-hero-title">{{item.heroTitle}}</text>
+              <text class="card-hero-desc">{{item.heroDesc}}</text>
+            </view>
+          </view>
+          <view class="card-body">
+            <text class="card-title">{{item.title}}</text>
+            <text class="card-meta">{{item.meta}}</text>
+          </view>
         </view>
       </block>
-      <block wx:elif="{{!hasUserInfo}}">
-        <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
-        <view wx:else> 请使用2.10.4及以上版本基础库 </view>
-      </block>
-      <block wx:else>
-        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-      </block>
     </view>
-    <view class="usermotto">
-      <text class="user-motto">{{motto}}</text>
-    </view>
-  </view>
-</scroll-view>
+  </scroll-view>
+
+  <t-tab-bar
+    class="bottom-bar"
+    value="{{tabValue}}"
+    fixed="{{true}}"
+    bordered="{{true}}"
+    safe-area-inset-bottom="{{true}}"
+    bindchange="onTabChange"
+  >
+    <t-tab-bar-item value="activity">
+      <view slot="icon" class="tab-icon">
+        <t-icon name="home" size="40rpx" />
+      </view>
+      活动
+    </t-tab-bar-item>
+    <t-tab-bar-item value="mine">
+      <view slot="icon" class="tab-icon">
+        <t-icon name="user-1" size="40rpx" />
+      </view>
+      我的
+    </t-tab-bar-item>
+  </t-tab-bar>
+
+  <view class="home-indicator"></view>
+</view>

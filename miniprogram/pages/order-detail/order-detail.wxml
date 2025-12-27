@@ -1,0 +1,98 @@
+<view class="page">
+  <view class="status-spacer"></view>
+
+  <view class="nav-bar">
+    <view class="nav-left" bindtap="onBack">
+      <view class="nav-icon-wrap">
+        <t-icon name="chevron-left" size="32rpx" />
+      </view>
+      <text class="nav-text">返回</text>
+    </view>
+    <text class="nav-title">订单详情</text>
+    <view class="nav-right">
+      <view class="nav-action">
+        <t-icon name="ellipsis" size="32rpx" />
+      </view>
+    </view>
+  </view>
+
+  <scroll-view class="scroll-area" scroll-y show-scrollbar="{{false}}">
+    <view class="card summary-card">
+      <view class="summary-thumb"></view>
+      <view class="summary-main">
+        <text class="summary-title">未来学习中心 · 26 年春季黑客松</text>
+        <text class="summary-sub">北京 · 3 天 · AI 创新营</text>
+      </view>
+      <text class="summary-price">¥ 26800</text>
+    </view>
+
+    <view class="card info-card">
+      <view class="info-row">
+        <text class="info-label">支付状态</text>
+        <text class="info-value info-value--success">已支付</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">订单号</text>
+        <text class="info-value">QX202602210001</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">下单时间</text>
+        <text class="info-value">2026.02.18 18:42</text>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">学员信息</view>
+      <view class="card form-card">
+        <view class="field-row">
+          <text class="field-label">学员姓名</text>
+          <text class="field-value">刘梓泽</text>
+        </view>
+        <view class="field-row">
+          <text class="field-label">身份证号</text>
+          <text class="field-value">340***********1234</text>
+        </view>
+        <view class="field-row">
+          <text class="field-label">身高 / 体重</text>
+          <text class="field-value">175 cm / 55 kg</text>
+        </view>
+        <view class="field-row field-row--last">
+          <text class="field-label">出行方式</text>
+          <text class="field-value">统一大巴</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">监护人信息</view>
+      <view class="card form-card">
+        <view class="field-row">
+          <text class="field-label">监护人姓名</text>
+          <text class="field-value">刘怀泽</text>
+        </view>
+        <view class="field-row">
+          <text class="field-label">身份证号</text>
+          <text class="field-value">340***********5678</text>
+        </view>
+        <view class="field-row field-row--last">
+          <text class="field-label">联系电话</text>
+          <text class="field-value">138****8899</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="card note-card">
+      <text class="note-text">如需修改信息，请联系老师或在订单列表中发起咨询。</text>
+    </view>
+  </scroll-view>
+
+  <view class="bottom-bar">
+    <view>
+      <text class="bottom-label">合计金额</text>
+      <text class="bottom-price">¥ 26800</text>
+    </view>
+    <t-button class="paid-btn" theme="primary" shape="round" size="small" disabled>已支付</t-button>
+  </view>
+
+  <view class="home-indicator"></view>
+</view>

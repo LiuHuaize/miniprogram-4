@@ -1,0 +1,56 @@
+<view class="page">
+  <view class="status-spacer"></view>
+
+  <view class="nav-bar">
+    <view class="nav-left" bindtap="onBack">
+      <view class="nav-icon-wrap">
+        <t-icon name="chevron-left" size="32rpx" />
+      </view>
+      <text class="nav-text">返回</text>
+    </view>
+    <text class="nav-title">支付结果</text>
+    <view class="nav-right">
+      <view class="nav-action">
+        <t-icon name="ellipsis" size="32rpx" />
+      </view>
+    </view>
+  </view>
+
+  <scroll-view class="scroll-area" scroll-y show-scrollbar="{{false}}">
+    <view class="result">
+      <view class="result-icon">
+        <t-icon name="check-circle" size="52rpx" />
+      </view>
+      <text class="result-title">支付成功</text>
+      <text class="result-sub">订单已完成，报名信息已提交</text>
+    </view>
+
+    <view class="card detail-card">
+      <view class="detail-row">
+        <text class="detail-label">活动名称</text>
+        <text class="detail-value">未来学习中心 · 26 年春季黑客松</text>
+      </view>
+      <view class="detail-row">
+        <text class="detail-label">订单号</text>
+        <text class="detail-value">QX202602210001</text>
+      </view>
+      <view class="detail-row">
+        <text class="detail-label">支付金额</text>
+        <text class="detail-value detail-value--price">¥ 26800</text>
+      </view>
+      <view class="detail-row">
+        <text class="detail-label">支付状态</text>
+        <text class="detail-value detail-value--success">已支付</text>
+      </view>
+    </view>
+
+    <view class="action-grid">
+      <t-button class="btn-outline" shape="round" ghost bindtap="onGoHome">返回首页</t-button>
+      <t-button class="btn-primary" theme="primary" shape="round" bindtap="onViewOrder">查看订单</t-button>
+    </view>
+
+    <view class="hint">如需修改信息，可前往“我的订单”联系老师协助。</view>
+  </scroll-view>
+
+  <view class="home-indicator"></view>
+</view>

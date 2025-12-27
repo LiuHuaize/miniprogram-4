@@ -1,6 +1,11 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/detail/detail",
+    "pages/my/my",
+    "pages/order-form/order-form",
+    "pages/order-detail/order-detail",
+    "pages/pay-success/pay-success",
     "pages/logs/logs"
   ],
   "window": {

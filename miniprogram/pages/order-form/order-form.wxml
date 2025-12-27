@@ -1,0 +1,120 @@
+<view class="page">
+  <view class="status-spacer"></view>
+
+  <view class="nav-bar">
+    <view class="nav-left" bindtap="onBack">
+      <view class="nav-icon-wrap">
+        <t-icon name="chevron-left" size="32rpx" />
+      </view>
+      <text class="nav-text">返回</text>
+    </view>
+    <text class="nav-title">订单填写</text>
+    <view class="nav-right">
+      <view class="nav-action">
+        <t-icon name="ellipsis" size="32rpx" />
+      </view>
+    </view>
+  </view>
+
+  <scroll-view class="scroll-area" scroll-y show-scrollbar="{{false}}">
+    <view class="card summary-card">
+      <view class="summary-thumb"></view>
+      <view class="summary-main">
+        <text class="summary-title">未来学习中心 · 26 年春季黑客松</text>
+        <text class="summary-sub">北京 · 3 天 · AI 创新营</text>
+      </view>
+      <text class="summary-price">¥ 26800</text>
+    </view>
+
+    <view class="section">
+      <view class="section-title">学员信息</view>
+      <view class="card form-card">
+        <view class="field-row">
+          <view class="field-label"><text class="req">*</text> 学员姓名</view>
+          <t-input class="field-input" placeholder="请输入" borderless align="right" />
+        </view>
+        <view class="field-row">
+          <view class="field-label"><text class="req">*</text> 学员身份证号</view>
+          <t-input class="field-input" placeholder="请输入" borderless align="right" />
+        </view>
+        <view class="field-tip">
+          <view class="tip-dot"></view>
+          <text>身份证号必填，请填写正确证件号</text>
+        </view>
+        <view class="field-row">
+          <view class="field-label"><text class="req">*</text> 身高(cm)</view>
+          <view class="field-inline">
+            <t-input class="field-input field-input--compact" placeholder="请输入" borderless align="right" />
+            <text class="field-unit">cm</text>
+          </view>
+        </view>
+        <view class="field-row">
+          <view class="field-label"><text class="req">*</text> 体重(kg)</view>
+          <view class="field-inline">
+            <t-input class="field-input field-input--compact" placeholder="请输入" borderless align="right" />
+            <text class="field-unit">kg</text>
+          </view>
+        </view>
+        <view class="field-row">
+          <view class="field-label">忌口</view>
+          <t-input class="field-input" placeholder="选填" borderless align="right" />
+        </view>
+        <view class="field-row">
+          <view class="field-label">敏感源/过敏源</view>
+          <t-input class="field-input" placeholder="选填" borderless align="right" />
+        </view>
+        <view class="field-row field-row--last" bindtap="onOpenPicker">
+          <view class="field-label"><text class="req">*</text> 出行方式</view>
+          <view class="picker-value">
+            <text class="picker-text">{{travelMode || '请选择'}}</text>
+            <t-icon name="chevron-right" size="28rpx" />
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">监护人信息</view>
+      <view class="card form-card">
+        <view class="field-row">
+          <view class="field-label"><text class="req">*</text> 监护人姓名</view>
+          <t-input class="field-input" placeholder="请输入" borderless align="right" />
+        </view>
+        <view class="field-row">
+          <view class="field-label"><text class="req">*</text> 监护人身份证号</view>
+          <t-input class="field-input" placeholder="请输入" borderless align="right" />
+        </view>
+        <view class="field-row field-row--last">
+          <view class="field-label"><text class="req">*</text> 监护人电话</view>
+          <t-input class="field-input" placeholder="请输入" borderless align="right" />
+        </view>
+      </view>
+    </view>
+
+    <view class="card note-card">
+      <text class="note-text">提交订单后将调起蓝兔支付完成微信支付</text>
+    </view>
+  </scroll-view>
+
+  <view class="bottom-bar">
+    <view>
+      <text class="bottom-label">合计金额</text>
+      <text class="bottom-price">¥ 26800</text>
+    </view>
+    <t-button class="submit-btn" theme="primary" shape="round" size="small" loading disabled>提交订单</t-button>
+  </view>
+
+  <t-picker
+    visible="{{pickerVisible}}"
+    title="出行方式"
+    confirm-btn="确定"
+    cancel-btn="取消"
+    bind:confirm="onConfirmPicker"
+    bind:cancel="onClosePicker"
+    bind:close="onClosePicker"
+  >
+    <t-picker-item options="{{travelModes}}" />
+  </t-picker>
+
+  <view class="home-indicator"></view>
+</view>
