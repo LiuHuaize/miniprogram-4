@@ -4,6 +4,8 @@
     "pages/detail/detail",
     "pages/my/my",
     "pages/order-form/order-form",
+    "pages/camper-list/camper-list",
+    "pages/camper-info/camper-info",
     "pages/order-detail/order-detail",
     "pages/pay-success/pay-success",
     "pages/logs/logs"

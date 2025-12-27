@@ -8,7 +8,7 @@
       </view>
       <text class="nav-text">返回</text>
     </view>
-    <text class="nav-title">订单填写</text>
+    <text class="nav-title">订单详情</text>
     <view class="nav-right">
       <view class="nav-action">
         <t-icon name="ellipsis" size="32rpx" />
@@ -18,90 +18,79 @@
 
   <scroll-view class="scroll-area" scroll-y show-scrollbar="{{false}}">
     <view class="card summary-card">
-      <view class="summary-thumb"></view>
+      <image
+        class="summary-thumb"
+        mode="aspectFill"
+        src="https://images.unsplash.com/photo-1747487492939-7f0357333c0a?fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=1200"
+      />
       <view class="summary-main">
-        <text class="summary-title">未来学习中心 · 26 年春季黑客松</text>
-        <text class="summary-sub">北京 · 3 天 · AI 创新营</text>
+        <text class="summary-title">{{summary.title}}</text>
+        <text class="summary-sub">{{summary.sub}}</text>
       </view>
-      <text class="summary-price">¥ 26800</text>
+      <text class="summary-price">¥ {{summary.price}}</text>
+    </view>
+
+    <view class="card period-card" bindtap="onChoosePeriod">
+      <view class="period-left">
+        <text class="period-label">期数</text>
+        <text class="period-value">{{periods[selectedPeriodIndex].name}}（{{periods[selectedPeriodIndex].date}}）</text>
+      </view>
+      <t-icon name="chevron-right" size="28rpx" />
     </view>
 
     <view class="section">
-      <view class="section-title">学员信息</view>
+      <view class="section-title">营员数量</view>
+      <view class="card count-card">
+        <view class="count-row">
+          <text class="count-label">营员数量</text>
+          <view class="count-stepper">
+            <view class="step-btn {{campers.length <= 1 ? 'disabled' : ''}}" data-type="minus" bindtap="onChangeCount">-</view>
+            <text class="step-value">{{campers.length}}</text>
+            <view class="step-btn {{campers.length >= maxCampers ? 'disabled' : ''}}" data-type="plus" bindtap="onChangeCount">+</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">营员信息</view>
+      <view
+        class="card camper-card"
+        wx:for="{{campers}}"
+        wx:key="index"
+        data-index="{{index}}"
+        bindtap="onOpenCamper"
+      >
+        <view class="camper-left">
+          <text class="camper-title">营员{{index + 1}}</text>
+          <text class="camper-sub">{{item.name || '选择营员'}}</text>
+        </view>
+        <t-icon name="chevron-right" size="28rpx" />
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">其他信息</view>
       <view class="card form-card">
-        <view class="field-row">
-          <view class="field-label"><text class="req">*</text> 学员姓名</view>
-          <t-input class="field-input" placeholder="请输入" borderless align="right" />
-        </view>
-        <view class="field-row">
-          <view class="field-label"><text class="req">*</text> 学员身份证号</view>
-          <t-input class="field-input" placeholder="请输入" borderless align="right" />
-        </view>
-        <view class="field-tip">
-          <view class="tip-dot"></view>
-          <text>身份证号必填，请填写正确证件号</text>
-        </view>
-        <view class="field-row">
-          <view class="field-label"><text class="req">*</text> 身高(cm)</view>
-          <view class="field-inline">
-            <t-input class="field-input field-input--compact" placeholder="请输入" borderless align="right" />
-            <text class="field-unit">cm</text>
-          </view>
-        </view>
-        <view class="field-row">
-          <view class="field-label"><text class="req">*</text> 体重(kg)</view>
-          <view class="field-inline">
-            <t-input class="field-input field-input--compact" placeholder="请输入" borderless align="right" />
-            <text class="field-unit">kg</text>
-          </view>
-        </view>
-        <view class="field-row">
-          <view class="field-label">忌口</view>
-          <t-input class="field-input" placeholder="选填" borderless align="right" />
-        </view>
-        <view class="field-row">
-          <view class="field-label">敏感源/过敏源</view>
-          <t-input class="field-input" placeholder="选填" borderless align="right" />
-        </view>
         <view class="field-row field-row--last" bindtap="onOpenPicker">
-          <view class="field-label"><text class="req">*</text> 出行方式</view>
-          <view class="picker-value">
-            <text class="picker-text">{{travelMode || '请选择'}}</text>
-            <t-icon name="chevron-right" size="28rpx" />
+          <view class="field-label">出行方式</view>
+          <view class="field-value">
+            <view class="picker-value" bindtap="onOpenPicker">
+              <text class="picker-text">{{travelMode || '请选择'}}</text>
+              <t-icon name="chevron-right" size="28rpx" />
+            </view>
           </view>
         </view>
       </view>
-    </view>
-
-    <view class="section">
-      <view class="section-title">监护人信息</view>
-      <view class="card form-card">
-        <view class="field-row">
-          <view class="field-label"><text class="req">*</text> 监护人姓名</view>
-          <t-input class="field-input" placeholder="请输入" borderless align="right" />
-        </view>
-        <view class="field-row">
-          <view class="field-label"><text class="req">*</text> 监护人身份证号</view>
-          <t-input class="field-input" placeholder="请输入" borderless align="right" />
-        </view>
-        <view class="field-row field-row--last">
-          <view class="field-label"><text class="req">*</text> 监护人电话</view>
-          <t-input class="field-input" placeholder="请输入" borderless align="right" />
-        </view>
-      </view>
-    </view>
-
-    <view class="card note-card">
-      <text class="note-text">提交订单后将调起蓝兔支付完成微信支付</text>
     </view>
   </scroll-view>
 
   <view class="bottom-bar">
-    <view>
+    <view class="bottom-left">
       <text class="bottom-label">合计金额</text>
-      <text class="bottom-price">¥ 26800</text>
+      <text class="bottom-price">¥ {{summary.price}}</text>
     </view>
-    <t-button class="submit-btn" theme="primary" shape="round" size="small" loading disabled>提交订单</t-button>
+    <t-button class="submit-btn" theme="primary" shape="round" size="small">提交订单</t-button>
   </view>
 
   <t-picker
@@ -115,6 +104,32 @@
   >
     <t-picker-item options="{{travelModes}}" />
   </t-picker>
+
+  <view class="period-mask" wx:if="{{periodPopupVisible}}" bindtap="onClosePeriods">
+    <view class="period-sheet" catchtap>
+      <view class="period-head">
+        <view class="period-top">
+          <text class="period-title">IDEAS X SANYA：2026 三亚商业 & 探险研学</text>
+          <text class="period-price">¥ {{summary.price}}</text>
+        </view>
+        <view class="period-sub">报名截止：{{periods[selectedPeriodIndex].deadline}}</view>
+        <text class="period-quota">{{periods[selectedPeriodIndex].quota}}</text>
+      </view>
+      <view class="period-section-title">期数选择</view>
+      <view class="period-list">
+        <view
+          class="period-item {{selectedPeriodIndex === index ? 'active' : ''}}"
+          wx:for="{{periods}}"
+          wx:key="id"
+          data-index="{{index}}"
+          bindtap="onSelectPeriod"
+        >
+          <text>{{item.name}}（{{item.date}}）</text>
+        </view>
+      </view>
+      <t-button class="period-confirm" theme="primary" shape="round" size="small" bindtap="onConfirmPeriod">确认</t-button>
+    </view>
+  </view>
 
   <view class="home-indicator"></view>
 </view>

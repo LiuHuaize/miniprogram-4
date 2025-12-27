@@ -212,6 +212,36 @@ page {
   margin-top: 12px;
 }
 
+.period-row {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #f7f9fb;
+  border: 1px solid #e6ebf1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #7b8a99;
+  font-size: 12px;
+}
+
+.period-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.period-label {
+  font-size: 11px;
+  color: #a0aec0;
+}
+
+.period-value {
+  font-size: 12px;
+  color: #0f172a;
+  display: block;
+}
+
 .meta-item {
   flex: 1;
   background: #f5f7fa;
@@ -626,4 +656,107 @@ page {
   opacity: 0.15;
   pointer-events: none;
   z-index: 6;
+}
+
+.period-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 20;
+}
+
+.period-sheet {
+  width: 100%;
+  background: #ffffff;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  padding: 18px 16px calc(24px + env(safe-area-inset-bottom));
+  box-shadow: 0 -12px 24px rgba(15, 23, 42, 0.18);
+}
+
+.period-head {
+  padding-bottom: 12px;
+  border-bottom: 1px solid #edf1f5;
+}
+
+.period-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.period-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  line-height: 1.4;
+  display: block;
+}
+
+.period-price {
+  font-size: 16px;
+  font-weight: 700;
+  color: #3a8c88;
+  white-space: nowrap;
+  display: block;
+}
+
+.period-sub {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #94a3b8;
+  display: block;
+}
+
+.period-quota {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #7b8a99;
+  display: block;
+}
+
+.period-section-title {
+  margin-top: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.period-list {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.period-item {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f7f9fb;
+  border: 1px solid #e6ebf1;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.period-item.active {
+  background: rgba(47, 125, 117, 0.12);
+  border-color: rgba(47, 125, 117, 0.4);
+  color: #2f7d75;
+  font-weight: 600;
+}
+
+.period-confirm {
+  --td-button-primary-bg-color: #9bbdc9;
+  --td-button-primary-border-color: #9bbdc9;
+  --td-button-primary-hover-bg-color: #8fb2be;
+  --td-button-primary-hover-border-color: #8fb2be;
+  margin-top: 16px;
+  width: 100%;
+  height: 40px;
+  font-size: 13px;
+  font-weight: 600;
 }

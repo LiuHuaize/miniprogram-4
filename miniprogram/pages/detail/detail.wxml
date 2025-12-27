@@ -65,6 +65,13 @@
           <text>三亚 · 海南</text>
         </view>
       </view>
+      <view class="period-row" bindtap="onOpenPeriods">
+        <view class="period-left">
+          <text class="period-label">期数</text>
+          <text class="period-value">{{periods[selectedPeriodIndex].name}}（{{periods[selectedPeriodIndex].date}}）</text>
+        </view>
+        <t-icon name="chevron-right" size="28rpx" />
+      </view>
     </view>
 
     <scroll-view class="tabs" scroll-x show-scrollbar="{{false}}">
@@ -334,4 +341,30 @@
   </view>
 
   <view class="home-indicator"></view>
+
+  <view class="period-mask" wx:if="{{periodPopupVisible}}" bindtap="onClosePeriods">
+    <view class="period-sheet" catchtap>
+      <view class="period-head">
+        <view class="period-top">
+          <text class="period-title">IDEAS X SANYA：2026 三亚商业 & 探险研学</text>
+          <text class="period-price">¥ 17800.00</text>
+        </view>
+        <view class="period-sub">报名截止：{{periods[selectedPeriodIndex].deadline}}</view>
+        <text class="period-quota">{{periods[selectedPeriodIndex].quota}}</text>
+      </view>
+      <view class="period-section-title">期数选择</view>
+      <view class="period-list">
+        <view
+          class="period-item {{selectedPeriodIndex === index ? 'active' : ''}}"
+          wx:for="{{periods}}"
+          wx:key="id"
+          data-index="{{index}}"
+          bindtap="onSelectPeriod"
+        >
+          <text>{{item.name}}（{{item.date}}）</text>
+        </view>
+      </view>
+      <t-button class="period-confirm" theme="primary" shape="round" size="small" bindtap="onConfirmPeriod">确认</t-button>
+    </view>
+  </view>
 </view>
