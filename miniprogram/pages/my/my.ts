@@ -1,37 +1,138 @@
 Component({
   data: {
     tabValue: 'mine',
-    orders: [
+    hasLogin: false,
+    loginLoading: false,
+    userInfo: {
+      nickName: '微信用户',
+      avatarUrl: '',
+    },
+    menuPrimary: [
       {
-        id: 'QX202602210001',
-        title: '未来学习中心 · 26 年春季黑客松',
-        status: '已支付',
-        statusStyle: 'background: #e8f6ee; color: #2ba471;',
-        price: '¥ 26800',
-        time: '报名时间 2026.02.18',
-        action: '查看详情 >'
+        key: 'orders',
+        label: '订单',
+        icon: 'list-numbered',
       },
       {
-        id: 'QX202601150021',
-        title: 'IDEAS X SANYA: 2026 商业探索营',
-        status: '未支付',
-        statusStyle: 'background: #f1f2f4; color: #6b7280;',
-        price: '¥ 19800',
-        time: '报名时间 2026.01.15',
-        action: '继续支付 >'
+        key: 'coupon',
+        label: '优惠券',
+        icon: 'coupon',
       },
       {
-        id: 'QX202512050080',
-        title: '2025 IDEA 教育开放日',
-        status: '已结束',
-        statusStyle: 'background: #fdf3d1; color: #b77a08;',
-        price: '¥ 0',
-        time: '报名时间 2025.12.05',
-        action: '查看详情 >'
-      }
-    ]
+        key: 'common',
+        label: '常用信息',
+        icon: 'personal-information',
+      },
+      {
+        key: 'about',
+        label: '了解启行',
+        icon: 'compass',
+      },
+    ],
+    menuSecondary: [
+      {
+        key: 'privacy',
+        label: '隐私政策',
+        icon: 'info-circle',
+      },
+      {
+        key: 'terms',
+        label: '服务条款',
+        icon: 'file-1',
+      },
+    ],
+  },
+  lifetimes: {
+    attached() {
+      this.restoreSession()
+    },
   },
   methods: {
+    restoreSession() {
+      const profile = wx.getStorageSync('user_profile')
+      const userId = wx.getStorageSync('user_id')
+      if (profile && userId) {
+        this.setData({
+          hasLogin: true,
+          userInfo: profile,
+        })
+      }
+    },
+    onLoginTap() {
+      if (this.data.hasLogin) return
+      if (this.data.loginLoading) return
+      if (!wx.cloud) {
+        wx.showToast({ title: '云开发未初始化', icon: 'none' })
+        return
+      }
+
+      this.setData({ loginLoading: true })
+      wx.getUserProfile({
+        desc: '用于完善会员资料',
+        success: res => {
+          const profile = {
+            nickName: res.userInfo.nickName,
+            avatarUrl: res.userInfo.avatarUrl,
+          }
+          wx.cloud.callFunction({
+            name: 'login',
+            data: { profile },
+            success: fnRes => {
+              const callResult = fnRes as WechatMiniprogram.Cloud.CallFunctionResult
+              const result = (callResult.result || {}) as {
+                userId?: string
+                isNew?: boolean
+              }
+              if (result?.userId) {
+                wx.setStorageSync('user_id', result.userId)
+              }
+              wx.setStorageSync('user_profile', profile)
+              this.setData({
+                hasLogin: true,
+                userInfo: profile,
+              })
+              wx.showToast({
+                title: result?.isNew ? '注册成功' : '登录成功',
+                icon: 'success',
+              })
+            },
+            fail: () => {
+              wx.showToast({ title: '登录失败', icon: 'none' })
+            },
+            complete: () => {
+              this.setData({ loginLoading: false })
+            },
+          })
+        },
+        fail: () => {
+          this.setData({ loginLoading: false })
+          wx.showToast({ title: '已取消授权', icon: 'none' })
+        },
+      })
+    },
+    onLogoutTap() {
+      wx.removeStorageSync('user_profile')
+      wx.removeStorageSync('user_id')
+      this.setData({
+        hasLogin: false,
+        userInfo: {
+          nickName: '微信用户',
+          avatarUrl: '',
+        },
+      })
+    },
+    onMenuTap(e: WechatMiniprogram.CustomEvent) {
+      const key = e.currentTarget.dataset.key
+      if (key === 'logout') {
+        this.onLogoutTap()
+        return
+      }
+      if (key === 'login') {
+        this.onLoginTap()
+        return
+      }
+      wx.showToast({ title: '功能建设中', icon: 'none' })
+    },
     onTabChange(e: WechatMiniprogram.CustomEvent) {
       const value = e.detail.value
       if (value === this.data.tabValue) return

@@ -1,34 +1,66 @@
 <view class="page">
   <view class="status-spacer"></view>
 
-  <view class="page-title">我的订单</view>
+  <view class="nav-bar">
+    <text class="nav-title">个人中心</text>
+  </view>
 
-  <scroll-view class="scroll-area" scroll-y show-scrollbar="{{false}}">
-    <view class="order-list">
-      <block wx:for="{{orders}}" wx:key="id">
-        <view class="order-card">
-          <view class="order-row order-row--title">
-            <text class="order-title">{{item.title}}</text>
-            <t-tag
-              class="order-tag"
-              size="small"
-              shape="round"
-              variant="light"
-              style="{{item.statusStyle}}"
-            >{{item.status}}</t-tag>
+  <view class="profile-card" bindtap="onLoginTap">
+    <view class="profile-left">
+      <text class="profile-greeting">
+        {{hasLogin ? 'Hi, ' + userInfo.nickName : 'Hi, 微信用户'}}
+      </text>
+      <text class="profile-sub">
+        {{hasLogin ? '欢迎回来' : '点击登录，完善资料'}}
+      </text>
+    </view>
+    <view class="profile-avatar">
+      <image
+        wx:if="{{hasLogin && userInfo.avatarUrl}}"
+        class="profile-avatar-image"
+        src="{{userInfo.avatarUrl}}"
+        mode="aspectFill"
+      />
+      <t-icon wx:else name="user-1" size="48rpx" />
+    </view>
+  </view>
+
+  <view class="menu-section">
+    <view class="menu-card">
+      <block wx:for="{{menuPrimary}}" wx:for-item="item" wx:key="key">
+        <view class="menu-item" data-key="{{item.key}}" bindtap="onMenuTap">
+          <view class="menu-icon">
+            <t-icon name="{{item.icon}}" size="28rpx" />
           </view>
-          <view class="order-row order-row--meta">
-            <text>订单号 {{item.id}}</text>
-            <text>{{item.price}}</text>
-          </view>
-          <view class="order-row order-row--foot">
-            <text>{{item.time}}</text>
-            <text class="order-action">{{item.action}}</text>
-          </view>
+          <text class="menu-text">{{item.label}}</text>
         </view>
       </block>
     </view>
-  </scroll-view>
+
+    <view class="menu-card">
+      <block wx:for="{{menuSecondary}}" wx:for-item="item" wx:key="key">
+        <view class="menu-item" data-key="{{item.key}}" bindtap="onMenuTap">
+          <view class="menu-icon">
+            <t-icon name="{{item.icon}}" size="28rpx" />
+          </view>
+          <text class="menu-text">{{item.label}}</text>
+        </view>
+      </block>
+    </view>
+
+    <view class="menu-card">
+      <view
+        class="menu-item menu-item--center"
+        data-key="{{hasLogin ? 'logout' : 'login'}}"
+        bindtap="onMenuTap"
+      >
+        <view class="menu-icon menu-icon--plain">
+          <t-icon name="{{hasLogin ? 'logout' : 'login'}}" size="26rpx" />
+        </view>
+        <text class="menu-text">{{hasLogin ? '退出登录' : '登录 / 注册'}}</text>
+      </view>
+    </view>
+  </view>
 
   <t-tab-bar
     class="bottom-bar"
