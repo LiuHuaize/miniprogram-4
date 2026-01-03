@@ -46,7 +46,8 @@ page {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f1f5f9;
+  background: #f3f6f9;
+  border: 1px solid rgba(148, 163, 184, 0.2);
   margin-right: 6px;
 }
 
@@ -71,7 +72,8 @@ page {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f1f5f9;
+  background: #f3f6f9;
+  border: 1px solid rgba(148, 163, 184, 0.2);
   color: #64748b;
 }
 
@@ -93,7 +95,7 @@ page {
   height: 64px;
   border-radius: 50%;
   margin: 0 auto;
-  background: #e7f3f1;
+  background: rgba(47, 125, 117, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -105,6 +107,7 @@ page {
   font-size: 18px;
   font-weight: 600;
   color: #0f172a;
+  letter-spacing: 0.02em;
 }
 
 .result-sub {
@@ -114,10 +117,10 @@ page {
 }
 
 .card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+  border: 1px solid rgba(148, 163, 184, 0.2);
   border-radius: 18px;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.1);
 }
 
 .detail-card {
@@ -144,6 +147,7 @@ page {
   font-weight: 600;
   max-width: 60%;
   text-align: right;
+  line-height: 1.4;
 }
 
 .detail-value--price {
@@ -196,7 +200,7 @@ page {
   height: 4px;
   border-radius: 999px;
   background: #0f172a;
-  opacity: 0.15;
+  opacity: 0.12;
   pointer-events: none;
   z-index: 6;
 }

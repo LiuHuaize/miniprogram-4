@@ -5,14 +5,14 @@ Component({
       {
         id: 1,
         status: '报名中',
-        tagStyle: 'background: #e7f3f1; color: #2f7d75;',
-        subLabel: '2026 暑期研究营',
-        heroTitle: 'IDEAS X 三亚',
-        heroDesc: '2026 亚洲商业 & 探险研学',
-        title: 'IDEAS X SANYA: 2026 商业探索营',
-        meta: '7 天 · 三亚 · 海滨成长体验',
-        heroStyle: 'background: linear-gradient(135deg, #0f766e 0%, #10b981 55%, #5eead4 100%);',
-        overlayStyle: 'background: rgba(0, 0, 0, 0.25);',
+        tagStyle: 'background: #dbeafe; color: #1d4ed8;',
+        subLabel: '2026 AI 创业营',
+        heroTitle: '少年独角兽',
+        heroDesc: 'AI 创业营 · 深圳',
+        title: '少年独角兽 AI 创业营（深圳）',
+        meta: '6 天 · 深圳 · 10-16 岁',
+        heroStyle: 'background-image: url("/assets/poster/poster-cover.png"); background-size: cover; background-position: center; background-repeat: no-repeat;',
+        overlayStyle: 'background: linear-gradient(180deg, rgba(30, 64, 175, 0.12), rgba(30, 64, 175, 0.55));',
         themeClass: 'card-hero--light'
       },
       {

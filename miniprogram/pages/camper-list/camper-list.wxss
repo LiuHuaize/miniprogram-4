@@ -1,6 +1,6 @@
 page {
   height: 100vh;
-  background: #f5f7f9;
+  background: linear-gradient(180deg, #f8fafc 0%, #eef3f8 100%);
   color: #1f2a37;
   font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
@@ -43,7 +43,8 @@ page {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f0f2f5;
+  background: #f3f6f9;
+  border: 1px solid rgba(148, 163, 184, 0.2);
   margin-right: 6px;
 }
 
@@ -67,14 +68,14 @@ page {
 
 .add-row {
   margin-top: 10px;
-  background: #ffffff;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
   border-radius: 14px;
   padding: 12px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid #e6ebf1;
-  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
 }
 
 .add-left {
@@ -100,10 +101,10 @@ page {
 }
 
 .card {
-  background: #ffffff;
-  border: 1px solid #e6ebf1;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+  border: 1px solid rgba(148, 163, 184, 0.2);
   border-radius: 16px;
-  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
   margin-top: 12px;
 }
 
@@ -156,6 +157,7 @@ page {
   font-size: 11px;
   color: #7b8a99;
   display: block;
+  line-height: 1.5;
 }
 
 .empty {
@@ -172,8 +174,8 @@ page {
   bottom: 0;
   padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
   border-top: 1px solid #e6ebf1;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
   display: flex;
   justify-content: center;
 }
@@ -200,7 +202,7 @@ page {
   height: 4px;
   border-radius: 999px;
   background: #0f172a;
-  opacity: 0.15;
+  opacity: 0.12;
   pointer-events: none;
   z-index: 6;
 }

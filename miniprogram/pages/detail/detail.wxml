@@ -8,7 +8,7 @@
       </view>
       <text class="nav-text">返回</text>
     </view>
-    <text class="nav-title">营会详情</text>
+    <text class="nav-title">创业营详情</text>
     <view class="nav-right">
       <view class="nav-action">
         <t-icon name="ellipsis" size="32rpx" />
@@ -31,38 +31,38 @@
         <image
           class="hero-photo"
           mode="aspectFill"
-          src="https://images.unsplash.com/photo-1747487492939-7f0357333c0a?fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=3000"
+          src="/assets/poster/poster-cover.png"
         />
         <view class="hero-mask"></view>
-        <view class="hero-badge">2026 IDEAS RESEARCH CAMP</view>
-        <view class="hero-title">IDEAS X SANYA</view>
-        <view class="hero-sub">商业探索 · 海岛成长体验</view>
+        <view class="hero-badge">2026 AI ENTREPRENEURSHIP CAMP</view>
+        <view class="hero-title">少年独角兽 AI 创业营</view>
+        <view class="hero-sub">深圳 · 6 天沉浸式项目制学习</view>
       </view>
     </view>
 
     <view class="info-card">
       <view class="info-main">
         <view class="info-left">
-          <text class="info-title">IDEAS X SANYA：2026 三亚商业 & 探险研学</text>
-          <text class="info-sub">报名截止：2026.02.21</text>
+          <text class="info-title">少年独角兽 AI 创业营 2026</text>
+          <text class="info-sub">营期时间：2026.02.08-02.13</text>
         </view>
         <view class="info-right">
-          <text class="info-price">¥ 17800.00 起</text>
-          <text class="info-tip">含食宿 · 6 天 5 晚</text>
+          <text class="info-price">咨询价</text>
+          <text class="info-tip">10-16 岁 · 6 天 5 晚</text>
         </view>
       </view>
       <view class="info-meta">
         <view class="meta-item">
           <t-icon name="time" size="24rpx" />
-          <text>共 6 天</text>
+          <text>6 天</text>
         </view>
         <view class="meta-item">
           <t-icon name="user" size="24rpx" />
-          <text>9-12 岁</text>
+          <text>10-16 岁</text>
         </view>
         <view class="meta-item">
           <t-icon name="location" size="24rpx" />
-          <text>三亚 · 海南</text>
+          <text>深圳 · 广东</text>
         </view>
       </view>
       <view class="period-row" bindtap="onOpenPeriods">
@@ -76,44 +76,46 @@
 
     <scroll-view class="tabs" scroll-x show-scrollbar="{{false}}">
       <view class="tab-list">
-        <view class="tab-item {{activeTab === 'theme' ? 'active' : ''}}" data-key="theme" bindtap="onTab">主题</view>
-        <view class="tab-item {{activeTab === 'content' ? 'active' : ''}}" data-key="content" bindtap="onTab">内容</view>
-        <view class="tab-item {{activeTab === 'schedule' ? 'active' : ''}}" data-key="schedule" bindtap="onTab">课表</view>
-        <view class="tab-item {{activeTab === 'itinerary' ? 'active' : ''}}" data-key="itinerary" bindtap="onTab">行程</view>
-        <view class="tab-item {{activeTab === 'stay' ? 'active' : ''}}" data-key="stay" bindtap="onTab">食宿</view>
-        <view class="tab-item {{activeTab === 'service' ? 'active' : ''}}" data-key="service" bindtap="onTab">服务</view>
+        <view class="tab-item {{activeTab === 'theme' ? 'active' : ''}}" data-key="theme" bindtap="onTab">介绍</view>
+        <view class="tab-item {{activeTab === 'content' ? 'active' : ''}}" data-key="content" bindtap="onTab">核心收获</view>
+        <view class="tab-item {{activeTab === 'schedule' ? 'active' : ''}}" data-key="schedule" bindtap="onTab">日程</view>
+        <view class="tab-item {{activeTab === 'itinerary' ? 'active' : ''}}" data-key="itinerary" bindtap="onTab">师资</view>
+        <view class="tab-item {{activeTab === 'stay' ? 'active' : ''}}" data-key="stay" bindtap="onTab">保障</view>
+        <view class="tab-item {{activeTab === 'service' ? 'active' : ''}}" data-key="service" bindtap="onTab">流程</view>
       </view>
     </scroll-view>
 
     <view class="section-block" id="anchor-theme" wx:if="{{activeTab === 'theme'}}">
       <view class="section-head">
         <view class="section-left">
-          <text class="section-title">主题</text>
-          <text class="section-en">THEME</text>
+          <text class="section-title">介绍</text>
+          <text class="section-en">INTRO</text>
         </view>
-        <text class="section-brand">IDEAS EDUCATION</text>
+        <text class="section-brand">YIXIAOBU EDU</text>
       </view>
       <view class="section-card">
         <view class="section-figure theme-figure">
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="https://images.pexels.com/photos/32556797/pexels-photo-32556797.jpeg?cs=srgb&dl=pexels-h-th-t-quyen-2153105414-32556797.jpg&fm=jpg"
+            src="/assets/poster/poster-group.png"
           />
           <view class="figure-content">
-            <view class="figure-chip">商业探索</view>
-            <text class="figure-title">IDEAS X SANYA</text>
-            <text class="figure-sub">2026 研学季</text>
+            <view class="figure-chip">AI 创业营</view>
+            <text class="figure-title">少年独角兽 2026</text>
+            <text class="figure-sub">真实问题驱动 · 深圳</text>
           </view>
         </view>
         <view class="section-body">
-          <text class="section-subtitle">以真实场景驱动的商业创新主题</text>
+          <text class="section-subtitle">让孩子用 AI 技术解决真实世界问题</text>
           <view class="chip-row">
-            <text class="chip">项目制学习</text>
-            <text class="chip">城市商业观察</text>
-            <text class="chip">团队共创</text>
+            <text class="chip">设计思维</text>
+            <text class="chip">AI 工具实践</text>
+            <text class="chip">CEO 思维</text>
           </view>
-          <text class="section-desc">聚焦海岛文旅、可持续商业与青年创新，让孩子在真实场景中建立商业感知与表达力。</text>
+          <text class="section-desc">AI 时代知识不再是护城河，营地以真实问题为起点，引导孩子从洞察、共创到表达，完成一次完整的创业体验。</text>
+          <image class="poster-image" mode="widthFix" src="/assets/poster/poster-intro.png" />
+          <text class="poster-caption">AI 创业营介绍</text>
         </view>
       </view>
     </view>
@@ -121,38 +123,52 @@
     <view class="section-block" id="anchor-content" wx:if="{{activeTab === 'content'}}">
       <view class="section-head">
         <view class="section-left">
-          <text class="section-title">内容</text>
-          <text class="section-en">CONTENT</text>
+          <text class="section-title">核心收获</text>
+          <text class="section-en">GAINS</text>
         </view>
-        <text class="section-brand">IDEAS EDUCATION</text>
+        <text class="section-brand">YIXIAOBU EDU</text>
       </view>
       <view class="section-card">
         <view class="section-figure content-figure">
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="https://images.pexels.com/photos/32556802/pexels-photo-32556802.jpeg?cs=srgb&dl=pexels-h-th-t-quyen-2153105414-32556802.jpg&fm=jpg"
+            src="/assets/poster/poster-cover.png"
           />
           <view class="figure-content">
-            <view class="figure-chip">课程模块</view>
-            <text class="figure-title">主题课程</text>
-            <text class="figure-sub">从洞察到表达</text>
+            <view class="figure-chip">6 大核心收获</view>
+            <text class="figure-title">创业 + AI 能力</text>
+            <text class="figure-sub">真实项目沉浸训练</text>
           </view>
         </view>
         <view class="section-body">
           <view class="list-item">
             <view class="dot"></view>
-            <text>商业模型搭建：用画布快速理解商业逻辑。</text>
+            <text>创业实战力：完整模拟创业流程，训练执行与管理意识。</text>
           </view>
           <view class="list-item">
             <view class="dot"></view>
-            <text>品牌故事设计：训练定位、价值主张与用户画像。</text>
+            <text>真实社会感：在真实语境中完成一次正式的自我表达。</text>
           </view>
           <view class="list-item">
             <view class="dot"></view>
-            <text>路演表达训练：结构化表达 + 现场模拟。</text>
+            <text>背景含金量：项目成果可纳入成长档案与升学材料。</text>
           </view>
-          <text class="section-desc">配套企业参访、任务挑战、导师点评与作品展示，全程强调实践与输出。</text>
+          <view class="list-item">
+            <view class="dot"></view>
+            <text>职业认知觉醒：发现兴趣方向，建立未来职业画像。</text>
+          </view>
+          <view class="list-item">
+            <view class="dot"></view>
+            <text>协作与表达进化：小组共创 + 路演训练。</text>
+          </view>
+          <view class="list-item">
+            <view class="dot"></view>
+            <text>同辈影响力：优质同伴圈层，激发志向与视野。</text>
+          </view>
+          <text class="section-desc">以项目制学习为核心，配套导师点评、任务挑战与成果展示，强调“能做出来”的真实输出。</text>
+          <image class="poster-image" mode="widthFix" src="/assets/poster/poster-gains.png" />
+          <text class="poster-caption">核心收获一览</text>
         </view>
       </view>
     </view>
@@ -160,42 +176,59 @@
     <view class="section-block" id="anchor-schedule" wx:if="{{activeTab === 'schedule'}}">
       <view class="section-head">
         <view class="section-left">
-          <text class="section-title">课表</text>
+          <text class="section-title">日程</text>
           <text class="section-en">SCHEDULE</text>
         </view>
-        <text class="section-brand">IDEAS EDUCATION</text>
+        <text class="section-brand">YIXIAOBU EDU</text>
       </view>
       <view class="section-card">
         <view class="section-figure schedule-figure">
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="https://images.unsplash.com/photo-1647782616397-010978c05e1e?fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=3000"
+            src="/assets/poster/poster-schedule.png"
           />
           <view class="figure-content">
-            <view class="figure-chip">6 天课程节奏</view>
-            <text class="figure-title">上午 · 下午 · 晚间</text>
-            <text class="figure-sub">学习 + 实践 + 共创</text>
+            <view class="figure-chip">6 天项目流程</view>
+            <text class="figure-title">趋势 · 洞察 · 共创</text>
+            <text class="figure-sub">从发现问题到路演展示</text>
           </view>
         </view>
         <view class="section-body">
           <view class="schedule-grid">
             <view class="schedule-item">
               <text class="schedule-day">Day 1</text>
-              <text class="schedule-title">破冰 · 城市商业观察</text>
-              <text class="schedule-time">下午｜任务发布</text>
+              <text class="schedule-title">趋势洞察 Trend Insight</text>
+              <text class="schedule-time">AI 时代 · 需求观察 · 任务发布</text>
             </view>
             <view class="schedule-item">
-              <text class="schedule-day">Day 2-3</text>
-              <text class="schedule-title">主题课程 · 实地调研</text>
-              <text class="schedule-time">上午｜课程 晚间｜共创</text>
+              <text class="schedule-day">Day 2</text>
+              <text class="schedule-title">用户探索 User Discovery</text>
+              <text class="schedule-time">发现痛点 · 定义问题</text>
             </view>
             <view class="schedule-item">
-              <text class="schedule-day">Day 4-6</text>
-              <text class="schedule-title">方案成型 · 路演展示</text>
-              <text class="schedule-time">全天｜项目推进</text>
+              <text class="schedule-day">Day 3</text>
+              <text class="schedule-title">产品原型 Product Prototyping</text>
+              <text class="schedule-time">AI 工具实践 · 原型设计</text>
+            </view>
+            <view class="schedule-item">
+              <text class="schedule-day">Day 4</text>
+              <text class="schedule-title">市场营销 Marketing Strategy</text>
+              <text class="schedule-time">品牌定位 · 渠道策略</text>
+            </view>
+            <view class="schedule-item">
+              <text class="schedule-day">Day 5</text>
+              <text class="schedule-title">商业建模 Business Modeling</text>
+              <text class="schedule-time">商业模型 · 路演准备</text>
+            </view>
+            <view class="schedule-item">
+              <text class="schedule-day">Day 6</text>
+              <text class="schedule-title">荣耀路演 Ultimate Roadshow</text>
+              <text class="schedule-time">作品展示 · 颁发证书</text>
             </view>
           </view>
+          <image class="poster-image" mode="widthFix" src="/assets/poster/poster-schedule.png" />
+          <text class="poster-caption">日程安排</text>
         </view>
       </view>
     </view>
@@ -203,46 +236,48 @@
     <view class="section-block" id="anchor-itinerary" wx:if="{{activeTab === 'itinerary'}}">
       <view class="section-head">
         <view class="section-left">
-          <text class="section-title">行程</text>
-          <text class="section-en">ITINERARY</text>
+          <text class="section-title">师资</text>
+          <text class="section-en">MENTORS</text>
         </view>
-        <text class="section-brand">IDEAS EDUCATION</text>
+        <text class="section-brand">YIXIAOBU EDU</text>
       </view>
       <view class="section-card">
         <view class="section-figure itinerary-figure">
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="https://images.pexels.com/photos/22719318/pexels-photo-22719318.jpeg?cs=srgb&dl=pexels-alexmoliski-22719318.jpg&fm=jpg"
+            src="/assets/poster/poster-mentors.png"
           />
           <view class="figure-content">
-            <view class="figure-chip">城市探索</view>
-            <text class="figure-title">三亚湾 · 热带雨林</text>
-            <text class="figure-sub">行走中的课堂</text>
+            <view class="figure-chip">专家导师 + 青年导师</view>
+            <text class="figure-title">导师体系</text>
+            <text class="figure-sub">重磅评委 · 项目共创</text>
           </view>
         </view>
         <view class="section-body">
           <view class="timeline-item">
             <view class="timeline-dot"></view>
             <view class="timeline-content">
-              <text class="timeline-title">三亚湾 · 城市商业观察</text>
-              <text class="timeline-desc">走进地标商业区，完成调研与用户访谈任务。</text>
+              <text class="timeline-title">专家导师 · 重磅评委</text>
+              <text class="timeline-desc">学习力与 PBL 导师领衔，为孩子提供高质量点评与引导。</text>
             </view>
           </view>
           <view class="timeline-item">
             <view class="timeline-dot"></view>
             <view class="timeline-content">
-              <text class="timeline-title">海岛生态 · 可持续挑战</text>
-              <text class="timeline-desc">结合环保主题进行产品创意与解决方案设计。</text>
+              <text class="timeline-title">名校小组导师 x6</text>
+              <text class="timeline-desc">名校毕业与商业项目导师，跟班陪跑项目进展。</text>
             </view>
           </view>
           <view class="timeline-item">
             <view class="timeline-dot"></view>
             <view class="timeline-content">
-              <text class="timeline-title">企业参访 · 导师点评</text>
-              <text class="timeline-desc">与行业导师面对面交流，完成路演展示。</text>
+              <text class="timeline-title">青年导师 · 技术共创</text>
+              <text class="timeline-desc">少年 CTO 与 AI 应用导师参与共创，带领技术落地。</text>
             </view>
           </view>
+          <image class="poster-image" mode="widthFix" src="/assets/poster/poster-mentors.png" />
+          <text class="poster-caption">专业师资阵容</text>
         </view>
       </view>
     </view>
@@ -250,35 +285,45 @@
     <view class="section-block" id="anchor-stay" wx:if="{{activeTab === 'stay'}}">
       <view class="section-head">
         <view class="section-left">
-          <text class="section-title">食宿</text>
-          <text class="section-en">STAY</text>
+          <text class="section-title">保障</text>
+          <text class="section-en">GUARD</text>
         </view>
-        <text class="section-brand">IDEAS EDUCATION</text>
+        <text class="section-brand">YIXIAOBU EDU</text>
       </view>
       <view class="section-card">
         <view class="section-figure stay-figure">
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="https://images.pexels.com/photos/35171524/pexels-photo-35171524.jpeg?cs=srgb&dl=pexels-magda-ehlers-pexels-35171524.jpg&fm=jpg"
+            src="/assets/poster/poster-guard.png"
           />
           <view class="figure-content">
-            <view class="figure-chip">安心食宿</view>
-            <text class="figure-title">度假酒店</text>
-            <text class="figure-sub">双人间 · 24 小时管理</text>
+            <view class="figure-chip">全方位营期保障</view>
+            <text class="figure-title">十二项保障措施</text>
+            <text class="figure-sub">安全 · 医疗 · 出行 · 食宿</text>
           </view>
         </view>
         <view class="section-body">
           <view class="stay-grid">
             <view class="stay-card">
-              <text class="stay-title">住宿</text>
-              <text class="stay-desc">精选度假型酒店，双人间配置，晚上值班老师巡查。</text>
+              <text class="stay-title">营养健康</text>
+              <text class="stay-desc">科学配餐与健康管理，全程陪护。</text>
             </view>
             <view class="stay-card">
-              <text class="stay-title">餐食</text>
-              <text class="stay-desc">营养三餐 + 能量加餐，兼顾口味与均衡饮食。</text>
+              <text class="stay-title">住宿与睡眠</text>
+              <text class="stay-desc">优质配套，保证休息与作息管理。</text>
+            </view>
+            <view class="stay-card">
+              <text class="stay-title">师生比 1:4</text>
+              <text class="stay-desc">科学配比，小组化陪伴与成长记录。</text>
+            </view>
+            <view class="stay-card">
+              <text class="stay-title">实时分享</text>
+              <text class="stay-desc">电子相册与家长群同步营期进展。</text>
             </view>
           </view>
+          <image class="poster-image" mode="widthFix" src="/assets/poster/poster-guard.png" />
+          <text class="poster-caption">营期保障与标准</text>
         </view>
       </view>
     </view>
@@ -286,58 +331,93 @@
     <view class="section-block" id="anchor-service" wx:if="{{activeTab === 'service'}}">
       <view class="section-head">
         <view class="section-left">
-          <text class="section-title">服务</text>
-          <text class="section-en">SERVICE</text>
+          <text class="section-title">流程</text>
+          <text class="section-en">PROCESS</text>
         </view>
-        <text class="section-brand">IDEAS EDUCATION</text>
+        <text class="section-brand">YIXIAOBU EDU</text>
       </view>
       <view class="section-card">
         <view class="section-figure service-figure">
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="https://images.pexels.com/photos/7875902/pexels-photo-7875902.jpeg?cs=srgb&dl=pexels-karola-g-7875902.jpg&fm=jpg"
+            src="/assets/poster/poster-service.png"
           />
           <view class="figure-content">
-            <view class="figure-chip">全程守护</view>
-            <text class="figure-title">导师 + 班主任</text>
-            <text class="figure-sub">1:8 小组陪伴</text>
+            <view class="figure-chip">报名与服务流程</view>
+            <text class="figure-title">顾问对接 · 行前准备</text>
+            <text class="figure-sub">开营到结营全程陪伴</text>
           </view>
         </view>
         <view class="section-body">
-          <view class="service-grid">
-            <view class="service-item">
-              <view class="service-icon">导</view>
-              <text class="service-title">导师体系</text>
-              <text class="service-desc">行业导师带队，项目共创。</text>
-            </view>
-            <view class="service-item">
-              <view class="service-icon">安</view>
-              <text class="service-title">安全保障</text>
-              <text class="service-desc">保险 + 医务应急，全程报备。</text>
-            </view>
-            <view class="service-item">
-              <view class="service-icon">伴</view>
-              <text class="service-title">成长陪伴</text>
-              <text class="service-desc">每日成长记录，家长群同步。</text>
-            </view>
-            <view class="service-item">
-              <view class="service-icon">证</view>
-              <text class="service-title">结营证书</text>
-              <text class="service-desc">成果集 + 证书 + 作品展示。</text>
+          <text class="section-subtitle">报名与营期流程</text>
+          <view class="timeline-item">
+            <view class="timeline-dot"></view>
+            <view class="timeline-content">
+              <text class="timeline-title">顾问咨询</text>
+              <text class="timeline-desc">扫码添加专属顾问老师，了解营期与导师安排。</text>
             </view>
           </view>
+          <view class="timeline-item">
+            <view class="timeline-dot"></view>
+            <view class="timeline-content">
+              <text class="timeline-title">下单签约</text>
+              <text class="timeline-desc">确认信息后下单并签署合同，完成营期报名。</text>
+            </view>
+          </view>
+          <view class="timeline-item">
+            <view class="timeline-dot"></view>
+            <view class="timeline-content">
+              <text class="timeline-title">行前准备</text>
+              <text class="timeline-desc">开营前建群通知，收集出行与营期信息。</text>
+            </view>
+          </view>
+          <view class="timeline-item">
+            <view class="timeline-dot"></view>
+            <view class="timeline-content">
+              <text class="timeline-title">营地接站 · 正式开营</text>
+              <text class="timeline-desc">统一接站入营，开启 6 天游学与项目挑战。</text>
+            </view>
+          </view>
+          <view class="timeline-item">
+            <view class="timeline-dot"></view>
+            <view class="timeline-content">
+              <text class="timeline-title">结营展示</text>
+              <text class="timeline-desc">成果路演与证书颁发，老师送站离营。</text>
+            </view>
+          </view>
+          <image class="poster-image" mode="widthFix" src="/assets/poster/poster-service.png" />
+          <text class="poster-caption">服务流程与退费说明</text>
+          <view class="qa-card">
+            <text class="qa-title">家长关心的问题</text>
+            <view class="qa-item">
+              <text class="qa-q">Q：孩子完全不懂编程可以参加吗？</text>
+              <text class="qa-a">可以。营地以 AI 工具与设计思维为核心，更注重思考、表达与创意落地。</text>
+            </view>
+            <view class="qa-item">
+              <text class="qa-q">Q：对升学有帮助吗？</text>
+              <text class="qa-a">项目成果可作为成长档案与作品集素材，提升表达与综合素养。</text>
+            </view>
+            <view class="qa-item">
+              <text class="qa-q">Q：家长需要陪同吗？</text>
+              <text class="qa-a">无需陪同。营期配备导师与班主任，全程陪伴与实时同步。</text>
+            </view>
+          </view>
+          <image class="poster-image" mode="widthFix" src="/assets/poster/poster-parents.png" />
+          <text class="poster-caption">家长见证与 Q&A</text>
         </view>
       </view>
     </view>
   </scroll-view>
 
   <view class="bottom-bar">
-    <view>
-      <text class="bottom-label">活动费用</text>
-      <text class="bottom-price">¥ 17800</text>
+    <view class="bottom-bar-inner">
+      <view class="bottom-info">
+        <text class="bottom-label">活动费用</text>
+        <text class="bottom-price">咨询价</text>
+      </view>
+      <t-button class="apply-btn" theme="primary" shape="round" size="small" bindtap="onApply">我要报名</t-button>
     </view>
-    <t-button class="apply-btn" theme="primary" shape="round" size="small" bindtap="onApply">我要报名</t-button>
   </view>
 
   <view class="home-indicator"></view>
@@ -346,8 +426,8 @@
     <view class="period-sheet" catchtap>
       <view class="period-head">
         <view class="period-top">
-          <text class="period-title">IDEAS X SANYA：2026 三亚商业 & 探险研学</text>
-          <text class="period-price">¥ 17800.00</text>
+          <text class="period-title">少年独角兽 AI 创业营 2026</text>
+          <text class="period-price">咨询价</text>
         </view>
         <view class="period-sub">报名截止：{{periods[selectedPeriodIndex].deadline}}</view>
         <text class="period-quota">{{periods[selectedPeriodIndex].quota}}</text>
