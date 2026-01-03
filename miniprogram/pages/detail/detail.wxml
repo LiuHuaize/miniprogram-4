@@ -98,7 +98,7 @@
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="/assets/poster/02-group.png"
+            src="/assets/poster/intro-photo.jpg"
           />
           <view class="figure-content">
             <view class="figure-chip">AI 创业营</view>
@@ -133,7 +133,7 @@
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="/assets/poster/01-cover.png"
+            src="/assets/poster/gains-photo.jpg"
           />
           <view class="figure-content">
             <view class="figure-chip">6 大核心收获</view>
@@ -186,7 +186,7 @@
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="/assets/poster/05-schedule.png"
+            src="/assets/poster/schedule-photo.jpg"
           />
           <view class="figure-content">
             <view class="figure-chip">6 天项目流程</view>
@@ -246,7 +246,7 @@
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="/assets/poster/06-mentors.png"
+            src="/assets/poster/mentors-photo.jpg"
           />
           <view class="figure-content">
             <view class="figure-chip">专家导师 + 青年导师</view>
@@ -295,7 +295,7 @@
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="/assets/poster/07-guard.png"
+            src="/assets/poster/guard-photo.jpg"
           />
           <view class="figure-content">
             <view class="figure-chip">全方位营期保障</view>
@@ -341,7 +341,7 @@
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="/assets/poster/09-service.png"
+            src="/assets/poster/process-photo.jpg"
           />
           <view class="figure-content">
             <view class="figure-chip">报名与服务流程</view>
