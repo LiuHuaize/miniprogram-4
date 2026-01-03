@@ -11,7 +11,7 @@ Component({
         heroDesc: 'AI 创业营 · 深圳',
         title: '少年独角兽 AI 创业营（深圳）',
         meta: '6 天 · 深圳 · 10-16 岁',
-        heroStyle: 'background-image: url("/assets/poster/poster-cover.png"); background-size: cover; background-position: center; background-repeat: no-repeat;',
+        heroStyle: 'background-image: url("/assets/poster/01-cover.png"); background-size: cover; background-position: center; background-repeat: no-repeat;',
         overlayStyle: 'background: linear-gradient(180deg, rgba(30, 64, 175, 0.12), rgba(30, 64, 175, 0.55));',
         themeClass: 'card-hero--light'
       },

@@ -31,7 +31,7 @@
         <image
           class="hero-photo"
           mode="aspectFill"
-          src="/assets/poster/poster-cover.png"
+          src="/assets/poster/01-cover.png"
         />
         <view class="hero-mask"></view>
         <view class="hero-badge">2026 AI ENTREPRENEURSHIP CAMP</view>
@@ -98,7 +98,7 @@
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="/assets/poster/poster-group.png"
+            src="/assets/poster/02-group.png"
           />
           <view class="figure-content">
             <view class="figure-chip">AI 创业营</view>
@@ -114,7 +114,7 @@
             <text class="chip">CEO 思维</text>
           </view>
           <text class="section-desc">AI 时代知识不再是护城河，营地以真实问题为起点，引导孩子从洞察、共创到表达，完成一次完整的创业体验。</text>
-          <image class="poster-image" mode="widthFix" src="/assets/poster/poster-intro.png" />
+          <image class="poster-image" mode="widthFix" src="/assets/poster/03-intro.png" />
           <text class="poster-caption">AI 创业营介绍</text>
         </view>
       </view>
@@ -133,7 +133,7 @@
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="/assets/poster/poster-cover.png"
+            src="/assets/poster/01-cover.png"
           />
           <view class="figure-content">
             <view class="figure-chip">6 大核心收获</view>
@@ -167,7 +167,7 @@
             <text>同辈影响力：优质同伴圈层，激发志向与视野。</text>
           </view>
           <text class="section-desc">以项目制学习为核心，配套导师点评、任务挑战与成果展示，强调“能做出来”的真实输出。</text>
-          <image class="poster-image" mode="widthFix" src="/assets/poster/poster-gains.png" />
+          <image class="poster-image" mode="widthFix" src="/assets/poster/04-gains.png" />
           <text class="poster-caption">核心收获一览</text>
         </view>
       </view>
@@ -186,7 +186,7 @@
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="/assets/poster/poster-schedule.png"
+            src="/assets/poster/05-schedule.png"
           />
           <view class="figure-content">
             <view class="figure-chip">6 天项目流程</view>
@@ -227,7 +227,7 @@
               <text class="schedule-time">作品展示 · 颁发证书</text>
             </view>
           </view>
-          <image class="poster-image" mode="widthFix" src="/assets/poster/poster-schedule.png" />
+          <image class="poster-image" mode="widthFix" src="/assets/poster/05-schedule.png" />
           <text class="poster-caption">日程安排</text>
         </view>
       </view>
@@ -246,7 +246,7 @@
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="/assets/poster/poster-mentors.png"
+            src="/assets/poster/06-mentors.png"
           />
           <view class="figure-content">
             <view class="figure-chip">专家导师 + 青年导师</view>
@@ -276,7 +276,7 @@
               <text class="timeline-desc">少年 CTO 与 AI 应用导师参与共创，带领技术落地。</text>
             </view>
           </view>
-          <image class="poster-image" mode="widthFix" src="/assets/poster/poster-mentors.png" />
+          <image class="poster-image" mode="widthFix" src="/assets/poster/06-mentors.png" />
           <text class="poster-caption">专业师资阵容</text>
         </view>
       </view>
@@ -295,7 +295,7 @@
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="/assets/poster/poster-guard.png"
+            src="/assets/poster/07-guard.png"
           />
           <view class="figure-content">
             <view class="figure-chip">全方位营期保障</view>
@@ -322,7 +322,7 @@
               <text class="stay-desc">电子相册与家长群同步营期进展。</text>
             </view>
           </view>
-          <image class="poster-image" mode="widthFix" src="/assets/poster/poster-guard.png" />
+          <image class="poster-image" mode="widthFix" src="/assets/poster/07-guard.png" />
           <text class="poster-caption">营期保障与标准</text>
         </view>
       </view>
@@ -341,7 +341,7 @@
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="/assets/poster/poster-service.png"
+            src="/assets/poster/09-service.png"
           />
           <view class="figure-content">
             <view class="figure-chip">报名与服务流程</view>
@@ -386,7 +386,7 @@
               <text class="timeline-desc">成果路演与证书颁发，老师送站离营。</text>
             </view>
           </view>
-          <image class="poster-image" mode="widthFix" src="/assets/poster/poster-service.png" />
+          <image class="poster-image" mode="widthFix" src="/assets/poster/09-service.png" />
           <text class="poster-caption">服务流程与退费说明</text>
           <view class="qa-card">
             <text class="qa-title">家长关心的问题</text>
@@ -403,7 +403,7 @@
               <text class="qa-a">无需陪同。营期配备导师与班主任，全程陪伴与实时同步。</text>
             </view>
           </view>
-          <image class="poster-image" mode="widthFix" src="/assets/poster/poster-parents.png" />
+          <image class="poster-image" mode="widthFix" src="/assets/poster/08-parents.png" />
           <text class="poster-caption">家长见证与 Q&A</text>
         </view>
       </view>
