@@ -1,6 +1,6 @@
 Component({
   data: {
-    campers: [] as Array<{ id: string; name: string; gender: string; birthday: string; idNo: string }>,
+    campers: [] as Array<{ id: string; name: string; idNoMask?: string; height: string; weight: string; allergies: string; personality: string }>,
     selectedId: '',
     index: 0
   },
@@ -18,8 +18,23 @@ Component({
   },
   methods: {
     loadCampers() {
-      const list = wx.getStorageSync('commonCampers') || []
-      this.setData({ campers: list })
+      if (!wx.cloud) {
+        wx.showToast({ title: '云开发未初始化', icon: 'none' })
+        return
+      }
+      wx.cloud.callFunction({
+        name: 'childrenList',
+        data: {},
+        success: (res) => {
+          const result = (res.result || {}) as { ok?: boolean; data?: typeof this.data.campers }
+          if (result.ok && result.data) {
+            this.setData({ campers: result.data })
+          }
+        },
+        fail: () => {
+          wx.showToast({ title: '营员加载失败', icon: 'none' })
+        }
+      })
     },
     onBack() {
       wx.navigateBack({

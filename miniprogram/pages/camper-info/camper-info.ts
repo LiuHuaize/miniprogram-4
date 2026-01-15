@@ -4,15 +4,13 @@ Component({
     camper: {
       id: '',
       name: '',
-      gender: '',
-      birthday: '',
-      idNo: ''
-    },
-    genderVisible: false,
-    genderOptions: [
-      { label: '男', value: '男' },
-      { label: '女', value: '女' }
-    ]
+      idNo: '',
+      idNoMask: '',
+      height: '',
+      weight: '',
+      allergies: '',
+      personality: ''
+    }
   },
   lifetimes: {
     attached() {
@@ -23,15 +21,29 @@ Component({
       const index = Number(current?.options?.index || 0)
       this.setData({ index })
       const channel = this.getOpenerEventChannel()
-      channel.on('load', (payload: { camper?: { id?: string; name: string; gender: string; birthday: string; idNo: string } } | null) => {
+      channel.on('load', (payload: {
+        camper?: {
+          id?: string
+          name: string
+          idNo: string
+          idNoMask?: string
+          height: string
+          weight: string
+          allergies: string
+          personality: string
+        }
+      } | null) => {
         if (payload?.camper) {
           this.setData({
             camper: {
               id: payload.camper.id || '',
               name: payload.camper.name || '',
-              gender: payload.camper.gender || '',
-              birthday: payload.camper.birthday || '',
-              idNo: payload.camper.idNo || ''
+              idNo: '',
+              idNoMask: payload.camper.idNoMask || '',
+              height: payload.camper.height || '',
+              weight: payload.camper.weight || '',
+              allergies: payload.camper.allergies || '',
+              personality: payload.camper.personality || ''
             }
           })
         }
@@ -57,59 +69,88 @@ Component({
       this.setData({
         camper: {
           ...this.data.camper,
-          idNo: e.detail.value
+          idNo: e.detail.value,
+          idNoMask: this.data.camper.idNoMask
         }
       })
     },
-    onOpenGender() {
-      this.setData({
-        genderVisible: true
-      })
-    },
-    onCloseGender() {
-      this.setData({
-        genderVisible: false
-      })
-    },
-    onConfirmGender(e: WechatMiniprogram.CustomEvent) {
-      const label = e.detail.label
-      const text = Array.isArray(label) ? label[0] : label
+    onHeightChange(e: WechatMiniprogram.CustomEvent) {
       this.setData({
         camper: {
           ...this.data.camper,
-          gender: text
-        },
-        genderVisible: false
+          height: e.detail.value
+        }
       })
     },
-    onBirthChange(e: WechatMiniprogram.PickerChange) {
-      const value = e.detail.value
+    onWeightChange(e: WechatMiniprogram.CustomEvent) {
       this.setData({
         camper: {
           ...this.data.camper,
-          birthday: value
+          weight: e.detail.value
+        }
+      })
+    },
+    onAllergiesChange(e: WechatMiniprogram.CustomEvent) {
+      this.setData({
+        camper: {
+          ...this.data.camper,
+          allergies: e.detail.value
+        }
+      })
+    },
+    onPersonalityChange(e: WechatMiniprogram.CustomEvent) {
+      this.setData({
+        camper: {
+          ...this.data.camper,
+          personality: e.detail.value
         }
       })
     },
     onSave() {
-      const camper = {
-        ...this.data.camper,
-        id: this.data.camper.id || `${Date.now()}_${Math.random().toString(16).slice(2, 8)}`
+      if (!wx.cloud) {
+        wx.showToast({ title: '云开发未初始化', icon: 'none' })
+        return
       }
-      const list = wx.getStorageSync('commonCampers') || []
-      const existsIndex = list.findIndex((item: { id: string }) => item.id === camper.id)
-      if (existsIndex >= 0) {
-        list[existsIndex] = camper
-      } else {
-        list.unshift(camper)
+      const camper = this.data.camper
+      if (!camper.name) {
+        wx.showToast({ title: '请填写营员姓名', icon: 'none' })
+        return
       }
-      wx.setStorageSync('commonCampers', list)
-      const channel = (this as unknown as { eventChannel?: WechatMiniprogram.EventChannel }).eventChannel
-      if (channel) {
-        channel.emit('saved', camper)
-      }
-      wx.navigateBack({
-        delta: 1
+      wx.cloud.callFunction({
+        name: 'childrenSave',
+        data: {
+          childId: camper.id,
+          name: camper.name,
+          idNo: camper.idNo,
+          height: camper.height,
+          weight: camper.weight,
+          allergies: camper.allergies,
+          personality: camper.personality
+        },
+        success: (res) => {
+          const result = (res.result || {}) as { ok?: boolean; childId?: string; idNoMask?: string; message?: string }
+          if (!result.ok) {
+            wx.showToast({ title: result.message || '保存失败', icon: 'none' })
+            return
+          }
+          const payload = {
+            ...camper,
+            id: result.childId || camper.id,
+            idNo: '',
+            idNoMask: result.idNoMask || camper.idNoMask
+          }
+          const channel = (this as unknown as { eventChannel?: WechatMiniprogram.EventChannel }).eventChannel
+          if (channel) {
+            channel.emit('saved', payload)
+          }
+          wx.showToast({ title: '保存成功', icon: 'success' })
+          wx.navigateBack({
+            delta: 1
+          })
+        },
+        fail: () => {
+          wx.showToast({ title: '保存失败', icon: 'none' })
+        }
       })
     }
   }

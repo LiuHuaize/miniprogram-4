@@ -1,0 +1,158 @@
+page {
+  height: 100vh;
+  background: linear-gradient(180deg, #f8fafc 0%, #eef3f8 100%);
+  color: #1f2a37;
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.status-spacer {
+  height: 44px;
+}
+
+.nav-bar {
+  padding: 6px 16px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.nav-left,
+.nav-right {
+  display: flex;
+  align-items: center;
+  min-width: 60px;
+}
+
+.nav-left {
+  color: #475569;
+}
+
+.nav-icon-wrap {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f6f9;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  margin-right: 6px;
+}
+
+.nav-text {
+  font-weight: 500;
+}
+
+.nav-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.nav-right {
+  justify-content: flex-end;
+}
+
+.scroll-area {
+  flex: 1;
+  height: 0;
+  padding: 0 16px 24px;
+  box-sizing: border-box;
+}
+
+.card {
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+  margin-bottom: 12px;
+}
+
+.submission-card {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.card-title-group {
+  flex: 1;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  display: block;
+  line-height: 1.4;
+}
+
+.card-sub {
+  font-size: 12px;
+  color: #64748b;
+  display: block;
+  margin-top: 4px;
+}
+
+.status-tag {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  border: 1px solid transparent;
+}
+
+.status-tag--active {
+  background: rgba(59, 130, 246, 0.12);
+  color: #1d4ed8;
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.status-tag--muted {
+  background: rgba(148, 163, 184, 0.2);
+  color: #64748b;
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+.card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  flex: 1;
+}
+
+.empty {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+  margin-top: 40px;
+}
+
+.home-indicator {
+  height: 34px;
+}

@@ -21,13 +21,15 @@
       <image
         class="summary-thumb"
         mode="aspectFill"
-        src="https://images.unsplash.com/photo-1747487492939-7f0357333c0a?fm=jpg&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=60&w=1200"
+        src="{{posterUrls['/assets/poster/01-cover.png']}}"
+        data-src="{{posterUrls['/assets/poster/01-cover.png']}}"
+        binderror="onImageError"
       />
       <view class="summary-main">
         <text class="summary-title">{{summary.title}}</text>
         <text class="summary-sub">{{summary.sub}}</text>
       </view>
-      <text class="summary-price">¥ {{summary.price}}</text>
+      <text class="summary-price">{{summary.price}}</text>
     </view>
 
     <view class="card period-card" bindtap="onChoosePeriod">
@@ -70,15 +72,60 @@
     </view>
 
     <view class="section">
-      <view class="section-title">其他信息</view>
+      <view class="section-title">监护人信息</view>
       <view class="card form-card">
-        <view class="field-row field-row--last" bindtap="onOpenPicker">
-          <view class="field-label">出行方式</view>
+        <view class="field-row">
+          <view class="field-label">监护人姓名</view>
           <view class="field-value">
-            <view class="picker-value" bindtap="onOpenPicker">
-              <text class="picker-text">{{travelMode || '请选择'}}</text>
-              <t-icon name="chevron-right" size="28rpx" />
-            </view>
+            <t-input
+              class="field-input"
+              placeholder="请输入"
+              borderless
+              align="left"
+              value="{{guardian.name}}"
+              bindchange="onGuardianNameChange"
+            />
+          </view>
+        </view>
+        <view class="field-row">
+          <view class="field-label">监护人身份证号</view>
+          <view class="field-value">
+          <t-input
+            class="field-input"
+            placeholder="{{guardian.idNoMask ? '已保存，重新输入以修改' : '请输入'}}"
+            borderless
+            align="left"
+            type="idcard"
+              value="{{guardian.idNo}}"
+              bindchange="onGuardianIdChange"
+            />
+          </view>
+        </view>
+        <view class="field-row">
+          <view class="field-label">监护人手机号</view>
+          <view class="field-value">
+            <t-input
+              class="field-input"
+              placeholder="请输入"
+              borderless
+              align="left"
+              type="number"
+              value="{{guardian.phone}}"
+              bindchange="onGuardianPhoneChange"
+            />
+          </view>
+        </view>
+        <view class="field-row field-row--last">
+          <view class="field-label">监护人微信号</view>
+          <view class="field-value">
+            <t-input
+              class="field-input"
+              placeholder="请输入"
+              borderless
+              align="left"
+              value="{{guardian.wechat}}"
+              bindchange="onGuardianWechatChange"
+            />
           </view>
         </view>
       </view>
@@ -87,30 +134,18 @@
 
   <view class="bottom-bar">
     <view class="bottom-left">
-      <text class="bottom-label">合计金额</text>
-      <text class="bottom-price">¥ {{summary.price}}</text>
+      <text class="bottom-label">活动费用</text>
+      <text class="bottom-price">{{summary.price}}</text>
     </view>
-    <t-button class="submit-btn" theme="primary" shape="round" size="small">提交订单</t-button>
+    <t-button class="submit-btn" theme="primary" shape="round" size="small" bindtap="onSubmit">提交订单</t-button>
   </view>
-
-  <t-picker
-    visible="{{pickerVisible}}"
-    title="出行方式"
-    confirm-btn="确定"
-    cancel-btn="取消"
-    bind:confirm="onConfirmPicker"
-    bind:cancel="onClosePicker"
-    bind:close="onClosePicker"
-  >
-    <t-picker-item options="{{travelModes}}" />
-  </t-picker>
 
   <view class="period-mask" wx:if="{{periodPopupVisible}}" bindtap="onClosePeriods">
     <view class="period-sheet" catchtap>
       <view class="period-head">
         <view class="period-top">
-          <text class="period-title">IDEAS X SANYA：2026 三亚商业 & 探险研学</text>
-          <text class="period-price">¥ {{summary.price}}</text>
+          <text class="period-title">少年独角兽 AI 创业营 2026</text>
+          <text class="period-price">{{summary.price}}</text>
         </view>
         <view class="period-sub">报名截止：{{periods[selectedPeriodIndex].deadline}}</view>
         <text class="period-quota">{{periods[selectedPeriodIndex].quota}}</text>

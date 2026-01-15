@@ -101,7 +101,7 @@ page {
   width: 84px;
   height: 64px;
   border-radius: 12px;
-  background: #dbe4ea;
+  background: #dbeafe;
 }
 
 .summary-main {
@@ -127,7 +127,7 @@ page {
 .summary-price {
   font-size: 15px;
   font-weight: 700;
-  color: #3a8c88;
+  color: #2563eb;
   white-space: nowrap;
 }
 
@@ -192,7 +192,7 @@ page {
   height: 28px;
   border-radius: 8px;
   background: #eef3f7;
-  color: #2f7d75;
+  color: #2563eb;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -249,6 +249,7 @@ page {
   padding: 12px 4px;
   font-size: 13px;
   border-bottom: 1px solid #edf0f3;
+  gap: 12px;
 }
 
 .field-row--last {
@@ -258,12 +259,24 @@ page {
 .field-label {
   color: #1f2937;
   font-weight: 500;
+  min-width: 88px;
+  line-height: 1.4;
 }
 
 .field-value {
-  min-width: 160px;
+  flex: 1;
+  min-width: 0;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
+}
+
+.field-input {
+  width: 100%;
+  text-align: left;
+  --td-input-vertical-padding: 6px;
+  --td-input-bg-color: transparent;
+  --td-input-placeholder-text-color: #94a3b8;
+  --td-input-default-text-color: #1f2937;
 }
 
 .picker-value {
@@ -312,10 +325,10 @@ page {
 }
 
 .submit-btn {
-  --td-button-primary-bg-color: #9bbdc9;
-  --td-button-primary-border-color: #9bbdc9;
-  --td-button-primary-hover-bg-color: #8fb2be;
-  --td-button-primary-hover-border-color: #8fb2be;
+  --td-button-primary-bg-color: #2563eb;
+  --td-button-primary-border-color: #2563eb;
+  --td-button-primary-hover-bg-color: #1d4ed8;
+  --td-button-primary-hover-border-color: #1d4ed8;
   height: 40px;
   padding: 0 26px;
   font-size: 13px;
@@ -379,7 +392,7 @@ page {
 .period-price {
   font-size: 16px;
   font-weight: 700;
-  color: #3a8c88;
+  color: #2563eb;
   white-space: nowrap;
   display: block;
 }
@@ -422,17 +435,17 @@ page {
 }
 
 .period-item.active {
-  background: rgba(47, 125, 117, 0.12);
-  border-color: rgba(47, 125, 117, 0.4);
-  color: #2f7d75;
+  background: rgba(37, 99, 235, 0.12);
+  border-color: rgba(37, 99, 235, 0.4);
+  color: #2563eb;
   font-weight: 600;
 }
 
 .period-confirm {
-  --td-button-primary-bg-color: #9bbdc9;
-  --td-button-primary-border-color: #9bbdc9;
-  --td-button-primary-hover-bg-color: #8fb2be;
-  --td-button-primary-hover-border-color: #8fb2be;
+  --td-button-primary-bg-color: #93c5fd;
+  --td-button-primary-border-color: #93c5fd;
+  --td-button-primary-hover-bg-color: #7fb6f6;
+  --td-button-primary-hover-border-color: #7fb6f6;
   margin-top: 16px;
   width: 100%;
   height: 40px;

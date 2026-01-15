@@ -6,41 +6,7 @@ Component({
     userInfo: {
       nickName: '微信用户',
       avatarUrl: '',
-    },
-    menuPrimary: [
-      {
-        key: 'orders',
-        label: '订单',
-        icon: 'list-numbered',
-      },
-      {
-        key: 'coupon',
-        label: '优惠券',
-        icon: 'coupon',
-      },
-      {
-        key: 'common',
-        label: '常用信息',
-        icon: 'personal-information',
-      },
-      {
-        key: 'about',
-        label: '了解启行',
-        icon: 'compass',
-      },
-    ],
-    menuSecondary: [
-      {
-        key: 'privacy',
-        label: '隐私政策',
-        icon: 'info-circle',
-      },
-      {
-        key: 'terms',
-        label: '服务条款',
-        icon: 'file-1',
-      },
-    ],
+    }
   },
   lifetimes: {
     attached() {
@@ -129,6 +95,10 @@ Component({
       }
       if (key === 'login') {
         this.onLoginTap()
+        return
+      }
+      if (key === 'info') {
+        wx.navigateTo({ url: '/pages/my-submissions/my-submissions' })
         return
       }
       wx.showToast({ title: '功能建设中', icon: 'none' })

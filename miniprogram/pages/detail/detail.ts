@@ -1,5 +1,9 @@
+import { getPosterFallbackUrls, loadPosterUrls } from '../../utils/cloud-assets'
+
 Component({
   data: {
+    activityId: '',
+    posterUrls: getPosterFallbackUrls(),
     tabs: [
       { key: 'theme', label: '介绍' },
       { key: 'content', label: '核心收获' },
@@ -22,19 +26,41 @@ Component({
     selectedPeriodIndex: 0,
     periodPopupVisible: false
   },
+  lifetimes: {
+    attached() {
+      const pages = getCurrentPages()
+      const current = pages[pages.length - 1] as WechatMiniprogram.Page.Instance & {
+        options?: Record<string, string>
+      }
+      const activityId = current?.options?.activityId || ''
+      if (activityId) {
+        this.setData({ activityId })
+      }
+      this.loadPosterUrls()
+    }
+  },
   methods: {
+    onImageError(event: WechatMiniprogram.ImageErrorEvent) {
+      const dataset = event.currentTarget.dataset as { src?: string }
+      console.warn('image-load-failed', dataset?.src || '', event.detail?.errMsg || '')
+    },
+    loadPosterUrls() {
+      loadPosterUrls().then((posterUrls) => {
+        this.setData({ posterUrls })
+      })
+    },
     onBack() {
       wx.navigateBack({
         delta: 1
       })
     },
     onApply() {
-      const { periods, selectedPeriodIndex } = this.data
+      const { periods, selectedPeriodIndex, activityId } = this.data
       const selected = periods[selectedPeriodIndex]
       const periodName = selected ? selected.name : ''
       const periodDate = selected ? selected.date : ''
       wx.navigateTo({
-        url: `/pages/order-form/order-form?periodName=${encodeURIComponent(periodName)}&periodDate=${encodeURIComponent(periodDate)}`
+        url: `/pages/order-form/order-form?periodName=${encodeURIComponent(periodName)}&periodDate=${encodeURIComponent(periodDate)}&activityId=${encodeURIComponent(activityId || '')}`
       })
     },
     onTab(event: WechatMiniprogram.BaseEvent) {

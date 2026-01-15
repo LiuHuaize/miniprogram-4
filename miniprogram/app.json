@@ -3,6 +3,7 @@
     "pages/index/index",
     "pages/detail/detail",
     "pages/my/my",
+    "pages/my-submissions/my-submissions",
     "pages/order-form/order-form",
     "pages/camper-list/camper-list",
     "pages/camper-info/camper-info",

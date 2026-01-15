@@ -1,0 +1,8 @@
+{
+  "name": "childrenList",
+  "version": "1.0.0",
+  "description": "cloud function",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.0"
+  }
+}

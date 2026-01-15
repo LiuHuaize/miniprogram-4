@@ -15,48 +15,83 @@
   <scroll-view class="scroll-area" scroll-y show-scrollbar="{{false}}">
     <view class="card form-card">
       <view class="field-row">
-        <view class="field-label">姓名</view>
+        <view class="field-label">孩子姓名</view>
         <view class="field-value">
           <t-input
             class="field-input"
             placeholder="请输入"
             borderless
-            align="right"
+            align="left"
             value="{{camper.name}}"
             bindchange="onNameChange"
           />
         </view>
       </view>
-      <view class="field-row" bindtap="onOpenGender">
-        <view class="field-label">性别</view>
+      <view class="field-row">
+        <view class="field-label">孩子身份证号</view>
         <view class="field-value">
-          <view class="picker-value" bindtap="onOpenGender">
-            <text class="picker-text">{{camper.gender || '请选择'}}</text>
-            <t-icon name="chevron-right" size="28rpx" />
-          </view>
+          <t-input
+            class="field-input"
+            placeholder="{{camper.idNoMask ? '已保存，重新输入以修改' : '请输入'}}"
+            borderless
+            align="left"
+            type="idcard"
+            value="{{camper.idNo}}"
+            bindchange="onIdChange"
+          />
         </view>
       </view>
-      <picker mode="date" value="{{camper.birthday}}" bindchange="onBirthChange">
-        <view class="field-row">
-          <view class="field-label">生日</view>
-          <view class="field-value">
-            <view class="picker-value">
-              <text class="picker-text">{{camper.birthday || '请选择'}}</text>
-              <t-icon name="chevron-right" size="28rpx" />
-            </view>
-          </view>
-        </view>
-      </picker>
-      <view class="field-row field-row--last">
-        <view class="field-label">身份证号</view>
+      <view class="field-row">
+        <view class="field-label">身高</view>
         <view class="field-value">
           <t-input
             class="field-input"
             placeholder="请输入"
             borderless
-            align="right"
-            value="{{camper.idNo}}"
-            bindchange="onIdChange"
+            align="left"
+            type="number"
+            value="{{camper.height}}"
+            bindchange="onHeightChange"
+          />
+        </view>
+      </view>
+      <view class="field-row">
+        <view class="field-label">体重</view>
+        <view class="field-value">
+          <t-input
+            class="field-input"
+            placeholder="请输入"
+            borderless
+            align="left"
+            type="number"
+            value="{{camper.weight}}"
+            bindchange="onWeightChange"
+          />
+        </view>
+      </view>
+      <view class="field-row">
+        <view class="field-label">忌口、过敏原</view>
+        <view class="field-value">
+          <t-input
+            class="field-input"
+            placeholder="请输入"
+            borderless
+            align="left"
+            value="{{camper.allergies}}"
+            bindchange="onAllergiesChange"
+          />
+        </view>
+      </view>
+      <view class="field-row field-row--stacked field-row--last">
+        <view class="field-label">一句话介绍孩子的性格</view>
+        <view class="field-value">
+          <t-input
+            class="field-input"
+            placeholder="请输入"
+            borderless
+            align="left"
+            value="{{camper.personality}}"
+            bindchange="onPersonalityChange"
           />
         </view>
       </view>
@@ -66,18 +101,6 @@
   <view class="bottom-bar">
     <t-button class="save-btn" theme="primary" shape="round" size="small" bindtap="onSave">确认</t-button>
   </view>
-
-  <t-picker
-    visible="{{genderVisible}}"
-    title="选择性别"
-    confirm-btn="确定"
-    cancel-btn="取消"
-    bind:confirm="onConfirmGender"
-    bind:cancel="onCloseGender"
-    bind:close="onCloseGender"
-  >
-    <t-picker-item options="{{genderOptions}}" />
-  </t-picker>
 
   <view class="home-indicator"></view>
 </view>

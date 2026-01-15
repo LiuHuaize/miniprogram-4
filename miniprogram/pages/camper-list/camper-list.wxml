@@ -35,7 +35,7 @@
       </view>
       <view class="camper-main">
         <text class="camper-name">{{item.name}}</text>
-        <text class="camper-sub">性别：{{item.gender || '未填写'}}　生日：{{item.birthday || '未填写'}}</text>
+        <text class="camper-sub">身份证号：{{item.idNoMask || '未填写'}}　身高：{{item.height || '未填写'}}　体重：{{item.weight || '未填写'}}</text>
       </view>
     </view>
 

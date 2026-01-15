@@ -27,25 +27,12 @@
 
   <view class="menu-section">
     <view class="menu-card">
-      <block wx:for="{{menuPrimary}}" wx:for-item="item" wx:key="key">
-        <view class="menu-item" data-key="{{item.key}}" bindtap="onMenuTap">
-          <view class="menu-icon">
-            <t-icon name="{{item.icon}}" size="28rpx" />
-          </view>
-          <text class="menu-text">{{item.label}}</text>
+      <view class="menu-item" data-key="info" bindtap="onMenuTap">
+        <view class="menu-icon">
+          <t-icon name="personal-information" size="28rpx" />
         </view>
-      </block>
-    </view>
-
-    <view class="menu-card">
-      <block wx:for="{{menuSecondary}}" wx:for-item="item" wx:key="key">
-        <view class="menu-item" data-key="{{item.key}}" bindtap="onMenuTap">
-          <view class="menu-icon">
-            <t-icon name="{{item.icon}}" size="28rpx" />
-          </view>
-          <text class="menu-text">{{item.label}}</text>
-        </view>
-      </block>
+        <text class="menu-text">我的信息填报</text>
+      </view>
     </view>
 
     <view class="menu-card">

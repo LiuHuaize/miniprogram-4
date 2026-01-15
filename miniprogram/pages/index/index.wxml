@@ -16,7 +16,7 @@
   <scroll-view class="scroll-area" scroll-y show-scrollbar="{{false}}">
     <view class="card-list">
       <block wx:for="{{cards}}" wx:key="id">
-        <view class="card" bindtap="onCardTap" data-id="{{item.id}}">
+        <view class="card" bindtap="onCardTap" data-id="{{item.id}}" data-activity-id="{{item.activityId}}">
           <view class="card-hero {{item.themeClass}}" style="{{item.heroStyle}}">
             <view class="card-hero-overlay" style="{{item.overlayStyle}}"></view>
             <view class="card-hero-top">

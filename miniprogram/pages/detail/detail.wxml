@@ -31,7 +31,9 @@
         <image
           class="hero-photo"
           mode="aspectFill"
-          src="/assets/poster/01-cover.png"
+          src="{{posterUrls['/assets/poster/01-cover.png']}}"
+          data-src="{{posterUrls['/assets/poster/01-cover.png']}}"
+          binderror="onImageError"
         />
         <view class="hero-mask"></view>
         <view class="hero-badge">2026 AI ENTREPRENEURSHIP CAMP</view>
@@ -98,7 +100,9 @@
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="/assets/poster/intro-photo.jpg"
+            src="{{posterUrls['/assets/poster/intro-photo.jpg']}}"
+            data-src="{{posterUrls['/assets/poster/intro-photo.jpg']}}"
+            binderror="onImageError"
           />
           <view class="figure-content">
             <view class="figure-chip">AI 创业营</view>
@@ -107,15 +111,13 @@
           </view>
         </view>
         <view class="section-body">
-          <text class="section-subtitle">让孩子用 AI 技术解决真实世界问题</text>
-          <view class="chip-row">
-            <text class="chip">设计思维</text>
-            <text class="chip">AI 工具实践</text>
-            <text class="chip">CEO 思维</text>
-          </view>
-          <text class="section-desc">AI 时代知识不再是护城河，营地以真实问题为起点，引导孩子从洞察、共创到表达，完成一次完整的创业体验。</text>
-          <image class="poster-image" mode="widthFix" src="/assets/poster/03-intro.png" />
-          <text class="poster-caption">AI 创业营介绍</text>
+          <image
+            class="poster-image"
+            mode="widthFix"
+            src="{{posterUrls['/assets/poster/03-intro.png']}}"
+            data-src="{{posterUrls['/assets/poster/03-intro.png']}}"
+            binderror="onImageError"
+          />
         </view>
       </view>
     </view>
@@ -133,7 +135,9 @@
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="/assets/poster/gains-photo.jpg"
+            src="{{posterUrls['/assets/poster/gains-photo.jpg']}}"
+            data-src="{{posterUrls['/assets/poster/gains-photo.jpg']}}"
+            binderror="onImageError"
           />
           <view class="figure-content">
             <view class="figure-chip">6 大核心收获</view>
@@ -142,33 +146,13 @@
           </view>
         </view>
         <view class="section-body">
-          <view class="list-item">
-            <view class="dot"></view>
-            <text>创业实战力：完整模拟创业流程，训练执行与管理意识。</text>
-          </view>
-          <view class="list-item">
-            <view class="dot"></view>
-            <text>真实社会感：在真实语境中完成一次正式的自我表达。</text>
-          </view>
-          <view class="list-item">
-            <view class="dot"></view>
-            <text>背景含金量：项目成果可纳入成长档案与升学材料。</text>
-          </view>
-          <view class="list-item">
-            <view class="dot"></view>
-            <text>职业认知觉醒：发现兴趣方向，建立未来职业画像。</text>
-          </view>
-          <view class="list-item">
-            <view class="dot"></view>
-            <text>协作与表达进化：小组共创 + 路演训练。</text>
-          </view>
-          <view class="list-item">
-            <view class="dot"></view>
-            <text>同辈影响力：优质同伴圈层，激发志向与视野。</text>
-          </view>
-          <text class="section-desc">以项目制学习为核心，配套导师点评、任务挑战与成果展示，强调“能做出来”的真实输出。</text>
-          <image class="poster-image" mode="widthFix" src="/assets/poster/04-gains.png" />
-          <text class="poster-caption">核心收获一览</text>
+          <image
+            class="poster-image"
+            mode="widthFix"
+            src="{{posterUrls['/assets/poster/04-gains.png']}}"
+            data-src="{{posterUrls['/assets/poster/04-gains.png']}}"
+            binderror="onImageError"
+          />
         </view>
       </view>
     </view>
@@ -186,7 +170,9 @@
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="/assets/poster/schedule-photo.jpg"
+            src="{{posterUrls['/assets/poster/schedule-photo.jpg']}}"
+            data-src="{{posterUrls['/assets/poster/schedule-photo.jpg']}}"
+            binderror="onImageError"
           />
           <view class="figure-content">
             <view class="figure-chip">6 天项目流程</view>
@@ -195,40 +181,13 @@
           </view>
         </view>
         <view class="section-body">
-          <view class="schedule-grid">
-            <view class="schedule-item">
-              <text class="schedule-day">Day 1</text>
-              <text class="schedule-title">趋势洞察 Trend Insight</text>
-              <text class="schedule-time">AI 时代 · 需求观察 · 任务发布</text>
-            </view>
-            <view class="schedule-item">
-              <text class="schedule-day">Day 2</text>
-              <text class="schedule-title">用户探索 User Discovery</text>
-              <text class="schedule-time">发现痛点 · 定义问题</text>
-            </view>
-            <view class="schedule-item">
-              <text class="schedule-day">Day 3</text>
-              <text class="schedule-title">产品原型 Product Prototyping</text>
-              <text class="schedule-time">AI 工具实践 · 原型设计</text>
-            </view>
-            <view class="schedule-item">
-              <text class="schedule-day">Day 4</text>
-              <text class="schedule-title">市场营销 Marketing Strategy</text>
-              <text class="schedule-time">品牌定位 · 渠道策略</text>
-            </view>
-            <view class="schedule-item">
-              <text class="schedule-day">Day 5</text>
-              <text class="schedule-title">商业建模 Business Modeling</text>
-              <text class="schedule-time">商业模型 · 路演准备</text>
-            </view>
-            <view class="schedule-item">
-              <text class="schedule-day">Day 6</text>
-              <text class="schedule-title">荣耀路演 Ultimate Roadshow</text>
-              <text class="schedule-time">作品展示 · 颁发证书</text>
-            </view>
-          </view>
-          <image class="poster-image" mode="widthFix" src="/assets/poster/05-schedule.png" />
-          <text class="poster-caption">日程安排</text>
+          <image
+            class="poster-image"
+            mode="widthFix"
+            src="{{posterUrls['/assets/poster/05-schedule.png']}}"
+            data-src="{{posterUrls['/assets/poster/05-schedule.png']}}"
+            binderror="onImageError"
+          />
         </view>
       </view>
     </view>
@@ -246,7 +205,9 @@
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="/assets/poster/mentors-photo.jpg"
+            src="{{posterUrls['/assets/poster/mentors-photo.jpg']}}"
+            data-src="{{posterUrls['/assets/poster/mentors-photo.jpg']}}"
+            binderror="onImageError"
           />
           <view class="figure-content">
             <view class="figure-chip">专家导师 + 青年导师</view>
@@ -255,29 +216,13 @@
           </view>
         </view>
         <view class="section-body">
-          <view class="timeline-item">
-            <view class="timeline-dot"></view>
-            <view class="timeline-content">
-              <text class="timeline-title">专家导师 · 重磅评委</text>
-              <text class="timeline-desc">学习力与 PBL 导师领衔，为孩子提供高质量点评与引导。</text>
-            </view>
-          </view>
-          <view class="timeline-item">
-            <view class="timeline-dot"></view>
-            <view class="timeline-content">
-              <text class="timeline-title">名校小组导师 x6</text>
-              <text class="timeline-desc">名校毕业与商业项目导师，跟班陪跑项目进展。</text>
-            </view>
-          </view>
-          <view class="timeline-item">
-            <view class="timeline-dot"></view>
-            <view class="timeline-content">
-              <text class="timeline-title">青年导师 · 技术共创</text>
-              <text class="timeline-desc">少年 CTO 与 AI 应用导师参与共创，带领技术落地。</text>
-            </view>
-          </view>
-          <image class="poster-image" mode="widthFix" src="/assets/poster/06-mentors.png" />
-          <text class="poster-caption">专业师资阵容</text>
+          <image
+            class="poster-image"
+            mode="widthFix"
+            src="{{posterUrls['/assets/poster/06-mentors.png']}}"
+            data-src="{{posterUrls['/assets/poster/06-mentors.png']}}"
+            binderror="onImageError"
+          />
         </view>
       </view>
     </view>
@@ -295,7 +240,9 @@
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="/assets/poster/guard-photo.jpg"
+            src="{{posterUrls['/assets/poster/guard-photo.jpg']}}"
+            data-src="{{posterUrls['/assets/poster/guard-photo.jpg']}}"
+            binderror="onImageError"
           />
           <view class="figure-content">
             <view class="figure-chip">全方位营期保障</view>
@@ -304,26 +251,13 @@
           </view>
         </view>
         <view class="section-body">
-          <view class="stay-grid">
-            <view class="stay-card">
-              <text class="stay-title">营养健康</text>
-              <text class="stay-desc">科学配餐与健康管理，全程陪护。</text>
-            </view>
-            <view class="stay-card">
-              <text class="stay-title">住宿与睡眠</text>
-              <text class="stay-desc">优质配套，保证休息与作息管理。</text>
-            </view>
-            <view class="stay-card">
-              <text class="stay-title">师生比 1:4</text>
-              <text class="stay-desc">科学配比，小组化陪伴与成长记录。</text>
-            </view>
-            <view class="stay-card">
-              <text class="stay-title">实时分享</text>
-              <text class="stay-desc">电子相册与家长群同步营期进展。</text>
-            </view>
-          </view>
-          <image class="poster-image" mode="widthFix" src="/assets/poster/07-guard.png" />
-          <text class="poster-caption">营期保障与标准</text>
+          <image
+            class="poster-image"
+            mode="widthFix"
+            src="{{posterUrls['/assets/poster/07-guard.png']}}"
+            data-src="{{posterUrls['/assets/poster/07-guard.png']}}"
+            binderror="onImageError"
+          />
         </view>
       </view>
     </view>
@@ -341,7 +275,9 @@
           <image
             class="figure-photo"
             mode="aspectFill"
-            src="/assets/poster/process-photo.jpg"
+            src="{{posterUrls['/assets/poster/process-photo.jpg']}}"
+            data-src="{{posterUrls['/assets/poster/process-photo.jpg']}}"
+            binderror="onImageError"
           />
           <view class="figure-content">
             <view class="figure-chip">报名与服务流程</view>
@@ -350,61 +286,20 @@
           </view>
         </view>
         <view class="section-body">
-          <text class="section-subtitle">报名与营期流程</text>
-          <view class="timeline-item">
-            <view class="timeline-dot"></view>
-            <view class="timeline-content">
-              <text class="timeline-title">顾问咨询</text>
-              <text class="timeline-desc">扫码添加专属顾问老师，了解营期与导师安排。</text>
-            </view>
-          </view>
-          <view class="timeline-item">
-            <view class="timeline-dot"></view>
-            <view class="timeline-content">
-              <text class="timeline-title">下单签约</text>
-              <text class="timeline-desc">确认信息后下单并签署合同，完成营期报名。</text>
-            </view>
-          </view>
-          <view class="timeline-item">
-            <view class="timeline-dot"></view>
-            <view class="timeline-content">
-              <text class="timeline-title">行前准备</text>
-              <text class="timeline-desc">开营前建群通知，收集出行与营期信息。</text>
-            </view>
-          </view>
-          <view class="timeline-item">
-            <view class="timeline-dot"></view>
-            <view class="timeline-content">
-              <text class="timeline-title">营地接站 · 正式开营</text>
-              <text class="timeline-desc">统一接站入营，开启 6 天游学与项目挑战。</text>
-            </view>
-          </view>
-          <view class="timeline-item">
-            <view class="timeline-dot"></view>
-            <view class="timeline-content">
-              <text class="timeline-title">结营展示</text>
-              <text class="timeline-desc">成果路演与证书颁发，老师送站离营。</text>
-            </view>
-          </view>
-          <image class="poster-image" mode="widthFix" src="/assets/poster/09-service.png" />
-          <text class="poster-caption">服务流程与退费说明</text>
-          <view class="qa-card">
-            <text class="qa-title">家长关心的问题</text>
-            <view class="qa-item">
-              <text class="qa-q">Q：孩子完全不懂编程可以参加吗？</text>
-              <text class="qa-a">可以。营地以 AI 工具与设计思维为核心，更注重思考、表达与创意落地。</text>
-            </view>
-            <view class="qa-item">
-              <text class="qa-q">Q：对升学有帮助吗？</text>
-              <text class="qa-a">项目成果可作为成长档案与作品集素材，提升表达与综合素养。</text>
-            </view>
-            <view class="qa-item">
-              <text class="qa-q">Q：家长需要陪同吗？</text>
-              <text class="qa-a">无需陪同。营期配备导师与班主任，全程陪伴与实时同步。</text>
-            </view>
-          </view>
-          <image class="poster-image" mode="widthFix" src="/assets/poster/08-parents.png" />
-          <text class="poster-caption">家长见证与 Q&A</text>
+          <image
+            class="poster-image"
+            mode="widthFix"
+            src="{{posterUrls['/assets/poster/09-service.png']}}"
+            data-src="{{posterUrls['/assets/poster/09-service.png']}}"
+            binderror="onImageError"
+          />
+          <image
+            class="poster-image"
+            mode="widthFix"
+            src="{{posterUrls['/assets/poster/08-parents.png']}}"
+            data-src="{{posterUrls['/assets/poster/08-parents.png']}}"
+            binderror="onImageError"
+          />
         </view>
       </view>
     </view>
