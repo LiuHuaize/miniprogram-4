@@ -25,7 +25,7 @@
           <text class="card-title">{{item.summary.title}}</text>
           <text class="card-sub">{{item.summary.sub}}</text>
         </view>
-        <view class="status-tag {{item.status === 'submitted' ? 'status-tag--active' : 'status-tag--muted'}}">
+        <view class="status-tag {{item.status === 'submitted' || item.status === 'paid' ? 'status-tag--active' : 'status-tag--muted'}}">
           {{item.statusText}}
         </view>
       </view>

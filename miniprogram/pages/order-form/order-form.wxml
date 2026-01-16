@@ -137,7 +137,16 @@
       <text class="bottom-label">活动费用</text>
       <text class="bottom-price">{{summary.price}}</text>
     </view>
-    <t-button class="submit-btn" theme="primary" shape="round" size="small" bindtap="onSubmit">提交订单</t-button>
+    <t-button
+      class="submit-btn"
+      theme="primary"
+      shape="round"
+      size="small"
+      disabled="{{submissionStatus === 'paid' || paying}}"
+      bindtap="onSubmit"
+    >
+      {{submissionStatus === 'paid' ? '已支付' : '提交订单'}}
+    </t-button>
   </view>
 
   <view class="period-mask" wx:if="{{periodPopupVisible}}" bindtap="onClosePeriods">

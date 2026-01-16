@@ -97,11 +97,13 @@ Component({
           }
           const list = result.data.map((item) => {
             const summary = getActivitySummary(item.activityId)
+            const statusText =
+              item.status === 'paid' ? '已支付' : item.status === 'submitted' ? '已提交' : '已撤销'
             return {
               id: item.id,
               activityId: item.activityId,
               status: item.status,
-              statusText: item.status === 'submitted' ? '已提交' : '已撤销',
+              statusText,
               updatedLabel: formatDate(item.updatedAt),
               childrenCount: item.childrenCount || 0,
               summary

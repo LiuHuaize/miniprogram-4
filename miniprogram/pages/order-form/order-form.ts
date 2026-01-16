@@ -38,6 +38,7 @@ Component({
     maxCampers: 6,
     submissionStatus: '',
     loading: false,
+    paying: false,
     loadedActivityId: ''
   },
   pageLifetimes: {
@@ -329,9 +330,106 @@ Component({
       }
       return true
     },
+    startPayment() {
+      if (!wx.cloud) {
+        wx.showToast({ title: '云开发未初始化', icon: 'none' })
+        return
+      }
+      if (this.data.paying) {
+        return
+      }
+      this.setData({ paying: true })
+      wx.showLoading({ title: '发起支付' })
+      wx.cloud.callFunction({
+        name: 'paymentPrepare',
+        data: {
+          activityId: this.data.activityId
+        },
+        success: (res) => {
+          const result = (res.result || {}) as {
+            ok?: boolean
+            message?: string
+            outTradeNo?: string
+            totalFee?: number
+          }
+          if (!result.ok || !result.outTradeNo || !result.totalFee) {
+            wx.hideLoading()
+            wx.showToast({ title: result.message || '支付发起失败', icon: 'none' })
+            this.setData({ paying: false })
+            return
+          }
+          wx.cloud.callFunction({
+            name: 'wxpayFunctions',
+            data: {
+              type: 'wxpay_order',
+              outTradeNo: result.outTradeNo,
+              totalFee: result.totalFee,
+              description: this.data.summary.title || '活动报名'
+            },
+            success: (callRes) => {
+              const paymentData = (callRes.result || {}).data as {
+                timeStamp?: string
+                nonceStr?: string
+                package?: string
+                packageVal?: string
+                paySign?: string
+                signType?: string
+              }
+              const packageValue = paymentData ? paymentData.packageVal || paymentData.package || '' : ''
+              if (!paymentData || !paymentData.timeStamp || !paymentData.nonceStr || !packageValue) {
+                wx.hideLoading()
+                wx.showToast({ title: '支付参数缺失', icon: 'none' })
+                this.setData({ paying: false })
+                return
+              }
+              wx.hideLoading()
+              wx.requestPayment({
+                timeStamp: paymentData.timeStamp,
+                nonceStr: paymentData.nonceStr,
+                package: packageValue,
+                paySign: paymentData.paySign || '',
+                signType: paymentData.signType || 'RSA',
+                success: () => {
+                  this.setData({ submissionStatus: 'paid' })
+                  wx.redirectTo({ url: '/pages/pay-success/pay-success' })
+                },
+                fail: (err) => {
+                  const errMsg = err && typeof err === 'object' && 'errMsg' in err ? String(err.errMsg) : ''
+                  if (errMsg.includes('cancel')) {
+                    wx.showToast({ title: '已取消支付', icon: 'none' })
+                  } else {
+                    wx.showToast({ title: '支付失败', icon: 'none' })
+                  }
+                },
+                complete: () => {
+                  this.setData({ paying: false })
+                }
+              })
+            },
+            fail: () => {
+              wx.hideLoading()
+              wx.showToast({ title: '支付发起失败', icon: 'none' })
+              this.setData({ paying: false })
+            }
+          })
+        },
+        fail: () => {
+          wx.hideLoading()
+          wx.showToast({ title: '支付发起失败', icon: 'none' })
+          this.setData({ paying: false })
+        }
+      })
+    },
     onSubmit() {
       if (!wx.cloud) {
         wx.showToast({ title: '云开发未初始化', icon: 'none' })
+        return
+      }
+      if (this.data.submissionStatus === 'paid') {
+        wx.showToast({ title: '订单已支付', icon: 'none' })
+        return
+      }
+      if (this.data.paying) {
         return
       }
       if (!this.validateForm()) {
@@ -358,15 +456,15 @@ Component({
           const result = (res.result || {}) as { ok?: boolean; message?: string }
           if (!result.ok) {
             wx.showToast({ title: result.message || '提交失败', icon: 'none' })
+            wx.hideLoading()
             return
           }
           this.setData({ submissionStatus: 'submitted' })
-          wx.showToast({ title: '提交成功', icon: 'success' })
+          wx.hideLoading()
+          this.startPayment()
         },
         fail: () => {
           wx.showToast({ title: '提交失败', icon: 'none' })
-        },
-        complete: () => {
           wx.hideLoading()
         }
       })

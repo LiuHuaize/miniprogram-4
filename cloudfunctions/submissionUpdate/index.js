@@ -131,7 +131,8 @@ exports.main = async (event) => {
     }
 
     if (existing.data.status !== 'submitted') {
-      return { ok: false, message: 'Submission is cancelled' }
+      const message = existing.data.status === 'paid' ? 'Submission already paid' : 'Submission is cancelled'
+      return { ok: false, message }
     }
 
     const userRes = await users.where({ ownerOpenid: OPENID }).limit(1).get()

@@ -17,6 +17,9 @@ exports.main = async (event) => {
   if (!existing || !existing.data) {
     return { ok: false, message: 'Submission not found' }
   }
+  if (existing.data.status === 'paid') {
+    return { ok: false, message: 'Submission already paid' }
+  }
 
   const now = db.serverDate()
   await submissions.doc(docId).update({

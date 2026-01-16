@@ -147,6 +147,9 @@ exports.main = async (event) => {
     if (existingDoc && existingDoc.status === 'submitted') {
       return { ok: false, message: 'Submission already exists' }
     }
+    if (existingDoc && existingDoc.status === 'paid') {
+      return { ok: false, message: 'Submission already paid' }
+    }
 
     const guardianResult = buildGuardianSnapshot(guardianInput, existingDoc, user)
     const childrenSnapshot = await buildChildrenSnapshots(OPENID, childIds)
