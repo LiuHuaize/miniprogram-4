@@ -33,3 +33,8 @@
 ## Security & Configuration Tips
 - Do not hardcode secrets or API keys in `.ts` or `.json`.
 - Treat `project.private.config.json` as developer-local config; keep project-wide settings in `project.config.json`.
+
+## Known Issues & Fixes
+- iOS 真机扫码出现“列表/详情不显示但数据存在”时，优先检查 `.scroll-area` 容器高度。
+- 经验修复：将 `.scroll-area` 的 `height: 0;` 改为 `min-height: 0;`，并保留 `flex: 1;`。
+- 建议用 `wx.createSelectorQuery().boundingClientRect()` 打日志确认真机布局尺寸。

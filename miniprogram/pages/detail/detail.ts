@@ -1,5 +1,18 @@
 import { getPosterFallbackUrls, loadPosterUrls } from '../../utils/cloud-assets'
 
+const logPrefix = '[detail]'
+const logInfo = (message: string, payload?: unknown) => {
+  try {
+    if (payload !== undefined) {
+      console.log(logPrefix, message, payload)
+    } else {
+      console.log(logPrefix, message)
+    }
+  } catch (error) {
+    // ignore logging errors
+  }
+}
+
 Component({
   data: {
     activityId: '',
@@ -36,7 +49,18 @@ Component({
       if (activityId) {
         this.setData({ activityId })
       }
+      logInfo('attached', { activityId })
       this.loadPosterUrls()
+    },
+    ready() {
+      logInfo('ready')
+      this.logLayout('ready')
+    }
+  },
+  pageLifetimes: {
+    show() {
+      logInfo('page show')
+      this.logLayout('page-show')
     }
   },
   methods: {
@@ -46,8 +70,27 @@ Component({
     },
     loadPosterUrls() {
       loadPosterUrls().then((posterUrls) => {
-        this.setData({ posterUrls })
+        this.setData({ posterUrls }, () => {
+          logInfo('poster urls loaded', { total: Object.keys(posterUrls || {}).length })
+          this.logLayout('after-setData')
+        })
       })
+    },
+    logLayout(tag: string) {
+      try {
+        wx.nextTick(() => {
+          const query = wx.createSelectorQuery().in(this)
+          query.select('.scroll-area').boundingClientRect()
+          query.exec((res) => {
+            const [scrollArea] = res || []
+            logInfo(`layout ${tag}`, {
+              scrollArea
+            })
+          })
+        })
+      } catch (error) {
+        console.warn(logPrefix, 'logLayout failed', error)
+      }
     },
     onBack() {
       wx.navigateBack({
