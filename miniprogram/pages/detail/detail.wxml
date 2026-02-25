@@ -49,7 +49,7 @@
           <text class="info-sub">营期时间：2026.02.08-02.13</text>
         </view>
         <view class="info-right">
-          <text class="info-price">咨询价</text>
+          <text class="info-price">{{priceLabel}}</text>
           <text class="info-tip">10-16 岁 · 6 天 5 晚</text>
         </view>
       </view>
@@ -309,9 +309,9 @@
     <view class="bottom-bar-inner">
       <view class="bottom-info">
         <text class="bottom-label">活动费用</text>
-        <text class="bottom-price">咨询价</text>
+        <text class="bottom-price">{{priceLabel}}</text>
       </view>
-      <t-button class="apply-btn" theme="primary" shape="round" size="small" bindtap="onApply">我要报名</t-button>
+      <t-button class="apply-btn" theme="primary" shape="round" size="small" disabled="{{applyClosed}}" bindtap="onApply">我要报名</t-button>
     </view>
   </view>
 
@@ -322,7 +322,7 @@
       <view class="period-head">
         <view class="period-top">
           <text class="period-title">少年独角兽 AI 创业营 2026</text>
-          <text class="period-price">咨询价</text>
+          <text class="period-price">{{priceLabel}}</text>
         </view>
         <view class="period-sub">报名截止：{{periods[selectedPeriodIndex].deadline}}</view>
         <text class="period-quota">{{periods[selectedPeriodIndex].quota}}</text>

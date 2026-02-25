@@ -1,7 +1,7 @@
 <view class="page">
   <view class="status-spacer"></view>
 
-  <view class="page-title">亿小步未来独角兽</view>
+  <view class="page-title">亿小步少年独角兽</view>
 
   <view class="search-section">
     <t-search
