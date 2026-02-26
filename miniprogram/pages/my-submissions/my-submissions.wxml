@@ -18,6 +18,8 @@
       wx:for="{{list}}"
       wx:key="id"
       data-activity-id="{{item.activityId}}"
+      data-period-id="{{item.periodId}}"
+      data-submission-id="{{item.id}}"
       bindtap="onOpen"
     >
       <view class="card-header">
@@ -40,6 +42,8 @@
           shape="round"
           size="small"
           data-activity-id="{{item.activityId}}"
+          data-period-id="{{item.periodId}}"
+          data-submission-id="{{item.id}}"
           bindtap="onOpen"
         >
           查看/修改
@@ -51,6 +55,8 @@
           size="small"
           disabled="{{item.status !== 'submitted'}}"
           data-activity-id="{{item.activityId}}"
+          data-period-id="{{item.periodId}}"
+          data-submission-id="{{item.id}}"
           bindtap="onCancel"
         >
           撤销

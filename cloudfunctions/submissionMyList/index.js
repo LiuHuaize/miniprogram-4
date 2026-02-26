@@ -15,6 +15,8 @@ exports.main = async () => {
   const data = (res.data || []).map((doc) => ({
     id: doc._id,
     activityId: doc.activityId,
+    periodId: doc.periodId || '',
+    periodSnapshot: doc.periodSnapshot || null,
     status: doc.status,
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,

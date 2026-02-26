@@ -1,20 +1,87 @@
 import { getActivitySummary } from '../../utils/activities'
 import { getPosterFallbackUrls, loadPosterUrls } from '../../utils/cloud-assets'
 
+type ActivityPeriod = {
+  id: string
+  name: string
+  date: string
+  deadline: string
+  quota: string
+}
+
+type PeriodSnapshot = {
+  id: string
+  name: string
+  date: string
+  deadline: string
+  quota: string
+}
+
+const defaultActivityId = 'ai-camp-2026'
+
+const activityPeriodsMap: Record<string, ActivityPeriod[]> = {
+  'ai-camp-2026': [
+    {
+      id: 'sz-p1',
+      name: '第一期（深圳）',
+      date: '02/08 - 02/13',
+      deadline: '2026.02.07',
+      quota: '名额情况：已结束'
+    }
+  ],
+  'ai-camp-2026-copy': [
+    {
+      id: 'sz-p1',
+      name: '第一期（深圳）',
+      date: '07/13 - 07/18',
+      deadline: '2026.07.12',
+      quota: '名额情况：招生中'
+    },
+    {
+      id: 'hz-p2',
+      name: '第二期（杭州）',
+      date: '07/27 - 08/01',
+      deadline: '2026.07.26',
+      quota: '名额情况：招生中'
+    },
+    {
+      id: 'bj-p3',
+      name: '第三期（北京）',
+      date: '08/10 - 08/15',
+      deadline: '2026.08.09',
+      quota: '名额情况：招生中'
+    }
+  ]
+}
+
+const getActivityPeriods = (activityId: string) => {
+  const periods = activityPeriodsMap[activityId] || activityPeriodsMap[defaultActivityId]
+  return periods.map((item) => ({ ...item }))
+}
+
+const decodeValue = (value?: string) => {
+  if (!value) return ''
+  try {
+    return decodeURIComponent(value)
+  } catch {
+    return value
+  }
+}
+
+const buildPeriodSnapshot = (period?: ActivityPeriod): PeriodSnapshot => ({
+  id: period?.id || '',
+  name: period?.name || '',
+  date: period?.date || '',
+  deadline: period?.deadline || '',
+  quota: period?.quota || ''
+})
+
 Component({
   data: {
-    activityId: 'ai-camp-2026',
-    summary: getActivitySummary('ai-camp-2026'),
+    activityId: defaultActivityId,
+    summary: getActivitySummary(defaultActivityId),
     posterUrls: getPosterFallbackUrls(),
-    periods: [
-      {
-        id: 'p1',
-        name: '第一期',
-        date: '02/08 - 02/13',
-        deadline: '2026.02.07',
-        quota: '名额情况：咨询顾问'
-      }
-    ],
+    periods: getActivityPeriods(defaultActivityId),
     selectedPeriodIndex: 0,
     periodPopupVisible: false,
     guardian: {
@@ -36,10 +103,13 @@ Component({
       }
     ],
     maxCampers: 6,
+    submissionId: '',
     submissionStatus: '',
     loading: false,
     paying: false,
-    loadedActivityId: ''
+    loadedActivityId: '',
+    loadedSubmissionId: '',
+    loadedPeriodId: ''
   },
   pageLifetimes: {
     show() {
@@ -49,48 +119,77 @@ Component({
         options?: Record<string, string>
       }
       const options = current?.options || {}
-      const periodName = options.periodName ? decodeURIComponent(options.periodName) : ''
-      const periodDate = options.periodDate ? decodeURIComponent(options.periodDate) : ''
-      const activityId = options.activityId ? decodeURIComponent(options.activityId) : ''
+      const periodId = decodeValue(options.periodId)
+      const periodName = decodeValue(options.periodName)
+      const periodDate = decodeValue(options.periodDate)
+      const activityId = decodeValue(options.activityId)
+      const submissionId = decodeValue(options.submissionId)
       const nextActivityId = activityId || this.data.activityId
-      if (nextActivityId) {
-        this.setData({
-          activityId: nextActivityId,
-          summary: getActivitySummary(nextActivityId)
-        })
+      const sameActivity = nextActivityId === this.data.activityId
+      const periods = getActivityPeriods(nextActivityId)
+      let selectedPeriodIndex = 0
+      if (sameActivity && !periodId && !periodName) {
+        selectedPeriodIndex = Math.max(0, Math.min(this.data.selectedPeriodIndex, periods.length - 1))
       }
-      if (periodName) {
-        const index = this.data.periods.findIndex((item) => item.name === periodName)
+      if (periodId) {
+        const index = periods.findIndex((item) => item.id === periodId)
         if (index !== -1) {
-          this.setData({
-            selectedPeriodIndex: index
-          })
+          selectedPeriodIndex = index
+        }
+      } else if (periodName) {
+        const index = periods.findIndex((item) => item.name === periodName)
+        if (index !== -1) {
+          selectedPeriodIndex = index
         }
       }
-      if (periodDate) {
-        const period = this.data.periods[this.data.selectedPeriodIndex]
-        if (period && period.date !== periodDate) {
-          const periods = this.data.periods.map((item, index) => {
-            if (index === this.data.selectedPeriodIndex) {
-              return {
-                ...item,
-                date: periodDate
+      const nextPeriods =
+        periodDate && periods[selectedPeriodIndex] && periods[selectedPeriodIndex].date !== periodDate
+          ? periods.map((item, index) => {
+              if (index === selectedPeriodIndex) {
+                return {
+                  ...item,
+                  date: periodDate
+                }
               }
-            }
-            return item
-          })
-          this.setData({ periods })
-        }
-      }
-      if (nextActivityId && this.data.loadedActivityId !== nextActivityId) {
-        this.setData({ loadedActivityId: nextActivityId })
+              return item
+            })
+          : periods
+      const currentPeriodId = this.data.periods[this.data.selectedPeriodIndex]?.id || ''
+      const nextPeriodId = nextPeriods[selectedPeriodIndex]?.id || ''
+      const samePeriod = sameActivity && nextPeriodId === currentPeriodId
+      const nextSubmissionId = submissionId || (samePeriod ? this.data.submissionId : '')
+      this.setData({
+        submissionId: nextSubmissionId,
+        submissionStatus: nextSubmissionId ? this.data.submissionStatus : '',
+        activityId: nextActivityId,
+        summary: getActivitySummary(nextActivityId),
+        periods: nextPeriods,
+        selectedPeriodIndex
+      })
+      if (
+        nextActivityId &&
+        (this.data.loadedActivityId !== nextActivityId ||
+          this.data.loadedSubmissionId !== nextSubmissionId ||
+          this.data.loadedPeriodId !== nextPeriodId)
+      ) {
+        this.setData({
+          loadedActivityId: nextActivityId,
+          loadedSubmissionId: nextSubmissionId,
+          loadedPeriodId: nextPeriodId
+        })
         this.ensureLogin().then(() => {
-          this.loadSubmission()
+          this.loadSubmission(nextSubmissionId, nextPeriodId)
         })
       }
     }
   },
   methods: {
+    getSelectedPeriod() {
+      return this.data.periods[this.data.selectedPeriodIndex]
+    },
+    getSelectedPeriodId() {
+      return this.getSelectedPeriod()?.id || ''
+    },
     onImageError(event: WechatMiniprogram.ImageErrorEvent) {
       const dataset = event.currentTarget.dataset as { src?: string }
       console.warn('image-load-failed', dataset?.src || '', event.detail?.errMsg || '')
@@ -129,25 +228,32 @@ Component({
         })
       })
     },
-    loadSubmission() {
+    loadSubmission(submissionId?: string, periodId?: string) {
       if (!wx.cloud) {
         return
       }
+      const targetPeriodId = periodId || this.getSelectedPeriodId()
       this.setData({ loading: true })
       wx.cloud.callFunction({
         name: 'submissionGetByActivity',
         data: {
-          activityId: this.data.activityId
+          activityId: this.data.activityId,
+          periodId: targetPeriodId,
+          submissionId: submissionId || this.data.submissionId
         },
         success: (res) => {
           const result = (res.result || {}) as {
             ok?: boolean
             data?: {
+              id: string
+              activityId?: string
+              periodId?: string
               status: string
               guardianSnapshot: {
                 name: string
                 phone: string
                 wechat: string
+                idNo: string
                 idNoMask: string
               }
               childrenSnapshot: Array<{
@@ -161,9 +267,24 @@ Component({
               }>
             } | null
           }
-          if (!result.ok || !result.data) {
+          if (!result.ok) {
             return
           }
+          if (!result.data) {
+            this.setData({ submissionId: '', submissionStatus: '', loadedSubmissionId: '' })
+            return
+          }
+          const periodIdFromData = result.data.periodId || targetPeriodId
+          const periodIndex = periodIdFromData
+            ? this.data.periods.findIndex((item) => item.id === periodIdFromData)
+            : -1
+          const selectedPeriodIndex = periodIndex !== -1 ? periodIndex : this.data.selectedPeriodIndex
+          console.info('order-form:loadSubmission', {
+            activityId: this.data.activityId,
+            periodId: periodIdFromData,
+            status: result.data.status,
+            campersCount: result.data.childrenSnapshot?.length || 0
+          })
           const guardian = result.data.guardianSnapshot
           const campers = result.data.childrenSnapshot.length
             ? result.data.childrenSnapshot
@@ -179,12 +300,16 @@ Component({
                 }
               ]
           this.setData({
+            submissionId: result.data.id || '',
             submissionStatus: result.data.status,
+            selectedPeriodIndex,
+            loadedSubmissionId: result.data.id || this.data.loadedSubmissionId,
+            loadedPeriodId: periodIdFromData || this.data.loadedPeriodId,
             guardian: {
               name: guardian.name || '',
               phone: guardian.phone || '',
               wechat: guardian.wechat || '',
-              idNo: '',
+              idNo: guardian.idNo || '',
               idNoMask: guardian.idNoMask || ''
             },
             campers
@@ -223,8 +348,24 @@ Component({
       })
     },
     onConfirmPeriod() {
+      const periodId = this.getSelectedPeriodId()
+      const shouldReload =
+        periodId !== this.data.loadedPeriodId || this.data.loadedActivityId !== this.data.activityId
       this.setData({
         periodPopupVisible: false
+      })
+      if (!shouldReload) {
+        return
+      }
+      this.setData({
+        submissionId: '',
+        submissionStatus: '',
+        loadedActivityId: this.data.activityId,
+        loadedSubmissionId: '',
+        loadedPeriodId: periodId
+      })
+      this.ensureLogin().then(() => {
+        this.loadSubmission('', periodId)
       })
     },
     onChangeCount(event: WechatMiniprogram.BaseEvent) {
@@ -338,12 +479,20 @@ Component({
       if (this.data.paying) {
         return
       }
+      const periodId = this.getSelectedPeriodId()
+      console.info('order-form:startPayment', {
+        activityId: this.data.activityId,
+        periodId,
+        submissionStatus: this.data.submissionStatus
+      })
       this.setData({ paying: true })
       wx.showLoading({ title: '发起支付' })
       wx.cloud.callFunction({
         name: 'paymentPrepare',
         data: {
-          activityId: this.data.activityId
+          activityId: this.data.activityId,
+          periodId,
+          submissionId: this.data.submissionId
         },
         success: (res) => {
           const result = (res.result || {}) as {
@@ -351,22 +500,54 @@ Component({
             message?: string
             outTradeNo?: string
             totalFee?: number
+            activityId?: string
+            periodId?: string
+            submissionId?: string
           }
+          console.info('order-form:paymentPrepare:result', result)
           if (!result.ok || !result.outTradeNo || !result.totalFee) {
             wx.hideLoading()
             wx.showToast({ title: result.message || '支付发起失败', icon: 'none' })
             this.setData({ paying: false })
             return
           }
+          if (result.submissionId && result.submissionId !== this.data.submissionId) {
+            this.setData({
+              submissionId: result.submissionId,
+              loadedSubmissionId: result.submissionId
+            })
+          }
+          const paymentSnapshot = {
+            outTradeNo: result.outTradeNo,
+            totalFee: result.totalFee,
+            activityId: result.activityId || this.data.activityId,
+            periodId: result.periodId || periodId,
+            activityTitle: this.data.summary.title || '活动报名',
+            submissionId: result.submissionId || this.data.submissionId || ''
+          }
           wx.cloud.callFunction({
             name: 'wxpayFunctions',
             data: {
               type: 'wxpay_order',
-              outTradeNo: result.outTradeNo,
-              totalFee: result.totalFee,
+              outTradeNo: paymentSnapshot.outTradeNo,
+              totalFee: paymentSnapshot.totalFee,
               description: this.data.summary.title || '活动报名'
             },
             success: (callRes) => {
+              console.info('order-form:wxpayFunctions:raw', callRes)
+              const rawResult = (callRes.result || {}) as { errcode?: string; errmsg?: string }
+              const errMsg = typeof rawResult.errmsg === 'string' ? rawResult.errmsg : ''
+              if (rawResult.errcode || errMsg) {
+                wx.hideLoading()
+                if (errMsg.includes('ORDERPAID')) {
+                  wx.showToast({ title: '订单已支付，可再次购买', icon: 'none' })
+                  this.setData({ submissionStatus: 'paid', submissionId: '' })
+                } else {
+                  wx.showToast({ title: '支付发起失败', icon: 'none' })
+                }
+                this.setData({ paying: false })
+                return
+              }
               const paymentData = (callRes.result || {}).data as {
                 timeStamp?: string
                 nonceStr?: string
@@ -376,8 +557,18 @@ Component({
                 signType?: string
               }
               const packageValue = paymentData ? paymentData.packageVal || paymentData.package || '' : ''
+              console.info('order-form:wxpayFunctions:parsed', {
+                hasTimeStamp: !!paymentData?.timeStamp,
+                hasNonceStr: !!paymentData?.nonceStr,
+                hasPackage: !!packageValue,
+                signType: paymentData?.signType || '',
+                keys: paymentData ? Object.keys(paymentData) : []
+              })
               if (!paymentData || !paymentData.timeStamp || !paymentData.nonceStr || !packageValue) {
                 wx.hideLoading()
+                console.warn('order-form:payment-missing', {
+                  result: callRes?.result || null
+                })
                 wx.showToast({ title: '支付参数缺失', icon: 'none' })
                 this.setData({ paying: false })
                 return
@@ -391,7 +582,29 @@ Component({
                 signType: paymentData.signType || 'RSA',
                 success: () => {
                   this.setData({ submissionStatus: 'paid' })
-                  wx.redirectTo({ url: '/pages/pay-success/pay-success' })
+                  wx.setStorageSync('last_pay_success', {
+                    ...paymentSnapshot,
+                    paidAt: Date.now()
+                  })
+                  const query = [
+                    paymentSnapshot.outTradeNo
+                      ? `outTradeNo=${encodeURIComponent(paymentSnapshot.outTradeNo)}`
+                      : '',
+                    paymentSnapshot.totalFee ? `totalFee=${encodeURIComponent(String(paymentSnapshot.totalFee))}` : '',
+                    paymentSnapshot.activityId ? `activityId=${encodeURIComponent(paymentSnapshot.activityId)}` : '',
+                    paymentSnapshot.periodId ? `periodId=${encodeURIComponent(paymentSnapshot.periodId)}` : '',
+                    paymentSnapshot.activityTitle
+                      ? `activityTitle=${encodeURIComponent(paymentSnapshot.activityTitle)}`
+                      : '',
+                    paymentSnapshot.submissionId
+                      ? `submissionId=${encodeURIComponent(paymentSnapshot.submissionId)}`
+                      : ''
+                  ]
+                    .filter(Boolean)
+                    .join('&')
+                  wx.redirectTo({
+                    url: query ? `/pages/pay-success/pay-success?${query}` : '/pages/pay-success/pay-success'
+                  })
                 },
                 fail: (err) => {
                   const errMsg = err && typeof err === 'object' && 'errMsg' in err ? String(err.errMsg) : ''
@@ -425,25 +638,38 @@ Component({
         wx.showToast({ title: '云开发未初始化', icon: 'none' })
         return
       }
-      if (this.data.submissionStatus === 'paid') {
-        wx.showToast({ title: '订单已支付', icon: 'none' })
-        return
-      }
       if (this.data.paying) {
         return
       }
       if (!this.validateForm()) {
         return
       }
+      const selectedPeriod = this.getSelectedPeriod()
+      if (!selectedPeriod || !selectedPeriod.id) {
+        wx.showToast({ title: '请选择期数', icon: 'none' })
+        return
+      }
       const childIds = this.data.campers.map((item) => item.id).filter(Boolean)
-      const isUpdate = this.data.submissionStatus === 'submitted'
+      const isUpdate = this.data.submissionStatus === 'submitted' && !!this.data.submissionId
       const functionName = isUpdate ? 'submissionUpdate' : 'submissionSubmit'
+
+      console.info('order-form:submit', {
+        activityId: this.data.activityId,
+        periodId: selectedPeriod.id,
+        submissionStatus: this.data.submissionStatus,
+        campersCount: this.data.campers.length,
+        childIdsCount: childIds.length,
+        functionName
+      })
 
       wx.showLoading({ title: '提交中' })
       wx.cloud.callFunction({
         name: functionName,
         data: {
           activityId: this.data.activityId,
+          periodId: selectedPeriod.id,
+          periodSnapshot: buildPeriodSnapshot(selectedPeriod),
+          submissionId: isUpdate ? this.data.submissionId : '',
           guardian: {
             name: this.data.guardian.name,
             phone: this.data.guardian.phone,
@@ -453,13 +679,18 @@ Component({
           childIds
         },
         success: (res) => {
-          const result = (res.result || {}) as { ok?: boolean; message?: string }
+          const result = (res.result || {}) as { ok?: boolean; message?: string; submissionId?: string }
+          console.info('order-form:submit:result', result)
           if (!result.ok) {
             wx.showToast({ title: result.message || '提交失败', icon: 'none' })
             wx.hideLoading()
             return
           }
-          this.setData({ submissionStatus: 'submitted' })
+          this.setData({
+            submissionStatus: 'submitted',
+            submissionId: result.submissionId || this.data.submissionId,
+            loadedSubmissionId: result.submissionId || this.data.loadedSubmissionId
+          })
           wx.hideLoading()
           this.startPayment()
         },

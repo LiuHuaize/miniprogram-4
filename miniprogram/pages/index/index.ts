@@ -3,10 +3,23 @@ import { getPosterFallbackUrls, loadPosterUrls } from '../../utils/cloud-assets'
 const buildCards = (coverUrl: string) => [
   {
     id: 1,
+    activityId: 'ai-camp-2026-copy',
+    status: '报名中',
+    tagStyle: 'background: #e8f6ec; color: #1f8f4f;',
+    subLabel: '2026 AI 创业营',
+    heroTitle: '少年独角兽',
+    heroDesc: 'AI 创业营 · 深圳 / 杭州 / 北京',
+    title: '少年独角兽 AI 创业营（深圳 / 杭州 / 北京）',
+    meta: '6 天 · 深圳 / 杭州 / 北京 · 10-16 岁',
+    heroStyle: `background-image: url("${coverUrl}"); background-size: cover; background-position: center; background-repeat: no-repeat;`,
+    overlayStyle: 'background: linear-gradient(180deg, rgba(30, 64, 175, 0.12), rgba(30, 64, 175, 0.55));',
+    themeClass: 'card-hero--light'
+  },
+  {
+    id: 2,
     activityId: 'ai-camp-2026',
     status: '已结束',
-    tagStyle:
-      'background: rgba(255, 255, 255, 0.9); color: #475569; border: 1px solid rgba(255, 255, 255, 0.55); box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);',
+    tagStyle: 'background: #fdf3d1; color: #b77a08;',
     subLabel: '2026 AI 创业营',
     heroTitle: '少年独角兽',
     heroDesc: 'AI 创业营 · 深圳',
@@ -96,10 +109,19 @@ Component({
   },
   methods: {
     onCardTap(e: WechatMiniprogram.BaseEvent) {
-      const { activityId } = e.currentTarget.dataset as { activityId?: string }
-      logInfo('card tap', { activityId })
+      const { activityId, id } = e.currentTarget.dataset as { activityId?: string; id?: number | string }
+      const fallbackActivityId = this.data.cards.find((item) => `${item.id}` === `${id || ''}`)?.activityId || ''
+      const resolvedActivityId = activityId || fallbackActivityId
+      logInfo('card tap', { activityId, id, resolvedActivityId })
+      if (!resolvedActivityId) {
+        wx.showToast({
+          title: '活动信息异常，请重试',
+          icon: 'none'
+        })
+        return
+      }
       wx.navigateTo({
-        url: `/pages/detail/detail?activityId=${encodeURIComponent(activityId || '')}`
+        url: `/pages/detail/detail?activityId=${encodeURIComponent(resolvedActivityId)}`
       })
     },
     onTabChange(e: WechatMiniprogram.CustomEvent) {

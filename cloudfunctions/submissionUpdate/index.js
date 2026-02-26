@@ -113,6 +113,34 @@ const buildChildrenSnapshots = async (openid, childIds) => {
   return snapshots
 }
 
+const getLatestSubmitted = async (openid, activityId, periodId) => {
+  const where = {
+    ownerOpenid: openid,
+    activityId,
+    status: 'submitted'
+  }
+  if (periodId) {
+    where.periodId = periodId
+  }
+  const res = await submissions.where(where).orderBy('updatedAt', 'desc').limit(1).get()
+  if (!res.data || !res.data.length) {
+    return null
+  }
+  return res.data[0]
+}
+
+const buildPeriodSnapshot = (periodInput, periodId, fallbackSnapshot) => {
+  const period = periodInput && typeof periodInput === 'object' ? periodInput : {}
+  const fallback = fallbackSnapshot && typeof fallbackSnapshot === 'object' ? fallbackSnapshot : {}
+  return {
+    id: periodId,
+    name: normalizeText(period.name) || normalizeText(fallback.name),
+    date: normalizeText(period.date) || normalizeText(fallback.date),
+    deadline: normalizeText(period.deadline) || normalizeText(fallback.deadline),
+    quota: normalizeText(period.quota) || normalizeText(fallback.quota)
+  }
+}
+
 exports.main = async (event) => {
   try {
     const { OPENID } = cloud.getWXContext()
@@ -120,15 +148,29 @@ exports.main = async (event) => {
     if (!activityId) {
       return { ok: false, message: 'activityId is required' }
     }
+    const periodId = event && event.periodId ? String(event.periodId).trim() : ''
 
     const guardianInput = event.guardian || {}
     const childIds = Array.isArray(event.childIds) ? event.childIds.filter(Boolean) : []
 
-    const docId = `${OPENID}_${activityId}`
-    const existing = await submissions.doc(docId).get().catch(() => null)
+    const submissionId = event && event.submissionId ? String(event.submissionId) : ''
+    const existing = submissionId
+      ? await submissions.doc(submissionId).get().catch(() => null)
+      : await getLatestSubmitted(OPENID, activityId, periodId).then((doc) => (doc ? { data: doc } : null))
     if (!existing || !existing.data) {
       return { ok: false, message: 'Submission not found' }
     }
+    if (existing.data.ownerOpenid !== OPENID || existing.data.activityId !== activityId) {
+      return { ok: false, message: 'Submission not found' }
+    }
+    if (periodId && existing.data.periodId && existing.data.periodId !== periodId) {
+      return { ok: false, message: 'Submission not found' }
+    }
+    const effectivePeriodId = periodId || existing.data.periodId || ''
+    if (!effectivePeriodId) {
+      return { ok: false, message: 'periodId is required' }
+    }
+    const docId = existing.data._id || submissionId
 
     if (existing.data.status !== 'submitted') {
       const message = existing.data.status === 'paid' ? 'Submission already paid' : 'Submission is cancelled'
@@ -140,10 +182,13 @@ exports.main = async (event) => {
 
     const guardianResult = buildGuardianSnapshot(guardianInput, existing.data, user)
     const childrenSnapshot = await buildChildrenSnapshots(OPENID, childIds)
+    const periodSnapshot = buildPeriodSnapshot(event.periodSnapshot, effectivePeriodId, existing.data.periodSnapshot)
 
     const now = db.serverDate()
     await submissions.doc(docId).update({
       data: {
+        periodId: effectivePeriodId,
+        periodSnapshot,
         guardianSnapshot: guardianResult.snapshot,
         childrenSnapshot,
         childIds,
@@ -160,7 +205,7 @@ exports.main = async (event) => {
       })
     }
 
-    return { ok: true }
+    return { ok: true, submissionId: docId }
   } catch (err) {
     return { ok: false, message: err.message || 'Server error' }
   }

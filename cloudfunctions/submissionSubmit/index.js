@@ -33,6 +33,22 @@ const getOrCreateUser = async (openid, now) => {
   return { _id: addRes._id, ownerOpenid: openid }
 }
 
+const getLatestSubmitted = async (openid, activityId, periodId) => {
+  const where = {
+    ownerOpenid: openid,
+    activityId,
+    status: 'submitted'
+  }
+  if (periodId) {
+    where.periodId = periodId
+  }
+  const res = await submissions.where(where).orderBy('updatedAt', 'desc').limit(1).get()
+  if (res.data && res.data.length > 0) {
+    return res.data[0]
+  }
+  return null
+}
+
 const buildGuardianSnapshot = (guardianInput, existingSubmission, existingUser) => {
   const name = normalizeText(guardianInput.name)
   const phone = normalizeText(guardianInput.phone)
@@ -127,6 +143,17 @@ const buildChildrenSnapshots = async (openid, childIds) => {
   return snapshots
 }
 
+const buildPeriodSnapshot = (periodInput, periodId) => {
+  const period = periodInput && typeof periodInput === 'object' ? periodInput : {}
+  return {
+    id: periodId,
+    name: normalizeText(period.name),
+    date: normalizeText(period.date),
+    deadline: normalizeText(period.deadline),
+    quota: normalizeText(period.quota)
+  }
+}
+
 exports.main = async (event) => {
   try {
     const { OPENID } = cloud.getWXContext()
@@ -134,30 +161,28 @@ exports.main = async (event) => {
     if (!activityId) {
       return { ok: false, message: 'activityId is required' }
     }
+    const periodId = event && event.periodId ? String(event.periodId).trim() : ''
+    if (!periodId) {
+      return { ok: false, message: 'periodId is required' }
+    }
 
     const now = db.serverDate()
     const guardianInput = event.guardian || {}
     const childIds = Array.isArray(event.childIds) ? event.childIds.filter(Boolean) : []
+    const periodSnapshot = buildPeriodSnapshot(event.periodSnapshot, periodId)
 
     const user = await getOrCreateUser(OPENID, now)
-    const docId = `${OPENID}_${activityId}`
-    const existing = await submissions.doc(docId).get().catch(() => null)
-    const existingDoc = existing && existing.data ? existing.data : null
+    const existingSubmitted = await getLatestSubmitted(OPENID, activityId, periodId)
 
-    if (existingDoc && existingDoc.status === 'submitted') {
-      return { ok: false, message: 'Submission already exists' }
-    }
-    if (existingDoc && existingDoc.status === 'paid') {
-      return { ok: false, message: 'Submission already paid' }
-    }
-
-    const guardianResult = buildGuardianSnapshot(guardianInput, existingDoc, user)
+    const guardianResult = buildGuardianSnapshot(guardianInput, existingSubmitted, user)
     const childrenSnapshot = await buildChildrenSnapshots(OPENID, childIds)
 
     const submissionData = {
       ownerOpenid: OPENID,
       guardianId: user._id,
       activityId,
+      periodId,
+      periodSnapshot,
       status: 'submitted',
       guardianSnapshot: guardianResult.snapshot,
       childrenSnapshot,
@@ -166,11 +191,14 @@ exports.main = async (event) => {
       cancelledAt: null
     }
 
-    if (existingDoc) {
-      await submissions.doc(docId).update({ data: submissionData })
+    let submissionId = ''
+    if (existingSubmitted) {
+      submissionId = existingSubmitted._id
+      await submissions.doc(submissionId).update({ data: submissionData })
     } else {
       submissionData.createdAt = now
-      await submissions.doc(docId).set({ data: submissionData })
+      const addRes = await submissions.add({ data: submissionData })
+      submissionId = addRes._id
     }
 
     await users.doc(user._id).update({
@@ -180,7 +208,7 @@ exports.main = async (event) => {
       }
     })
 
-    return { ok: true, submissionId: docId }
+    return { ok: true, submissionId }
   } catch (err) {
     return { ok: false, message: err.message || 'Server error' }
   }

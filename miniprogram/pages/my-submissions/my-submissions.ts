@@ -23,6 +23,7 @@ Component({
     list: [] as Array<{
       id: string
       activityId: string
+      periodId: string
       status: string
       statusText: string
       updatedLabel: string
@@ -87,6 +88,7 @@ Component({
             data?: Array<{
               id: string
               activityId: string
+              periodId?: string
               status: string
               updatedAt: unknown
               childrenCount: number
@@ -102,6 +104,7 @@ Component({
             return {
               id: item.id,
               activityId: item.activityId,
+              periodId: item.periodId || '',
               status: item.status,
               statusText,
               updatedLabel: formatDate(item.updatedAt),
@@ -123,22 +126,32 @@ Component({
       wx.navigateBack({ delta: 1 })
     },
     onOpen(e: WechatMiniprogram.BaseEvent) {
-      const { activityId } = e.currentTarget.dataset as { activityId?: string }
+      const { activityId, periodId, submissionId } = e.currentTarget.dataset as {
+        activityId?: string
+        periodId?: string
+        submissionId?: string
+      }
       if (!activityId) return
+      const periodQuery = periodId ? `&periodId=${encodeURIComponent(periodId)}` : ''
+      const submissionQuery = submissionId ? `&submissionId=${encodeURIComponent(submissionId)}` : ''
       wx.navigateTo({
-        url: `/pages/order-form/order-form?activityId=${encodeURIComponent(activityId)}`
+        url: `/pages/order-form/order-form?activityId=${encodeURIComponent(activityId)}${periodQuery}${submissionQuery}`
       })
     },
     onCancel(e: WechatMiniprogram.BaseEvent) {
-      const { activityId } = e.currentTarget.dataset as { activityId?: string }
-      if (!activityId) return
+      const { activityId, periodId, submissionId } = e.currentTarget.dataset as {
+        activityId?: string
+        periodId?: string
+        submissionId?: string
+      }
+      if (!activityId || !submissionId) return
       wx.showModal({
         title: '确认撤销报名？',
         success: (res) => {
           if (!res.confirm) return
           wx.cloud.callFunction({
             name: 'submissionCancel',
-            data: { activityId },
+            data: { activityId, periodId: periodId || '', submissionId },
             success: (callRes) => {
               const result = (callRes.result || {}) as { ok?: boolean; message?: string }
               if (!result.ok) {
