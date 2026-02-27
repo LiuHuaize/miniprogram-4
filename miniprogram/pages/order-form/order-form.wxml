@@ -29,7 +29,11 @@
         <text class="summary-title">{{summary.title}}</text>
         <text class="summary-sub">{{summary.sub}}</text>
       </view>
-      <text class="summary-price">{{summary.price}}</text>
+      <view class="summary-price-wrap">
+        <text class="summary-price">{{displayPrice}}</text>
+        <text class="price-detail" wx:if="{{priceDetailText}}">{{priceDetailText}}</text>
+        <text class="discount-tag" wx:if="{{isAlumniDiscount}}">{{alumniDiscountText}}</text>
+      </view>
     </view>
 
     <view class="card period-card" bindtap="onChoosePeriod">
@@ -135,7 +139,9 @@
   <view class="bottom-bar">
     <view class="bottom-left">
       <text class="bottom-label">活动费用</text>
-      <text class="bottom-price">{{summary.price}}</text>
+      <text class="bottom-price">{{displayPrice}}</text>
+      <text class="price-detail" wx:if="{{priceDetailText}}">{{priceDetailText}}</text>
+      <text class="discount-note" wx:if="{{isAlumniDiscount}}">{{alumniDiscountText}}</text>
     </view>
     <t-button
       class="submit-btn"
@@ -154,7 +160,11 @@
       <view class="period-head">
         <view class="period-top">
           <text class="period-title">少年独角兽 AI 创业营 2026</text>
-          <text class="period-price">{{summary.price}}</text>
+          <view class="period-price-wrap">
+            <text class="period-price">{{displayPrice}}</text>
+            <text class="price-detail" wx:if="{{priceDetailText}}">{{priceDetailText}}</text>
+            <text class="discount-tag" wx:if="{{isAlumniDiscount}}">{{alumniDiscountText}}</text>
+          </view>
         </view>
         <view class="period-sub">报名截止：{{periods[selectedPeriodIndex].deadline}}</view>
         <text class="period-quota">{{periods[selectedPeriodIndex].quota}}</text>

@@ -1,5 +1,6 @@
 import { getActivitySummary } from '../../utils/activities'
 import { getPosterFallbackUrls, loadPosterUrls } from '../../utils/cloud-assets'
+import { alumniDiscountFeeYuan, alumniDiscountLabel, resolveAlumniPrice } from '../../utils/alumni-discount'
 
 type ActivityPeriod = {
   id: string
@@ -76,10 +77,45 @@ const buildPeriodSnapshot = (period?: ActivityPeriod): PeriodSnapshot => ({
   quota: period?.quota || ''
 })
 
+const activityFeeMapYuan: Record<string, number> = {
+  'ai-camp-2026': 16800,
+  'ai-camp-2026-copy': 18800
+}
+
+const getActivityFeeYuan = (activityId: string) => {
+  return activityFeeMapYuan[activityId] || activityFeeMapYuan[defaultActivityId]
+}
+
+const formatFeeText = (feeYuan: number) => `¥${feeYuan}`
+
+const buildPriceState = (activityId: string, campers: Array<{ name?: string }>) => {
+  const regularFeeYuan = getActivityFeeYuan(activityId)
+  const result = resolveAlumniPrice(
+    campers.map((item) => item.name || ''),
+    regularFeeYuan
+  )
+  const isAlumniDiscount = result.alumniCount > 0
+  const priceDetailParts = [
+    result.alumniCount > 0 ? `老学员${result.alumniCount}人 × ¥${alumniDiscountFeeYuan}` : '',
+    result.regularCount > 0 ? `新学员${result.regularCount}人 × ¥${regularFeeYuan}` : ''
+  ].filter(Boolean)
+
+  return {
+    displayPrice: formatFeeText(result.totalFeeYuan),
+    priceDetailText: priceDetailParts.join('，'),
+    isAlumniDiscount,
+    alumniDiscountText: isAlumniDiscount
+      ? `${alumniDiscountLabel}（减免${result.alumniCount}人）`
+      : '',
+    matchedAlumniNames: result.matchedAlumniNames
+  }
+}
+
 Component({
   data: {
     activityId: defaultActivityId,
     summary: getActivitySummary(defaultActivityId),
+    ...buildPriceState(defaultActivityId, [{ name: '' }]),
     posterUrls: getPosterFallbackUrls(),
     periods: getActivityPeriods(defaultActivityId),
     selectedPeriodIndex: 0,
@@ -158,29 +194,34 @@ Component({
       const nextPeriodId = nextPeriods[selectedPeriodIndex]?.id || ''
       const samePeriod = sameActivity && nextPeriodId === currentPeriodId
       const nextSubmissionId = submissionId || (samePeriod ? this.data.submissionId : '')
-      this.setData({
-        submissionId: nextSubmissionId,
-        submissionStatus: nextSubmissionId ? this.data.submissionStatus : '',
-        activityId: nextActivityId,
-        summary: getActivitySummary(nextActivityId),
-        periods: nextPeriods,
-        selectedPeriodIndex
-      })
-      if (
-        nextActivityId &&
-        (this.data.loadedActivityId !== nextActivityId ||
-          this.data.loadedSubmissionId !== nextSubmissionId ||
-          this.data.loadedPeriodId !== nextPeriodId)
-      ) {
-        this.setData({
-          loadedActivityId: nextActivityId,
-          loadedSubmissionId: nextSubmissionId,
-          loadedPeriodId: nextPeriodId
-        })
-        this.ensureLogin().then(() => {
-          this.loadSubmission(nextSubmissionId, nextPeriodId)
-        })
-      }
+      this.setData(
+        {
+          submissionId: nextSubmissionId,
+          submissionStatus: nextSubmissionId ? this.data.submissionStatus : '',
+          activityId: nextActivityId,
+          summary: getActivitySummary(nextActivityId),
+          periods: nextPeriods,
+          selectedPeriodIndex
+        },
+        () => {
+          this.refreshPriceState(nextActivityId, this.data.campers)
+          if (
+            nextActivityId &&
+            (this.data.loadedActivityId !== nextActivityId ||
+              this.data.loadedSubmissionId !== nextSubmissionId ||
+              this.data.loadedPeriodId !== nextPeriodId)
+          ) {
+            this.setData({
+              loadedActivityId: nextActivityId,
+              loadedSubmissionId: nextSubmissionId,
+              loadedPeriodId: nextPeriodId
+            })
+            this.ensureLogin().then(() => {
+              this.loadSubmission(nextSubmissionId, nextPeriodId)
+            })
+          }
+        }
+      )
     }
   },
   methods: {
@@ -189,6 +230,10 @@ Component({
     },
     getSelectedPeriodId() {
       return this.getSelectedPeriod()?.id || ''
+    },
+    refreshPriceState(activityId?: string, campers?: Array<{ name?: string }>) {
+      const priceState = buildPriceState(activityId || this.data.activityId, campers || this.data.campers)
+      this.setData(priceState)
     },
     onImageError(event: WechatMiniprogram.ImageErrorEvent) {
       const dataset = event.currentTarget.dataset as { src?: string }
@@ -299,21 +344,26 @@ Component({
                   personality: ''
                 }
               ]
-          this.setData({
-            submissionId: result.data.id || '',
-            submissionStatus: result.data.status,
-            selectedPeriodIndex,
-            loadedSubmissionId: result.data.id || this.data.loadedSubmissionId,
-            loadedPeriodId: periodIdFromData || this.data.loadedPeriodId,
-            guardian: {
-              name: guardian.name || '',
-              phone: guardian.phone || '',
-              wechat: guardian.wechat || '',
-              idNo: guardian.idNo || '',
-              idNoMask: guardian.idNoMask || ''
+          this.setData(
+            {
+              submissionId: result.data.id || '',
+              submissionStatus: result.data.status,
+              selectedPeriodIndex,
+              loadedSubmissionId: result.data.id || this.data.loadedSubmissionId,
+              loadedPeriodId: periodIdFromData || this.data.loadedPeriodId,
+              guardian: {
+                name: guardian.name || '',
+                phone: guardian.phone || '',
+                wechat: guardian.wechat || '',
+                idNo: guardian.idNo || '',
+                idNoMask: guardian.idNoMask || ''
+              },
+              campers
             },
-            campers
-          })
+            () => {
+              this.refreshPriceState(this.data.activityId, campers)
+            }
+          )
         },
         fail: () => {
           wx.showToast({ title: '加载失败', icon: 'none' })
@@ -391,9 +441,14 @@ Component({
           personality: ''
         })
       }
-      this.setData({
-        campers
-      })
+      this.setData(
+        {
+          campers
+        },
+        () => {
+          this.refreshPriceState(this.data.activityId, campers)
+        }
+      )
     },
     onGuardianNameChange(e: WechatMiniprogram.CustomEvent) {
       this.setData({
@@ -444,7 +499,9 @@ Component({
                 ...payload.camper,
                 idNoMask: payload.camper.idNoMask || ''
               }
-              this.setData({ campers })
+              this.setData({ campers }, () => {
+                this.refreshPriceState(this.data.activityId, campers)
+              })
             }
           }
         },

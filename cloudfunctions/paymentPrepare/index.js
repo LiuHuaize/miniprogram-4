@@ -4,6 +4,7 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 
 const db = cloud.database()
 const submissions = db.collection('submissions')
+const { resolveAlumniDiscount } = require('./alumni-discount')
 
 const padNumber = (value, length = 2) => String(value).padStart(length, '0')
 
@@ -130,7 +131,9 @@ exports.main = async (event) => {
     }
 
     const outTradeNo = buildOutTradeNo(OPENID)
-    const totalFee = feeResult.totalFee
+    const regularFee = feeResult.totalFee
+    const discountResult = resolveAlumniDiscount(submissionRes.data.childrenSnapshot, regularFee)
+    const totalFee = discountResult.camperCount > 0 ? discountResult.totalFee : regularFee
 
     const now = db.serverDate()
     await submissions.doc(docId).update({
@@ -139,18 +142,44 @@ exports.main = async (event) => {
         periodId: resolvedPeriodId || submissionRes.data.periodId || '',
         payOrderNo: outTradeNo,
         payAmount: totalFee,
+        payUnitAmount: regularFee,
+        payAlumniUnitAmount: discountResult.discountFee,
+        payCamperCount: discountResult.camperCount,
+        payAlumniCount: discountResult.alumniCount,
+        payRegularCount: discountResult.regularCount,
+        payDiscountType: discountResult.discountApplied ? 'alumni_mixed' : '',
+        payDiscountLabel: discountResult.discountLabel,
+        payDiscountMatchedNames: discountResult.matchedNames,
         updatedAt: now
       }
     })
 
-    console.info('[paymentPrepare] ready', { outTradeNo, totalFee, resolvedActivityId, resolvedPeriodId })
+    console.info('[paymentPrepare] ready', {
+      outTradeNo,
+      totalFee,
+      resolvedActivityId,
+      resolvedPeriodId,
+      discountApplied: discountResult.discountApplied,
+      camperCount: discountResult.camperCount,
+      alumniCount: discountResult.alumniCount,
+      regularCount: discountResult.regularCount,
+      regularFee,
+      matchedNames: discountResult.matchedNames
+    })
     return {
       ok: true,
       outTradeNo,
       totalFee,
       activityId: resolvedActivityId,
       periodId: resolvedPeriodId,
-      submissionId: docId
+      submissionId: docId,
+      discountApplied: discountResult.discountApplied,
+      discountLabel: discountResult.discountLabel,
+      camperCount: discountResult.camperCount,
+      alumniCount: discountResult.alumniCount,
+      regularCount: discountResult.regularCount,
+      regularFee,
+      matchedNames: discountResult.matchedNames
     }
   } catch (err) {
     console.error('[paymentPrepare] error', err)
