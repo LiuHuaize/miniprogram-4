@@ -5,28 +5,28 @@ const buildCards = (coverUrl: string) => [
     id: 1,
     activityId: 'ai-camp-2026-copy',
     status: '报名中',
-    tagStyle: 'background: #ecfdf3; color: #15803d; border: 1px solid #bbf7d0;',
+    statusClass: 'card-tag--active',
     subLabel: '2026 AI 创业营',
     heroTitle: '少年独角兽',
     heroDesc: 'AI 创业营 · 深圳 / 杭州 / 北京',
     title: '少年独角兽 AI 创业营（深圳 / 杭州 / 北京）',
     meta: '6 天 · 深圳 / 杭州 / 北京 · 10-16 岁',
     heroStyle: `background-image: url("${coverUrl}"); background-size: cover; background-position: center; background-repeat: no-repeat;`,
-    overlayStyle: 'background: linear-gradient(180deg, rgba(30, 64, 175, 0.12), rgba(30, 64, 175, 0.55));',
+    overlayStyle: 'background: linear-gradient(180deg, rgba(15, 23, 42, 0.04), rgba(15, 23, 42, 0.38));',
     themeClass: 'card-hero--light'
   },
   {
     id: 2,
     activityId: 'ai-camp-2026',
     status: '已结束',
-    tagStyle: 'background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0;',
+    statusClass: 'card-tag--ended',
     subLabel: '2026 AI 创业营',
     heroTitle: '少年独角兽',
     heroDesc: 'AI 创业营 · 深圳',
     title: '少年独角兽 AI 创业营（深圳）',
     meta: '6 天 · 深圳 · 10-16 岁',
     heroStyle: `background-image: url("${coverUrl}"); background-size: cover; background-position: center; background-repeat: no-repeat;`,
-    overlayStyle: 'background: linear-gradient(180deg, rgba(30, 64, 175, 0.12), rgba(30, 64, 175, 0.55));',
+    overlayStyle: 'background: linear-gradient(180deg, rgba(15, 23, 42, 0.04), rgba(15, 23, 42, 0.38));',
     themeClass: 'card-hero--light'
   }
 ]

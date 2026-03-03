@@ -20,13 +20,7 @@
           <view class="card-hero {{item.themeClass}}" style="{{item.heroStyle}}">
             <view class="card-hero-overlay" style="{{item.overlayStyle}}"></view>
             <view class="card-hero-top">
-              <t-tag
-                class="card-tag"
-                size="small"
-                shape="round"
-                variant="light"
-                style="{{item.tagStyle}}"
-              >{{item.status}}</t-tag>
+              <text class="card-tag {{item.statusClass}}">{{item.status}}</text>
               <text wx:if="{{item.subLabel}}" class="card-hero-sub">{{item.subLabel}}</text>
             </view>
             <view class="card-hero-bottom">
