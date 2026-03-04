@@ -82,7 +82,7 @@ page {
   flex: 1;
   min-height: 0;
   padding: 0 16px;
-  padding-bottom: calc(92px + env(safe-area-inset-bottom));
+  padding-bottom: calc(108px + env(safe-area-inset-bottom));
   box-sizing: border-box;
 }
 
@@ -200,7 +200,7 @@ page {
 .info-price {
   font-size: 18px;
   font-weight: 700;
-  color: #2563eb;
+  color: #64748b;
   line-height: 1.2;
   display: block;
 }
@@ -280,27 +280,38 @@ page {
 .tab-list {
   display: flex;
   align-items: center;
-  gap: 2px;
-  padding: 4px;
-  background: #ffffff;
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.08);
+  gap: 24px;
+  padding: 0 8px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .tab-item {
-  padding: 6px 12px;
-  font-size: 11px;
+  padding: 12px 0;
+  font-size: 14px;
   color: #94a3b8;
   white-space: nowrap;
-  border-radius: 999px;
+  position: relative;
 }
 
 .tab-item.active {
-  color: #ffffff;
-  background: #2563eb;
+  color: #7ca0b0;
+  background: transparent;
   box-shadow: none;
   font-weight: 600;
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 3px;
+  border-radius: 2px;
+  background: #7ca0b0;
 }
 
 .section-block {
@@ -344,6 +355,10 @@ page {
   overflow: hidden;
   border: none;
   box-shadow: 0 12px 26px rgba(15, 23, 42, 0.1);
+}
+
+.section-card--poster {
+  padding: 12px;
 }
 
 .section-figure {
@@ -455,8 +470,8 @@ page {
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 11px;
-  color: #2563eb;
-  background: rgba(37, 99, 235, 0.14);
+  color: #7ca0b0;
+  background: rgba(124, 160, 176, 0.1);
 }
 
 .list-item {
@@ -476,7 +491,7 @@ page {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #2563eb;
+  background: #7ca0b0;
   margin-top: 6px;
   flex-shrink: 0;
 }
@@ -496,7 +511,7 @@ page {
 
 .schedule-day {
   font-size: 11px;
-  color: #2563eb;
+  color: #7ca0b0;
   font-weight: 600;
   display: block;
 }
@@ -530,7 +545,7 @@ page {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #2563eb;
+  background: #7ca0b0;
   margin-top: 6px;
   flex-shrink: 0;
 }
@@ -629,8 +644,7 @@ page {
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-  padding-left: 20px;
+  padding: 10px 14px calc(12px + env(safe-area-inset-bottom));
   border-top: none;
   background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 -12px 26px rgba(15, 23, 42, 0.08);
@@ -642,7 +656,7 @@ page {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 10px;
   padding: 0;
   border-radius: 0;
   background: transparent;
@@ -651,36 +665,42 @@ page {
   backdrop-filter: none;
 }
 
-.bottom-info {
+.consult-btn {
+  padding: 0 18px;
+  height: 50px;
+  border: none;
+  background: transparent;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
-.bottom-label {
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  color: #a0aec0;
+.consult-btn-text {
+  font-size: 11px;
+  color: #475569;
+  font-weight: 500;
 }
 
-.bottom-price {
-  margin-top: 0;
-  font-size: 18px;
-  font-weight: 700;
-  color: #0f172a;
+.apply-btn-wrap {
+  flex: 1;
+}
+
+.apply-btn-wrap .apply-btn {
+  width: 100%;
 }
 
 .apply-btn {
-  --td-button-primary-bg-color: #2563eb;
-  --td-button-primary-border-color: #2563eb;
-  --td-button-primary-hover-bg-color: #1d4ed8;
-  --td-button-primary-hover-border-color: #1d4ed8;
-  height: 42px;
-  padding: 0 28px;
-  font-size: 13px;
-  font-weight: 600;
+  --td-button-primary-bg-color: #4f94b8;
+  --td-button-primary-border-color: #4f94b8;
+  --td-button-primary-hover-bg-color: #4381a1;
+  --td-button-primary-hover-border-color: #4381a1;
+  height: 50px;
+  font-size: 16px;
+  font-weight: 700;
   border-radius: 999px;
-  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.26);
+  box-shadow: 0 10px 18px rgba(79, 148, 184, 0.28);
 }
 
 .home-indicator {
@@ -739,7 +759,7 @@ page {
 .period-price {
   font-size: 16px;
   font-weight: 700;
-  color: #2563eb;
+  color: #64748b;
   white-space: nowrap;
   display: block;
 }
@@ -782,9 +802,9 @@ page {
 }
 
 .period-item.active {
-  background: rgba(37, 99, 235, 0.12);
-  border-color: rgba(37, 99, 235, 0.4);
-  color: #2563eb;
+  background: rgba(124, 160, 176, 0.08);
+  border-color: rgba(124, 160, 176, 0.4);
+  color: #7ca0b0;
   font-weight: 600;
 }
 
@@ -800,12 +820,88 @@ page {
   font-weight: 600;
 }
 
+.teacher-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.42);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 24;
+}
+
+.teacher-sheet {
+  width: 100%;
+  background: #ffffff;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  padding: 18px 16px calc(24px + env(safe-area-inset-bottom));
+  box-shadow: 0 -14px 28px rgba(15, 23, 42, 0.2);
+}
+
+.teacher-head {
+  padding-bottom: 12px;
+  border-bottom: 1px solid #edf1f5;
+}
+
+.teacher-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  display: block;
+}
+
+.teacher-sub {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #94a3b8;
+  display: block;
+}
+
+.teacher-list {
+  margin-top: 12px;
+}
+
+.teacher-item + .teacher-item {
+  margin-top: 8px;
+}
+
+.teacher-item {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+}
+
+.teacher-line {
+  font-size: 14px;
+  color: #1e293b;
+  display: block;
+}
+
+.teacher-close-btn {
+  margin-top: 14px;
+  height: 42px;
+  border-radius: 999px;
+  background: #7ca0b0;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .poster-image {
   width: 100%;
   border-radius: 14px;
   display: block;
   margin-top: 12px;
   box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+}
+
+.poster-image--first {
+  margin-top: 0;
 }
 
 .poster-caption {
@@ -827,7 +923,7 @@ page {
 .qa-title {
   font-size: 12px;
   font-weight: 600;
-  color: #1e3a8a;
+  color: #4e6f7f;
   display: block;
   margin-bottom: 8px;
 }
@@ -839,7 +935,7 @@ page {
 .qa-q {
   font-size: 11px;
   font-weight: 600;
-  color: #1e40af;
+  color: #5c8091;
   display: block;
 }
 

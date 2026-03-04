@@ -10,7 +10,7 @@ const padNumber = (value, length = 2) => String(value).padStart(length, '0')
 
 const activityPaymentConfigMap = {
   'ai-camp-2026': {
-    totalFee: 1680000,
+    totalFee: 1880000,
     periodIds: ['sz-p1']
   },
   'ai-camp-2026-copy': {
@@ -43,6 +43,14 @@ const getLatestSubmitted = async (openid, activityId, periodId) => {
     return null
   }
   return res.data[0]
+}
+
+const toPositiveInteger = (value) => {
+  const num = Number(value)
+  if (Number.isFinite(num) && num > 0) {
+    return Math.floor(num)
+  }
+  return 0
 }
 
 const resolveTotalFee = (activityId, periodId) => {
@@ -130,10 +138,13 @@ exports.main = async (event) => {
       return { ok: false, message: feeResult.message || 'Payment config invalid' }
     }
 
-    const outTradeNo = buildOutTradeNo(OPENID)
+    const existingOrderNo = submissionRes.data.payOrderNo ? String(submissionRes.data.payOrderNo).trim() : ''
+    const existingPayAmount = toPositiveInteger(submissionRes.data.payAmount)
+    const outTradeNo = existingOrderNo || buildOutTradeNo(OPENID)
     const regularFee = feeResult.totalFee
     const discountResult = resolveAlumniDiscount(submissionRes.data.childrenSnapshot, regularFee)
-    const totalFee = discountResult.camperCount > 0 ? discountResult.totalFee : regularFee
+    const computedTotalFee = discountResult.camperCount > 0 ? discountResult.totalFee : regularFee
+    const totalFee = existingPayAmount || computedTotalFee
 
     const now = db.serverDate()
     await submissions.doc(docId).update({
@@ -142,6 +153,7 @@ exports.main = async (event) => {
         periodId: resolvedPeriodId || submissionRes.data.periodId || '',
         payOrderNo: outTradeNo,
         payAmount: totalFee,
+        payCurrency: 'CNY',
         payUnitAmount: regularFee,
         payAlumniUnitAmount: discountResult.discountFee,
         payCamperCount: discountResult.camperCount,
@@ -157,6 +169,7 @@ exports.main = async (event) => {
     console.info('[paymentPrepare] ready', {
       outTradeNo,
       totalFee,
+      reusedOrderNo: !!existingOrderNo,
       resolvedActivityId,
       resolvedPeriodId,
       discountApplied: discountResult.discountApplied,

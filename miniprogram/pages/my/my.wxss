@@ -168,3 +168,138 @@ page {
   pointer-events: none;
   z-index: 6;
 }
+
+.profile-editor-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.profile-editor {
+  width: 78%;
+  max-width: 320px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 20px;
+  box-sizing: border-box;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+}
+
+.profile-editor-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.profile-editor-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-editor-avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-sizing: border-box;
+}
+
+.profile-editor-avatar::after {
+  border: none;
+}
+
+.profile-editor-avatar-ring {
+  width: 92px;
+  height: 92px;
+  border-radius: 999px;
+  padding: 3px;
+  background: linear-gradient(135deg, #cbd5f5 0%, #a7f3d0 100%);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.15);
+  box-sizing: border-box;
+}
+
+.profile-editor-avatar-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  background: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.profile-editor-avatar-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.profile-editor-avatar-icon {
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-editor-avatar-text {
+  margin-top: 8px;
+  font-size: 11px;
+  color: #94a3b8;
+  letter-spacing: 0.2px;
+}
+
+.profile-editor-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  font-size: 14px;
+  color: #0f172a;
+  box-sizing: border-box;
+  background: #ffffff;
+}
+
+.profile-editor-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+}
+
+.profile-editor-button {
+  flex: 1;
+  height: 40px;
+  border-radius: 999px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.profile-editor-button::after {
+  border: none;
+}
+
+.profile-editor-button--ghost {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.profile-editor-button--primary {
+  background: #2f7d75;
+  color: #ffffff;
+}

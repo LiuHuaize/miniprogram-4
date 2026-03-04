@@ -20,6 +20,7 @@
       data-activity-id="{{item.activityId}}"
       data-period-id="{{item.periodId}}"
       data-submission-id="{{item.id}}"
+      data-status="{{item.status}}"
       bindtap="onOpen"
     >
       <view class="card-header">
@@ -27,13 +28,13 @@
           <text class="card-title">{{item.summary.title}}</text>
           <text class="card-sub">{{item.summary.sub}}</text>
         </view>
-        <view class="status-tag {{item.status === 'submitted' || item.status === 'paid' ? 'status-tag--active' : 'status-tag--muted'}}">
+        <view class="status-tag {{item.status === 'paid' ? 'status-tag--active' : 'status-tag--muted'}}">
           {{item.statusText}}
         </view>
       </view>
       <view class="card-meta">
-        <text>营员数量：{{item.childrenCount}}</text>
-        <text>更新时间：{{item.updatedLabel || '--'}}</text>
+        <text>{{item.childrenCount}} 人报名</text>
+        <text>{{item.updatedLabel || '--'}}</text>
       </view>
       <view class="card-actions" catchtap>
         <t-button
@@ -44,19 +45,21 @@
           data-activity-id="{{item.activityId}}"
           data-period-id="{{item.periodId}}"
           data-submission-id="{{item.id}}"
+          data-status="{{item.status}}"
           bindtap="onOpen"
         >
-          查看/修改
+          {{item.status === 'paid' ? '查看' : '查看/修改'}}
         </t-button>
         <t-button
+          wx:if="{{item.status === 'submitted'}}"
           class="action-btn"
           theme="default"
           shape="round"
           size="small"
-          disabled="{{item.status !== 'submitted'}}"
           data-activity-id="{{item.activityId}}"
           data-period-id="{{item.periodId}}"
           data-submission-id="{{item.id}}"
+          data-status="{{item.status}}"
           bindtap="onCancel"
         >
           撤销

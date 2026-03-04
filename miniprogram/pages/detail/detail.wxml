@@ -8,7 +8,7 @@
       </view>
       <text class="nav-text">返回</text>
     </view>
-    <text class="nav-title">创业营详情</text>
+    <text class="nav-title">营会详情</text>
     <view class="nav-right">
       <view class="nav-action">
         <t-icon name="ellipsis" size="32rpx" />
@@ -31,22 +31,22 @@
         <image
           class="hero-photo"
           mode="aspectFill"
-          src="{{posterUrls['/assets/poster/01-cover.png']}}"
-          data-src="{{posterUrls['/assets/poster/01-cover.png']}}"
+          src="{{posterUrls[isSummerCamp ? '/assets/poster/youth-cover-detail.png' : '/assets/poster/01-cover.png']}}"
+          data-src="{{posterUrls[isSummerCamp ? '/assets/poster/youth-cover-detail.png' : '/assets/poster/01-cover.png']}}"
           binderror="onImageError"
         />
-        <view class="hero-mask"></view>
-        <view class="hero-badge">2026 AI ENTREPRENEURSHIP CAMP</view>
-        <view class="hero-title">少年独角兽 AI 创业营</view>
-        <view class="hero-sub">深圳 · 6 天沉浸式项目制学习</view>
+        <view class="hero-mask" wx:if="{{!isSummerCamp}}"></view>
+        <view class="hero-badge" wx:if="{{!isSummerCamp}}">2026 AI ENTREPRENEURSHIP CAMP</view>
+        <view class="hero-title" wx:if="{{!isSummerCamp}}">{{detailTitle}}</view>
+        <view class="hero-sub" wx:if="{{!isSummerCamp}}">{{periods[selectedPeriodIndex].location}} · 6 天沉浸式项目制学习</view>
       </view>
     </view>
 
     <view class="info-card">
       <view class="info-main">
         <view class="info-left">
-          <text class="info-title">少年独角兽 AI 创业营 2026</text>
-          <text class="info-sub">营期时间：2026.02.08-02.13</text>
+          <text class="info-title">{{detailTitle}}</text>
+          <text class="info-sub">营期时间：{{periods[selectedPeriodIndex].fullDate}}</text>
         </view>
         <view class="info-right">
           <text class="info-price">{{priceLabel}}</text>
@@ -64,7 +64,7 @@
         </view>
         <view class="meta-item">
           <t-icon name="location" size="24rpx" />
-          <text>深圳 · 广东</text>
+          <text>{{periods[selectedPeriodIndex].location}}</text>
         </view>
       </view>
       <view class="period-row" bindtap="onOpenPeriods">
@@ -78,16 +78,121 @@
 
     <scroll-view class="tabs" scroll-x show-scrollbar="{{false}}">
       <view class="tab-list">
-        <view class="tab-item {{activeTab === 'theme' ? 'active' : ''}}" data-key="theme" bindtap="onTab">介绍</view>
-        <view class="tab-item {{activeTab === 'content' ? 'active' : ''}}" data-key="content" bindtap="onTab">核心收获</view>
-        <view class="tab-item {{activeTab === 'schedule' ? 'active' : ''}}" data-key="schedule" bindtap="onTab">日程</view>
-        <view class="tab-item {{activeTab === 'itinerary' ? 'active' : ''}}" data-key="itinerary" bindtap="onTab">师资</view>
-        <view class="tab-item {{activeTab === 'stay' ? 'active' : ''}}" data-key="stay" bindtap="onTab">保障</view>
-        <view class="tab-item {{activeTab === 'service' ? 'active' : ''}}" data-key="service" bindtap="onTab">流程</view>
+        <view
+          class="tab-item {{activeTab === item.key ? 'active' : ''}}"
+          wx:for="{{tabs}}"
+          wx:key="key"
+          data-key="{{item.key}}"
+          bindtap="onTab"
+        >
+          {{item.label}}
+        </view>
       </view>
     </scroll-view>
 
-    <view class="section-block" id="anchor-theme" wx:if="{{activeTab === 'theme'}}">
+    <view class="section-block" id="anchor-theme" wx:if="{{isSummerCamp && activeTab === 'theme'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">主题</text>
+          <text class="section-en">THEME</text>
+        </view>
+        <text class="section-brand">YOUTH UNICORN</text>
+      </view>
+      <view class="section-card section-card--poster">
+        <image
+          class="poster-image poster-image--first"
+          mode="widthFix"
+          src="{{posterUrls['/assets/poster/youth-theme.jpg']}}"
+          data-src="{{posterUrls['/assets/poster/youth-theme.jpg']}}"
+          binderror="onImageError"
+        />
+      </view>
+    </view>
+
+    <view class="section-block" id="anchor-content" wx:if="{{isSummerCamp && activeTab === 'content'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">内容</text>
+          <text class="section-en">CONTENT</text>
+        </view>
+        <text class="section-brand">YOUTH UNICORN</text>
+      </view>
+      <view class="section-card section-card--poster">
+        <image
+          class="poster-image poster-image--first"
+          mode="widthFix"
+          src="{{posterUrls['/assets/poster/youth-content-1.png']}}"
+          data-src="{{posterUrls['/assets/poster/youth-content-1.png']}}"
+          binderror="onImageError"
+        />
+        <image
+          class="poster-image"
+          mode="widthFix"
+          src="{{posterUrls['/assets/poster/youth-content-2.png']}}"
+          data-src="{{posterUrls['/assets/poster/youth-content-2.png']}}"
+          binderror="onImageError"
+        />
+      </view>
+    </view>
+
+    <view class="section-block" id="anchor-notice" wx:if="{{isSummerCamp && activeTab === 'notice'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">须知</text>
+          <text class="section-en">NOTICE</text>
+        </view>
+        <text class="section-brand">YOUTH UNICORN</text>
+      </view>
+      <view class="section-card section-card--poster">
+        <image
+          class="poster-image poster-image--first"
+          mode="widthFix"
+          src="{{posterUrls['/assets/poster/youth-notice.png']}}"
+          data-src="{{posterUrls['/assets/poster/youth-notice.png']}}"
+          binderror="onImageError"
+        />
+      </view>
+    </view>
+
+    <view class="section-block" id="anchor-schedule" wx:if="{{isSummerCamp && activeTab === 'schedule'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">课表</text>
+          <text class="section-en">SCHEDULE</text>
+        </view>
+        <text class="section-brand">YOUTH UNICORN</text>
+      </view>
+      <view class="section-card section-card--poster">
+        <image
+          class="poster-image poster-image--first"
+          mode="widthFix"
+          src="{{posterUrls['/assets/poster/youth-schedule.png']}}"
+          data-src="{{posterUrls['/assets/poster/youth-schedule.png']}}"
+          binderror="onImageError"
+        />
+      </view>
+    </view>
+
+    <view class="section-block" id="anchor-service" wx:if="{{isSummerCamp && activeTab === 'service'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">服务</text>
+          <text class="section-en">SERVICE</text>
+        </view>
+        <text class="section-brand">YOUTH UNICORN</text>
+      </view>
+      <view class="section-card section-card--poster">
+        <image
+          class="poster-image poster-image--first"
+          mode="widthFix"
+          src="{{posterUrls['/assets/poster/youth-service.png']}}"
+          data-src="{{posterUrls['/assets/poster/youth-service.png']}}"
+          binderror="onImageError"
+        />
+      </view>
+    </view>
+
+    <view class="section-block" id="anchor-theme-winter" wx:if="{{!isSummerCamp && activeTab === 'theme'}}">
       <view class="section-head">
         <view class="section-left">
           <text class="section-title">介绍</text>
@@ -122,7 +227,7 @@
       </view>
     </view>
 
-    <view class="section-block" id="anchor-content" wx:if="{{activeTab === 'content'}}">
+    <view class="section-block" id="anchor-content-winter" wx:if="{{!isSummerCamp && activeTab === 'content'}}">
       <view class="section-head">
         <view class="section-left">
           <text class="section-title">核心收获</text>
@@ -157,7 +262,7 @@
       </view>
     </view>
 
-    <view class="section-block" id="anchor-schedule" wx:if="{{activeTab === 'schedule'}}">
+    <view class="section-block" id="anchor-schedule-winter" wx:if="{{!isSummerCamp && activeTab === 'schedule'}}">
       <view class="section-head">
         <view class="section-left">
           <text class="section-title">日程</text>
@@ -192,7 +297,7 @@
       </view>
     </view>
 
-    <view class="section-block" id="anchor-itinerary" wx:if="{{activeTab === 'itinerary'}}">
+    <view class="section-block" id="anchor-itinerary-winter" wx:if="{{!isSummerCamp && activeTab === 'itinerary'}}">
       <view class="section-head">
         <view class="section-left">
           <text class="section-title">师资</text>
@@ -227,7 +332,7 @@
       </view>
     </view>
 
-    <view class="section-block" id="anchor-stay" wx:if="{{activeTab === 'stay'}}">
+    <view class="section-block" id="anchor-stay-winter" wx:if="{{!isSummerCamp && activeTab === 'stay'}}">
       <view class="section-head">
         <view class="section-left">
           <text class="section-title">保障</text>
@@ -262,7 +367,7 @@
       </view>
     </view>
 
-    <view class="section-block" id="anchor-service" wx:if="{{activeTab === 'service'}}">
+    <view class="section-block" id="anchor-service-winter" wx:if="{{!isSummerCamp && activeTab === 'service'}}">
       <view class="section-head">
         <view class="section-left">
           <text class="section-title">流程</text>
@@ -307,11 +412,13 @@
 
   <view class="bottom-bar">
     <view class="bottom-bar-inner">
-      <view class="bottom-info">
-        <text class="bottom-label">活动费用</text>
-        <text class="bottom-price">{{priceLabel}}</text>
+      <view class="consult-btn" bindtap="onOpenTeacherPopup">
+        <t-icon name="service" size="44rpx" color="#475569" />
+        <text class="consult-btn-text">咨询老师</text>
       </view>
-      <t-button class="apply-btn" theme="primary" shape="round" size="small" disabled="{{applyClosed}}" bindtap="onApply">我要报名</t-button>
+      <view class="apply-btn-wrap">
+        <t-button class="apply-btn" theme="primary" shape="round" size="large" bindtap="onApply">{{applyClosed ? '报名已截止' : '我要报名'}}</t-button>
+      </view>
     </view>
   </view>
 
@@ -321,7 +428,7 @@
     <view class="period-sheet" catchtap>
       <view class="period-head">
         <view class="period-top">
-          <text class="period-title">少年独角兽 AI 创业营 2026</text>
+          <text class="period-title">{{detailTitle}}</text>
           <text class="period-price">{{priceLabel}}</text>
         </view>
         <view class="period-sub">报名截止：{{periods[selectedPeriodIndex].deadline}}</view>
@@ -340,6 +447,21 @@
         </view>
       </view>
       <t-button class="period-confirm" theme="primary" shape="round" size="small" bindtap="onConfirmPeriod">确认</t-button>
+    </view>
+  </view>
+
+  <view class="teacher-mask" wx:if="{{teacherPopupVisible}}" bindtap="onCloseTeacherPopup">
+    <view class="teacher-sheet" catchtap>
+      <view class="teacher-head">
+        <text class="teacher-title">咨询老师</text>
+        <text class="teacher-sub">可添加微信或电话咨询</text>
+      </view>
+      <view class="teacher-list">
+        <view class="teacher-item" wx:for="{{teacherContacts}}" wx:key="phone">
+          <text class="teacher-line">{{item.name}}：{{item.phone}}</text>
+        </view>
+      </view>
+      <view class="teacher-close-btn" bindtap="onCloseTeacherPopup">关闭</view>
     </view>
   </view>
 </view>

@@ -7,47 +7,15 @@ const _ = db.command
 const users = db.collection('users')
 const children = db.collection('children')
 const submissions = db.collection('submissions')
+const {
+  maskIdNo,
+  normalizeText,
+  createGetOrCreateUser,
+  createGetLatestSubmitted
+} = require('./backend-common')
 
-const maskIdNo = (value) => {
-  if (!value) return ''
-  const text = String(value)
-  if (text.length <= 8) {
-    return text.replace(/.(?=.{2})/g, '*')
-  }
-  return `${text.slice(0, 3)}${'*'.repeat(text.length - 7)}${text.slice(-4)}`
-}
-
-const normalizeText = (value) => (typeof value === 'string' ? value.trim() : '')
-
-const getOrCreateUser = async (openid, now) => {
-  const existing = await users.where({ ownerOpenid: openid }).limit(1).get()
-  if (existing.data.length > 0) {
-    return existing.data[0]
-  }
-  const newUser = {
-    ownerOpenid: openid,
-    createdAt: now,
-    updatedAt: now
-  }
-  const addRes = await users.add({ data: newUser })
-  return { _id: addRes._id, ownerOpenid: openid }
-}
-
-const getLatestSubmitted = async (openid, activityId, periodId) => {
-  const where = {
-    ownerOpenid: openid,
-    activityId,
-    status: 'submitted'
-  }
-  if (periodId) {
-    where.periodId = periodId
-  }
-  const res = await submissions.where(where).orderBy('updatedAt', 'desc').limit(1).get()
-  if (res.data && res.data.length > 0) {
-    return res.data[0]
-  }
-  return null
-}
+const getOrCreateUser = createGetOrCreateUser(users)
+const getLatestSubmitted = createGetLatestSubmitted(submissions)
 
 const buildGuardianSnapshot = (guardianInput, existingSubmission, existingUser) => {
   const name = normalizeText(guardianInput.name)

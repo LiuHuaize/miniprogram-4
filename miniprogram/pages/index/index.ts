@@ -1,18 +1,18 @@
 import { getPosterFallbackUrls, loadPosterUrls } from '../../utils/cloud-assets'
 
-const buildCards = (coverUrl: string) => [
+const buildCards = (summerCoverUrl: string, winterCoverUrl: string) => [
   {
     id: 1,
     activityId: 'ai-camp-2026-copy',
     status: '报名中',
     statusClass: 'card-tag--active',
-    subLabel: '2026 AI 创业营',
-    heroTitle: '少年独角兽',
-    heroDesc: 'AI 创业营 · 深圳 / 杭州 / 北京',
-    title: '少年独角兽 AI 创业营（深圳 / 杭州 / 北京）',
+    subLabel: '',
+    heroTitle: '',
+    heroDesc: '',
+    title: '【旗舰】2026暑假 - 少年独角兽AI创业营',
     meta: '6 天 · 深圳 / 杭州 / 北京 · 10-16 岁',
-    heroStyle: `background-image: url("${coverUrl}"); background-size: cover; background-position: center; background-repeat: no-repeat;`,
-    overlayStyle: 'background: linear-gradient(180deg, rgba(15, 23, 42, 0.04), rgba(15, 23, 42, 0.38));',
+    coverUrl: summerCoverUrl,
+    overlayStyle: '',
     themeClass: 'card-hero--light'
   },
   {
@@ -20,19 +20,27 @@ const buildCards = (coverUrl: string) => [
     activityId: 'ai-camp-2026',
     status: '已结束',
     statusClass: 'card-tag--ended',
-    subLabel: '2026 AI 创业营',
-    heroTitle: '少年独角兽',
-    heroDesc: 'AI 创业营 · 深圳',
-    title: '少年独角兽 AI 创业营（深圳）',
+    subLabel: '',
+    heroTitle: '',
+    heroDesc: '',
+    title: '【旗舰】2026寒假 - 少年独角兽AI创业营',
     meta: '6 天 · 深圳 · 10-16 岁',
-    heroStyle: `background-image: url("${coverUrl}"); background-size: cover; background-position: center; background-repeat: no-repeat;`,
-    overlayStyle: 'background: linear-gradient(180deg, rgba(15, 23, 42, 0.04), rgba(15, 23, 42, 0.38));',
+    coverUrl: winterCoverUrl,
+    overlayStyle: '',
     themeClass: 'card-hero--light'
   }
 ]
 
 const defaultPosterUrls = getPosterFallbackUrls()
-const defaultCoverUrl = defaultPosterUrls['/assets/poster/01-cover.png'] || ''
+const defaultSummerCoverUrl =
+  defaultPosterUrls['/assets/poster/summer-cover.png'] ||
+  defaultPosterUrls['/assets/poster/youth-cover-list.png'] ||
+  defaultPosterUrls['/assets/poster/01-cover.png'] ||
+  ''
+const defaultWinterCoverUrl =
+  defaultPosterUrls['/assets/poster/winter-cover.png'] ||
+  defaultPosterUrls['/assets/poster/01-cover.png'] ||
+  defaultSummerCoverUrl
 const logPrefix = '[index]'
 const logInfo = (message: string, payload?: unknown) => {
   try {
@@ -50,12 +58,13 @@ Component({
   data: {
     tabValue: 'activity',
     posterUrls: defaultPosterUrls,
-    cards: buildCards(defaultCoverUrl)
+    cards: buildCards(defaultSummerCoverUrl, defaultWinterCoverUrl)
   },
   lifetimes: {
     attached() {
       logInfo('attached start', {
-        defaultCoverUrl,
+        defaultSummerCoverUrl,
+        defaultWinterCoverUrl,
         initialCards: this.data.cards.length
       })
       try {
@@ -77,13 +86,23 @@ Component({
 
       loadPosterUrls()
         .then((posterUrls) => {
-          const coverUrl = posterUrls['/assets/poster/01-cover.png'] || defaultCoverUrl
+          const summerCoverUrl =
+            posterUrls['/assets/poster/summer-cover.png'] ||
+            posterUrls['/assets/poster/youth-cover-list.png'] ||
+            posterUrls['/assets/poster/01-cover.png'] ||
+            defaultSummerCoverUrl
+          const winterCoverUrl =
+            posterUrls['/assets/poster/winter-cover.png'] ||
+            posterUrls['/assets/poster/01-cover.png'] ||
+            defaultWinterCoverUrl
           logInfo('poster urls loaded', {
-            coverUrl,
-            hasCover: Boolean(posterUrls['/assets/poster/01-cover.png']),
+            summerCoverUrl,
+            winterCoverUrl,
+            hasSummerCover: Boolean(posterUrls['/assets/poster/youth-cover-list.png']),
+            hasWinterCover: Boolean(posterUrls['/assets/poster/01-cover.png']),
             total: Object.keys(posterUrls || {}).length
           })
-          const cards = buildCards(coverUrl)
+          const cards = buildCards(summerCoverUrl, winterCoverUrl)
           this.setData(
             {
               posterUrls,

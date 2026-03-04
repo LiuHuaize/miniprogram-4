@@ -20,23 +20,39 @@ exports.main = async (event) => {
   if (!outTradeNo) {
     return { code: -1, msg: 'outTradeNo is required' }
   }
+  console.info('[wxpay_order] request', {
+    outTradeNoSuffix: outTradeNo.slice(-6),
+    totalFee,
+    hasDescription: !!description
+  })
 
-  const res = await cloud.callFunction({
-    name: 'cloudbase_module',
-    data: {
-      name: 'wxpay_order',
+  try {
+    const res = await cloud.callFunction({
+      name: 'cloudbase_module',
       data: {
-        description,
-        amount: {
-          total: totalFee,
-          currency: 'CNY'
-        },
-        out_trade_no: outTradeNo,
-        payer: {
-          openid: wxContext.OPENID
+        name: 'wxpay_order',
+        data: {
+          description,
+          amount: {
+            total: totalFee,
+            currency: 'CNY'
+          },
+          out_trade_no: outTradeNo,
+          payer: {
+            openid: wxContext.OPENID
+          }
         }
       }
-    }
-  })
-  return res.result
+    })
+    const result = res ? res.result : null
+    console.info('[wxpay_order] response', {
+      hasResult: !!result,
+      resultKeys: result ? Object.keys(result) : [],
+      dataKeys: result && result.data ? Object.keys(result.data) : []
+    })
+    return result
+  } catch (err) {
+    console.error('[wxpay_order] error', err)
+    throw err
+  }
 }

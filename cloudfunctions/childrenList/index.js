@@ -4,6 +4,7 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 
 const db = cloud.database()
 const children = db.collection('children')
+const PAGE_SIZE = 100
 
 const maskIdNo = (value) => {
   if (!value) return ''
@@ -17,12 +18,30 @@ const maskIdNo = (value) => {
 exports.main = async () => {
   const { OPENID } = cloud.getWXContext()
 
-  const res = await children
-    .where({ ownerOpenid: OPENID })
-    .orderBy('updatedAt', 'desc')
-    .get()
+  const all = []
+  let offset = 0
 
-  const data = (res.data || []).map((item) => {
+  while (true) {
+    const res = await children
+      .where({ ownerOpenid: OPENID })
+      .orderBy('updatedAt', 'desc')
+      .skip(offset)
+      .limit(PAGE_SIZE)
+      .get()
+
+    const batch = res.data || []
+    if (!batch.length) {
+      break
+    }
+
+    all.push(...batch)
+    if (batch.length < PAGE_SIZE) {
+      break
+    }
+    offset += batch.length
+  }
+
+  const data = all.map((item) => {
     const idNoMask = item.idNoMask || maskIdNo(item.idNo || '')
     return {
       id: item._id,

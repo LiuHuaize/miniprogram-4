@@ -127,7 +127,7 @@ page {
 .summary-price {
   font-size: 15px;
   font-weight: 700;
-  color: #2563eb;
+  color: #64748b;
   white-space: nowrap;
 }
 
@@ -217,7 +217,7 @@ page {
   height: 28px;
   border-radius: 8px;
   background: #eef3f7;
-  color: #2563eb;
+  color: #7ca0b0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -323,16 +323,20 @@ page {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-  border-top: 1px solid #e6ebf1;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(12px);
+  border-top: none;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 -12px 26px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(14px);
 }
 
 .bottom-left {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  min-width: 0;
+  flex: 1;
 }
 
 .bottom-label {
@@ -357,15 +361,17 @@ page {
 }
 
 .submit-btn {
-  --td-button-primary-bg-color: #2563eb;
-  --td-button-primary-border-color: #2563eb;
-  --td-button-primary-hover-bg-color: #1d4ed8;
-  --td-button-primary-hover-border-color: #1d4ed8;
-  height: 40px;
-  padding: 0 26px;
-  font-size: 13px;
-  font-weight: 600;
+  --td-button-primary-bg-color: #7ca0b0;
+  --td-button-primary-border-color: #7ca0b0;
+  --td-button-primary-hover-bg-color: #688e9f;
+  --td-button-primary-hover-border-color: #688e9f;
+  min-width: 168px;
+  height: 50px;
+  padding: 0 32px;
+  font-size: 16px;
+  font-weight: 700;
   border-radius: 999px;
+  box-shadow: 0 10px 18px rgba(124, 160, 176, 0.24);
 }
 
 .home-indicator {
@@ -424,7 +430,7 @@ page {
 .period-price {
   font-size: 16px;
   font-weight: 700;
-  color: #2563eb;
+  color: #64748b;
   white-space: nowrap;
   display: block;
 }
@@ -467,17 +473,17 @@ page {
 }
 
 .period-item.active {
-  background: rgba(37, 99, 235, 0.12);
-  border-color: rgba(37, 99, 235, 0.4);
-  color: #2563eb;
+  background: rgba(124, 160, 176, 0.08);
+  border-color: rgba(124, 160, 176, 0.4);
+  color: #7ca0b0;
   font-weight: 600;
 }
 
 .period-confirm {
-  --td-button-primary-bg-color: #93c5fd;
-  --td-button-primary-border-color: #93c5fd;
-  --td-button-primary-hover-bg-color: #7fb6f6;
-  --td-button-primary-hover-border-color: #7fb6f6;
+  --td-button-primary-bg-color: #7ca0b0;
+  --td-button-primary-border-color: #7ca0b0;
+  --td-button-primary-hover-bg-color: #688e9f;
+  --td-button-primary-hover-border-color: #688e9f;
   margin-top: 16px;
   width: 100%;
   height: 40px;

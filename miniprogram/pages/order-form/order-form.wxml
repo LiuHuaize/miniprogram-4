@@ -94,12 +94,12 @@
         <view class="field-row">
           <view class="field-label">监护人身份证号</view>
           <view class="field-value">
-          <t-input
-            class="field-input"
-            placeholder="{{guardian.idNoMask ? '已保存，重新输入以修改' : '请输入'}}"
-            borderless
-            align="left"
-            type="idcard"
+            <t-input
+              class="field-input"
+              placeholder="请输入"
+              borderless
+              align="left"
+              type="idcard"
               value="{{guardian.idNo}}"
               bindchange="onGuardianIdChange"
             />
@@ -147,11 +147,11 @@
       class="submit-btn"
       theme="primary"
       shape="round"
-      size="small"
-      disabled="{{submissionStatus === 'paid' || paying}}"
+      size="large"
+      disabled="{{paying}}"
       bindtap="onSubmit"
     >
-      {{submissionStatus === 'paid' ? '已支付' : '提交订单'}}
+      {{submissionStatus === 'paid' ? '再次购买' : '提交订单'}}
     </t-button>
   </view>
 
@@ -159,7 +159,7 @@
     <view class="period-sheet" catchtap>
       <view class="period-head">
         <view class="period-top">
-          <text class="period-title">少年独角兽 AI 创业营 2026</text>
+          <text class="period-title">{{summary.title}}</text>
           <view class="period-price-wrap">
             <text class="period-price">{{displayPrice}}</text>
             <text class="price-detail" wx:if="{{priceDetailText}}">{{priceDetailText}}</text>

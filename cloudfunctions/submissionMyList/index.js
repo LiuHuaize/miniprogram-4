@@ -4,15 +4,40 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 
 const db = cloud.database()
 const submissions = db.collection('submissions')
+const PAGE_SIZE = 100
+
+const getAllMySubmissions = async (openid) => {
+  const all = []
+  let offset = 0
+
+  while (true) {
+    const res = await submissions
+      .where({ ownerOpenid: openid })
+      .orderBy('updatedAt', 'desc')
+      .skip(offset)
+      .limit(PAGE_SIZE)
+      .get()
+
+    const batch = res.data || []
+    if (!batch.length) {
+      break
+    }
+
+    all.push(...batch)
+    if (batch.length < PAGE_SIZE) {
+      break
+    }
+    offset += batch.length
+  }
+
+  return all
+}
 
 exports.main = async () => {
   const { OPENID } = cloud.getWXContext()
-  const res = await submissions
-    .where({ ownerOpenid: OPENID })
-    .orderBy('updatedAt', 'desc')
-    .get()
+  const rows = await getAllMySubmissions(OPENID)
 
-  const data = (res.data || []).map((doc) => ({
+  const data = rows.map((doc) => ({
     id: doc._id,
     activityId: doc.activityId,
     periodId: doc.periodId || '',

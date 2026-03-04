@@ -1,7 +1,13 @@
 <view class="page">
   <view class="status-spacer"></view>
 
-  <view class="page-title">亿小步少年独角兽</view>
+  <view class="page-title">少年亿小步教育</view>
+
+  <view class="filter-row">
+    <view class="filter-item filter-item--active">综合排序</view>
+    <view class="filter-item">类型 <t-icon name="chevron-down" size="32rpx" color="#9ca3af" class="filter-icon" /></view>
+    <view class="filter-item">年龄 <t-icon name="chevron-down" size="32rpx" color="#9ca3af" class="filter-icon" /></view>
+  </view>
 
   <view class="search-section">
     <t-search
@@ -17,15 +23,13 @@
     <view class="card-list">
       <block wx:for="{{cards}}" wx:key="id">
         <view class="card" bindtap="onCardTap" data-id="{{item.id}}" data-activity-id="{{item.activityId}}">
-          <view class="card-hero {{item.themeClass}}" style="{{item.heroStyle}}">
-            <view class="card-hero-overlay" style="{{item.overlayStyle}}"></view>
-            <view class="card-hero-top">
-              <text class="card-tag {{item.statusClass}}">{{item.status}}</text>
-              <text wx:if="{{item.subLabel}}" class="card-hero-sub">{{item.subLabel}}</text>
-            </view>
+          <view class="card-hero {{item.themeClass}}">
+            <image class="card-hero-bg" src="{{item.coverUrl}}" mode="widthFix"></image>
+            <view wx:if="{{item.overlayStyle}}" class="card-hero-overlay" style="{{item.overlayStyle}}"></view>
             <view class="card-hero-bottom">
-              <text class="card-hero-title">{{item.heroTitle}}</text>
-              <text class="card-hero-desc">{{item.heroDesc}}</text>
+              <text class="card-tag {{item.statusClass}}">{{item.status}}</text>
+              <text wx:if="{{item.heroTitle}}" class="card-hero-title">{{item.heroTitle}}</text>
+              <text wx:if="{{item.heroDesc}}" class="card-hero-desc">{{item.heroDesc}}</text>
             </view>
           </view>
           <view class="card-body">

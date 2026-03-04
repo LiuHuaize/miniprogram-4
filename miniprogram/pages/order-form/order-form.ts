@@ -78,7 +78,7 @@ const buildPeriodSnapshot = (period?: ActivityPeriod): PeriodSnapshot => ({
 })
 
 const activityFeeMapYuan: Record<string, number> = {
-  'ai-camp-2026': 16800,
+  'ai-camp-2026': 18800,
   'ai-camp-2026-copy': 18800
 }
 

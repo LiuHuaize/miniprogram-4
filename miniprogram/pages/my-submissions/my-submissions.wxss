@@ -70,11 +70,9 @@ page {
 }
 
 .card {
-  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .submission-card {
@@ -118,9 +116,9 @@ page {
 }
 
 .status-tag--active {
-  background: rgba(59, 130, 246, 0.12);
-  color: #1d4ed8;
-  border-color: rgba(59, 130, 246, 0.2);
+  background: rgba(124, 160, 176, 0.1);
+  color: #7ca0b0;
+  border-color: rgba(124, 160, 176, 0.2);
 }
 
 .status-tag--muted {
@@ -144,6 +142,17 @@ page {
 
 .action-btn {
   flex: 1;
+  --td-button-primary-bg-color: rgba(124, 160, 176, 0.08);
+  --td-button-primary-border-color: transparent;
+  --td-button-primary-color: #7ca0b0;
+  --td-button-primary-active-bg-color: rgba(124, 160, 176, 0.15);
+  --td-button-primary-active-border-color: transparent;
+  
+  --td-button-default-bg-color: #f8fafc;
+  --td-button-default-border-color: transparent;
+  --td-button-default-color: #64748b;
+  --td-button-default-active-bg-color: #f1f5f9;
+  --td-button-default-active-border-color: transparent;
 }
 
 .empty {

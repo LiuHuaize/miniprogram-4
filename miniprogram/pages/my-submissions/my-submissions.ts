@@ -97,21 +97,23 @@ Component({
           if (!result.ok || !result.data) {
             return
           }
-          const list = result.data.map((item) => {
-            const summary = getActivitySummary(item.activityId)
-            const statusText =
-              item.status === 'paid' ? '已支付' : item.status === 'submitted' ? '已提交' : '已撤销'
-            return {
-              id: item.id,
-              activityId: item.activityId,
-              periodId: item.periodId || '',
-              status: item.status,
-              statusText,
-              updatedLabel: formatDate(item.updatedAt),
-              childrenCount: item.childrenCount || 0,
-              summary
-            }
-          })
+          const list = result.data
+            .filter((item) => item.status !== 'cancelled')
+            .map((item) => {
+              const summary = getActivitySummary(item.activityId)
+              const statusText =
+                item.status === 'paid' ? '已支付' : item.status === 'submitted' ? '未支付' : '已撤销'
+              return {
+                id: item.id,
+                activityId: item.activityId,
+                periodId: item.periodId || '',
+                status: item.status,
+                statusText,
+                updatedLabel: formatDate(item.updatedAt),
+                childrenCount: item.childrenCount || 0,
+                summary
+              }
+            })
           this.setData({ list })
         },
         fail: () => {
@@ -126,25 +128,33 @@ Component({
       wx.navigateBack({ delta: 1 })
     },
     onOpen(e: WechatMiniprogram.BaseEvent) {
-      const { activityId, periodId, submissionId } = e.currentTarget.dataset as {
+      const { activityId, periodId, submissionId, status } = e.currentTarget.dataset as {
         activityId?: string
         periodId?: string
         submissionId?: string
+        status?: string
       }
       if (!activityId) return
       const periodQuery = periodId ? `&periodId=${encodeURIComponent(periodId)}` : ''
       const submissionQuery = submissionId ? `&submissionId=${encodeURIComponent(submissionId)}` : ''
+      if (status === 'paid') {
+        wx.navigateTo({
+          url: `/pages/order-detail/order-detail?activityId=${encodeURIComponent(activityId)}${periodQuery}${submissionQuery}`
+        })
+        return
+      }
       wx.navigateTo({
         url: `/pages/order-form/order-form?activityId=${encodeURIComponent(activityId)}${periodQuery}${submissionQuery}`
       })
     },
     onCancel(e: WechatMiniprogram.BaseEvent) {
-      const { activityId, periodId, submissionId } = e.currentTarget.dataset as {
+      const { activityId, periodId, submissionId, status } = e.currentTarget.dataset as {
         activityId?: string
         periodId?: string
         submissionId?: string
+        status?: string
       }
-      if (!activityId || !submissionId) return
+      if (!activityId || !submissionId || status !== 'submitted') return
       wx.showModal({
         title: '确认撤销报名？',
         success: (res) => {

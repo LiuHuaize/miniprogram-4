@@ -5,31 +5,13 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
 const users = db.collection('users')
 const children = db.collection('children')
+const {
+  maskIdNo,
+  normalizeText,
+  createGetOrCreateUser
+} = require('./backend-common')
 
-const maskIdNo = (value) => {
-  if (!value) return ''
-  const text = String(value)
-  if (text.length <= 8) {
-    return text.replace(/.(?=.{2})/g, '*')
-  }
-  return `${text.slice(0, 3)}${'*'.repeat(text.length - 7)}${text.slice(-4)}`
-}
-
-const getOrCreateUser = async (openid, now) => {
-  const existing = await users.where({ ownerOpenid: openid }).limit(1).get()
-  if (existing.data.length > 0) {
-    return existing.data[0]
-  }
-  const newUser = {
-    ownerOpenid: openid,
-    createdAt: now,
-    updatedAt: now
-  }
-  const addRes = await users.add({ data: newUser })
-  return { _id: addRes._id, ownerOpenid: openid }
-}
-
-const normalizeText = (value) => (typeof value === 'string' ? value.trim() : '')
+const getOrCreateUser = createGetOrCreateUser(users)
 
 exports.main = async (event) => {
   try {

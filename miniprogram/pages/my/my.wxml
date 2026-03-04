@@ -72,4 +72,57 @@
   </t-tab-bar>
 
   <view class="home-indicator"></view>
+
+  <view wx:if="{{profileEditorVisible}}" class="profile-editor-mask">
+    <view class="profile-editor">
+      <text class="profile-editor-title">完善头像昵称</text>
+      <view class="profile-editor-body">
+        <button
+          class="profile-editor-avatar"
+          open-type="chooseAvatar"
+          bindchooseavatar="onChooseAvatar"
+        >
+          <view class="profile-editor-avatar-ring">
+            <view class="profile-editor-avatar-inner">
+              <image
+                wx:if="{{profileDraft.avatarUrl}}"
+                class="profile-editor-avatar-image"
+                src="{{profileDraft.avatarUrl}}"
+                mode="aspectFill"
+              />
+              <view wx:else class="profile-editor-avatar-icon">
+                <t-icon name="user-1" size="36rpx" />
+              </view>
+            </view>
+          </view>
+          <text class="profile-editor-avatar-text">
+            {{profileDraft.avatarUrl ? '点击更换头像' : '选择头像'}}
+          </text>
+        </button>
+        <input
+          class="profile-editor-input"
+          type="nickname"
+          placeholder="请输入昵称"
+          value="{{profileDraft.nickName}}"
+          bindinput="onNicknameInput"
+          bindblur="onNicknameBlur"
+        />
+      </view>
+      <view class="profile-editor-actions">
+        <button
+          class="profile-editor-button profile-editor-button--ghost"
+          bindtap="onProfileCancel"
+        >
+          暂不完善
+        </button>
+        <button
+          class="profile-editor-button profile-editor-button--primary"
+          loading="{{profileSaving}}"
+          bindtap="onProfileConfirm"
+        >
+          保存
+        </button>
+      </view>
+    </view>
+  </view>
 </view>

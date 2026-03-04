@@ -96,7 +96,7 @@ page {
 .summary-card {
   display: flex;
   gap: 12px;
-  padding: 16px;
+  padding: 12px 14px;
   align-items: center;
 }
 
@@ -109,6 +109,7 @@ page {
 
 .summary-main {
   flex: 1;
+  min-width: 0;
 }
 
 .summary-title {
@@ -116,26 +117,36 @@ page {
   font-weight: 600;
   color: #0f172a;
   line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 }
 
 .summary-sub {
   margin-top: 4px;
-  font-size: 12px;
+  font-size: 11px;
   color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 }
 
 .summary-price {
   font-size: 16px;
   font-weight: 600;
-  color: #2f7d75;
+  color: #7ca0b0;
+  flex-shrink: 0;
+  margin-left: 8px;
 }
 
 .info-card {
-  padding: 16px;
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  font-size: 14px;
+  gap: 10px;
+  font-size: 13px;
 }
 
 .info-row {
@@ -145,7 +156,7 @@ page {
 }
 
 .info-label {
-  color: #94a3b8;
+  color: #a0aec0;
 }
 
 .info-value {
@@ -162,23 +173,11 @@ page {
 }
 
 .section-title {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  color: #0f172a;
-  position: relative;
-  padding-left: 10px;
-  margin-bottom: 10px;
-}
-
-.section-title::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 2px;
-  width: 4px;
-  height: 16px;
-  border-radius: 999px;
-  background: #2f7d75;
+  color: #64748b;
+  margin-bottom: 8px;
+  padding-left: 4px;
 }
 
 .form-card {
@@ -189,8 +188,8 @@ page {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 4px;
-  font-size: 14px;
+  padding: 10px 4px;
+  font-size: 13px;
   border-bottom: 1px solid #edf0f3;
 }
 
@@ -203,8 +202,7 @@ page {
 }
 
 .field-value {
-  color: #1f2937;
-  font-weight: 600;
+  color: #0f172a;
 }
 
 .note-card {
@@ -239,17 +237,17 @@ page {
   margin-top: 4px;
   font-size: 18px;
   font-weight: 600;
-  color: #2f7d75;
+  color: #64748b;
 }
 
 .paid-btn {
-  --td-button-primary-bg-color: #2f7d75;
-  --td-button-primary-border-color: #2f7d75;
-  --td-button-primary-hover-bg-color: #24665f;
-  --td-button-primary-hover-border-color: #24665f;
+  --td-button-primary-bg-color: #7ca0b0;
+  --td-button-primary-border-color: #7ca0b0;
+  --td-button-primary-hover-bg-color: #688e9f;
+  --td-button-primary-hover-border-color: #688e9f;
   height: 38px;
   padding: 0 22px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
 }
 
