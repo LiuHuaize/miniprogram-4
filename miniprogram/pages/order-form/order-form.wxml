@@ -134,6 +134,8 @@
         </view>
       </view>
     </view>
+
+    <view class="scroll-bottom-spacer"></view>
   </scroll-view>
 
   <view class="bottom-bar">
