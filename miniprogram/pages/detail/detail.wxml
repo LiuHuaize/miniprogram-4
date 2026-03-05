@@ -31,14 +31,14 @@
         <image
           class="hero-photo"
           mode="aspectFill"
-          src="{{posterUrls[isSummerCamp ? '/assets/poster/youth-cover-detail.png' : '/assets/poster/01-cover.png']}}"
-          data-src="{{posterUrls[isSummerCamp ? '/assets/poster/youth-cover-detail.png' : '/assets/poster/01-cover.png']}}"
+          src="{{heroImageUrl || posterUrls[heroCoverPath] || heroCoverPath}}"
+          data-src="{{heroImageUrl || posterUrls[heroCoverPath] || heroCoverPath}}"
           binderror="onImageError"
         />
-        <view class="hero-mask" wx:if="{{!isSummerCamp}}"></view>
-        <view class="hero-badge" wx:if="{{!isSummerCamp}}">2026 AI ENTREPRENEURSHIP CAMP</view>
-        <view class="hero-title" wx:if="{{!isSummerCamp}}">{{detailTitle}}</view>
-        <view class="hero-sub" wx:if="{{!isSummerCamp}}">{{periods[selectedPeriodIndex].location}} · 6 天沉浸式项目制学习</view>
+        <view class="hero-mask" wx:if="{{isWinterCamp}}"></view>
+        <view class="hero-badge" wx:if="{{isWinterCamp}}">2026 AI ENTREPRENEURSHIP CAMP</view>
+        <view class="hero-title" wx:if="{{isWinterCamp}}">{{detailTitle}}</view>
+        <view class="hero-sub" wx:if="{{isWinterCamp}}">{{periods[selectedPeriodIndex].location}} · {{durationLabel}}沉浸式项目制学习</view>
       </view>
     </view>
 
@@ -50,17 +50,17 @@
         </view>
         <view class="info-right">
           <text class="info-price">{{priceLabel}}</text>
-          <text class="info-tip">10-16 岁 · 6 天 5 晚</text>
+          <text class="info-tip">{{infoTip}}</text>
         </view>
       </view>
       <view class="info-meta">
         <view class="meta-item">
           <t-icon name="time" size="24rpx" />
-          <text>6 天</text>
+          <text>{{durationLabel}}</text>
         </view>
         <view class="meta-item">
           <t-icon name="user" size="24rpx" />
-          <text>10-16 岁</text>
+          <text>{{ageLabel}}</text>
         </view>
         <view class="meta-item">
           <t-icon name="location" size="24rpx" />
@@ -89,6 +89,115 @@
         </view>
       </view>
     </scroll-view>
+
+    <view class="section-block" id="anchor-content-future" wx:if="{{isFutureCamp && activeTab === 'content'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">内容</text>
+          <text class="section-en">CONTENT</text>
+        </view>
+        <text class="section-brand">FUTURE UNICORN</text>
+      </view>
+      <view class="section-card section-card--poster">
+        <image
+          class="poster-image poster-image--first"
+          mode="widthFix"
+          src="{{posterUrls['/assets/poster/future-unicorn-content.png']}}"
+          data-src="{{posterUrls['/assets/poster/future-unicorn-content.png']}}"
+          binderror="onImageError"
+        />
+      </view>
+    </view>
+
+    <view class="section-block" id="anchor-gains-future" wx:if="{{isFutureCamp && activeTab === 'gains'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">收获</text>
+          <text class="section-en">GAINS</text>
+        </view>
+        <text class="section-brand">FUTURE UNICORN</text>
+      </view>
+      <view class="section-card section-card--poster">
+        <image
+          class="poster-image poster-image--first"
+          mode="widthFix"
+          src="{{posterUrls['/assets/poster/future-unicorn-gains-1.jpg']}}"
+          data-src="{{posterUrls['/assets/poster/future-unicorn-gains-1.jpg']}}"
+          binderror="onImageError"
+        />
+        <image
+          class="poster-image"
+          mode="widthFix"
+          src="{{posterUrls['/assets/poster/future-unicorn-gains-2.jpg']}}"
+          data-src="{{posterUrls['/assets/poster/future-unicorn-gains-2.jpg']}}"
+          binderror="onImageError"
+        />
+      </view>
+    </view>
+
+    <view class="section-block" id="anchor-schedule-future" wx:if="{{isFutureCamp && activeTab === 'schedule'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">课表</text>
+          <text class="section-en">SCHEDULE</text>
+        </view>
+        <text class="section-brand">FUTURE UNICORN</text>
+      </view>
+      <view class="section-card section-card--poster">
+        <image
+          class="poster-image poster-image--first"
+          mode="widthFix"
+          src="{{posterUrls['/assets/poster/future-unicorn-schedule.jpg']}}"
+          data-src="{{posterUrls['/assets/poster/future-unicorn-schedule.jpg']}}"
+          binderror="onImageError"
+        />
+      </view>
+    </view>
+
+    <view class="section-block" id="anchor-itinerary-future" wx:if="{{isFutureCamp && activeTab === 'itinerary'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">师资</text>
+          <text class="section-en">MENTORS</text>
+        </view>
+        <text class="section-brand">FUTURE UNICORN</text>
+      </view>
+      <view class="section-card section-card--poster">
+        <image
+          class="poster-image poster-image--first"
+          mode="widthFix"
+          src="{{posterUrls['/assets/poster/future-unicorn-mentors.jpg']}}"
+          data-src="{{posterUrls['/assets/poster/future-unicorn-mentors.jpg']}}"
+          binderror="onImageError"
+        />
+      </view>
+    </view>
+
+    <view class="section-block" id="anchor-service-future" wx:if="{{isFutureCamp && activeTab === 'service'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">服务</text>
+          <text class="section-en">SERVICE</text>
+        </view>
+        <text class="section-brand">FUTURE UNICORN</text>
+      </view>
+      <view class="section-card section-card--poster">
+        <image
+          class="poster-image poster-image--first"
+          mode="widthFix"
+          src="{{posterUrls['/assets/poster/future-unicorn-service-1.png']}}"
+          data-src="{{posterUrls['/assets/poster/future-unicorn-service-1.png']}}"
+          binderror="onImageError"
+        />
+        <image
+          class="poster-image"
+          mode="widthFix"
+          src="{{posterUrls['/assets/poster/future-unicorn-service-2.png']}}"
+          data-src="{{posterUrls['/assets/poster/future-unicorn-service-2.png']}}"
+          binderror="onImageError"
+        />
+      </view>
+    </view>
 
     <view class="section-block" id="anchor-theme" wx:if="{{isSummerCamp && activeTab === 'theme'}}">
       <view class="section-head">
@@ -192,7 +301,68 @@
       </view>
     </view>
 
-    <view class="section-block" id="anchor-theme-winter" wx:if="{{!isSummerCamp && activeTab === 'theme'}}">
+    <view class="section-block" id="anchor-theme-weekend" wx:if="{{isWeekendCamp && activeTab === 'theme'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">主题</text>
+          <text class="section-en">THEME</text>
+        </view>
+        <text class="section-brand">WEEKEND CAMP</text>
+      </view>
+      <view class="section-card section-card--poster">
+        <image
+          class="poster-image poster-image--first"
+          mode="widthFix"
+          src="{{posterUrls[weekendThemePath] || weekendThemePath}}"
+          data-src="{{posterUrls[weekendThemePath] || weekendThemePath}}"
+          binderror="onImageError"
+        />
+      </view>
+    </view>
+
+    <view class="section-block" id="anchor-content-weekend" wx:if="{{isWeekendCamp && activeTab === 'content'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">内容</text>
+          <text class="section-en">CONTENT</text>
+        </view>
+        <text class="section-brand">WEEKEND CAMP</text>
+      </view>
+      <view class="section-card section-card--poster">
+        <block wx:for="{{weekendContentPaths}}" wx:key="*this">
+          <image
+            class="poster-image {{index === 0 ? 'poster-image--first' : ''}}"
+            mode="widthFix"
+            src="{{posterUrls[item] || item}}"
+            data-src="{{posterUrls[item] || item}}"
+            binderror="onImageError"
+          />
+        </block>
+      </view>
+    </view>
+
+    <view class="section-block" id="anchor-works-weekend" wx:if="{{isWeekendCamp && activeTab === 'works'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">作品</text>
+          <text class="section-en">WORKS</text>
+        </view>
+        <text class="section-brand">WEEKEND CAMP</text>
+      </view>
+      <view class="section-card section-card--poster">
+        <block wx:for="{{weekendWorkPaths}}" wx:key="*this">
+          <image
+            class="poster-image {{index === 0 ? 'poster-image--first' : ''}}"
+            mode="widthFix"
+            src="{{posterUrls[item] || item}}"
+            data-src="{{posterUrls[item] || item}}"
+            binderror="onImageError"
+          />
+        </block>
+      </view>
+    </view>
+
+    <view class="section-block" id="anchor-theme-winter" wx:if="{{isWinterCamp && activeTab === 'theme'}}">
       <view class="section-head">
         <view class="section-left">
           <text class="section-title">介绍</text>
@@ -227,7 +397,7 @@
       </view>
     </view>
 
-    <view class="section-block" id="anchor-content-winter" wx:if="{{!isSummerCamp && activeTab === 'content'}}">
+    <view class="section-block" id="anchor-content-winter" wx:if="{{isWinterCamp && activeTab === 'content'}}">
       <view class="section-head">
         <view class="section-left">
           <text class="section-title">核心收获</text>
@@ -262,7 +432,7 @@
       </view>
     </view>
 
-    <view class="section-block" id="anchor-schedule-winter" wx:if="{{!isSummerCamp && activeTab === 'schedule'}}">
+    <view class="section-block" id="anchor-schedule-winter" wx:if="{{isWinterCamp && activeTab === 'schedule'}}">
       <view class="section-head">
         <view class="section-left">
           <text class="section-title">日程</text>
@@ -297,7 +467,7 @@
       </view>
     </view>
 
-    <view class="section-block" id="anchor-itinerary-winter" wx:if="{{!isSummerCamp && activeTab === 'itinerary'}}">
+    <view class="section-block" id="anchor-itinerary-winter" wx:if="{{isWinterCamp && activeTab === 'itinerary'}}">
       <view class="section-head">
         <view class="section-left">
           <text class="section-title">师资</text>
@@ -332,7 +502,7 @@
       </view>
     </view>
 
-    <view class="section-block" id="anchor-stay-winter" wx:if="{{!isSummerCamp && activeTab === 'stay'}}">
+    <view class="section-block" id="anchor-stay-winter" wx:if="{{isWinterCamp && activeTab === 'stay'}}">
       <view class="section-head">
         <view class="section-left">
           <text class="section-title">保障</text>
@@ -367,7 +537,7 @@
       </view>
     </view>
 
-    <view class="section-block" id="anchor-service-winter" wx:if="{{!isSummerCamp && activeTab === 'service'}}">
+    <view class="section-block" id="anchor-service-winter" wx:if="{{isWinterCamp && activeTab === 'service'}}">
       <view class="section-head">
         <view class="section-left">
           <text class="section-title">流程</text>
@@ -417,7 +587,7 @@
         <text class="consult-btn-text">咨询老师</text>
       </view>
       <view class="apply-btn-wrap">
-        <t-button class="apply-btn" theme="primary" shape="round" size="large" bindtap="onApply">{{applyClosed ? '报名已截止' : '我要报名'}}</t-button>
+        <t-button class="apply-btn" theme="primary" shape="round" size="large" bindtap="onApply">{{applyClosed ? '报名已结束' : '我要报名'}}</t-button>
       </view>
     </view>
   </view>

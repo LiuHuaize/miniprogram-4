@@ -1,6 +1,38 @@
 type PosterUrlMap = Record<string, string>
 
 const posterUrlMap: PosterUrlMap = {
+  '/assets/poster/weekend-cover.png':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/weekend-camp-2026/01-cover.png',
+  '/assets/poster/weekend-theme.jpg':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/weekend-camp-2026/02-theme.jpg',
+  '/assets/poster/weekend-content.jpg':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/weekend-camp-2026/03-content.jpg',
+  '/assets/poster/weekend-work-1.jpg':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/weekend-camp-2026/04-work-1.jpg',
+  '/assets/poster/weekend-work-2.jpg':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/weekend-camp-2026/05-work-2.jpg',
+  '/assets/poster/weekend-work-3.jpg':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/weekend-camp-2026/06-work-3.jpg',
+  '/assets/poster/weekend2-cover.png':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/poster/weekend2-cover.png',
+  '/assets/poster/weekend2-theme.jpg':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/poster/weekend2-theme.jpg',
+  '/assets/poster/weekend2-content.jpg':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/poster/weekend2-content.jpg',
+  '/assets/poster/weekend2-content-2.jpg':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/poster/weekend2-content-2.jpg',
+  '/assets/poster/weekend2-content-3.jpg':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/poster/weekend2-content-3.jpg',
+  '/assets/poster/weekend2-content-4.jpg':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/poster/weekend2-content-4.jpg',
+  '/assets/poster/weekend2-content-5.jpg':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/poster/weekend2-content-5.jpg',
+  '/assets/poster/weekend2-content-6.jpg':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/poster/weekend2-content-6.jpg',
+  '/assets/poster/weekend2-work-1.jpg':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/poster/weekend2-work-1.jpg',
+  '/assets/poster/weekend2-work-2.jpg':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/poster/weekend2-work-2.jpg',
   '/assets/poster/01-cover.png':
     'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E4%BA%BF%E5%B0%8F%E6%AD%A52025%E5%AF%92%E5%81%87%E5%88%9B%E4%B8%9A%E8%90%A5/01-cover.png',
   '/assets/poster/02-group.png':
@@ -20,21 +52,21 @@ const posterUrlMap: PosterUrlMap = {
   '/assets/poster/09-service.png':
     'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E4%BA%BF%E5%B0%8F%E6%AD%A52025%E5%AF%92%E5%81%87%E5%88%9B%E4%B8%9A%E8%90%A5/09-service.png',
   '/assets/poster/youth-theme.jpg':
-    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%B5%B7%E6%8A%A5%E6%B8%85%E6%99%B0%E7%89%88/2.png',
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%9B%BE%E6%96%872026.3.3/%E4%BD%A0%E7%9A%84%E6%AE%B5%E8%90%BD%E6%96%87%E5%AD%97%202.jpg',
   '/assets/poster/youth-cover-list.png':
     'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%9B%BE%E6%96%872026.3.3/2026-youth-cover-list.png',
   '/assets/poster/youth-cover-detail.png':
     'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%9B%BE%E6%96%872026.3.3/2026-youth-cover-detail.png',
   '/assets/poster/youth-content-1.png':
-    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%B5%B7%E6%8A%A5%E6%B8%85%E6%99%B0%E7%89%88/3.png',
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%9B%BE%E6%96%872026.3.3/3.png',
   '/assets/poster/youth-content-2.png':
-    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%B5%B7%E6%8A%A5%E6%B8%85%E6%99%B0%E7%89%88/4.png',
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%9B%BE%E6%96%872026.3.3/4.png',
   '/assets/poster/youth-schedule.png':
-    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%B5%B7%E6%8A%A5%E6%B8%85%E6%99%B0%E7%89%88/5.png',
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%9B%BE%E6%96%872026.3.3/5.png',
   '/assets/poster/youth-service.png':
-    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%B5%B7%E6%8A%A5%E6%B8%85%E6%99%B0%E7%89%88/6.png',
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%9B%BE%E6%96%872026.3.3/6.png',
   '/assets/poster/youth-notice.png':
-    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%B5%B7%E6%8A%A5%E6%B8%85%E6%99%B0%E7%89%88/7.png',
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%9B%BE%E6%96%872026.3.3/7.png',
   '/assets/poster/intro-photo.jpg':
     'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E4%BA%BF%E5%B0%8F%E6%AD%A52025%E5%AF%92%E5%81%87%E5%88%9B%E4%B8%9A%E8%90%A5/intro-photo.jpg',
   '/assets/poster/gains-photo.jpg':
@@ -50,7 +82,23 @@ const posterUrlMap: PosterUrlMap = {
   '/assets/poster/summer-cover.png':
     'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E4%BA%BF%E5%B0%8F%E6%AD%A52025%E5%AF%92%E5%81%87%E5%88%9B%E4%B8%9A%E8%90%A5/summer.png',
   '/assets/poster/winter-cover.png':
-    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E4%BA%BF%E5%B0%8F%E6%AD%A52025%E5%AF%92%E5%81%87%E5%88%9B%E4%B8%9A%E8%90%A5/winter3-cover-800x571.png'
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E4%BA%BF%E5%B0%8F%E6%AD%A52025%E5%AF%92%E5%81%87%E5%88%9B%E4%B8%9A%E8%90%A5/winter3-cover-800x571.png',
+  '/assets/poster/future-unicorn-cover.png':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/ai-challenge-2025-hz-upload/future-unicorn-cover.png',
+  '/assets/poster/future-unicorn-content.png':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/ai-challenge-2025-hz-upload/future-unicorn-content.png',
+  '/assets/poster/future-unicorn-gains-1.jpg':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/ai-challenge-2025-hz-upload/future-unicorn-gains-1.jpg',
+  '/assets/poster/future-unicorn-gains-2.jpg':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/ai-challenge-2025-hz-upload/future-unicorn-gains-2.jpg',
+  '/assets/poster/future-unicorn-schedule.jpg':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/ai-challenge-2025-hz-upload/future-unicorn-schedule.jpg',
+  '/assets/poster/future-unicorn-mentors.jpg':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/ai-challenge-2025-hz-upload/future-unicorn-mentors.jpg',
+  '/assets/poster/future-unicorn-service-1.png':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/ai-challenge-2025-hz-upload/future-unicorn-service-1.png',
+  '/assets/poster/future-unicorn-service-2.png':
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/ai-challenge-2025-hz-upload/future-unicorn-service-2.png'
 }
 
 export const getPosterFallbackUrls = () => ({

@@ -21,6 +21,33 @@ type PeriodSnapshot = {
 const defaultActivityId = 'ai-camp-2026'
 
 const activityPeriodsMap: Record<string, ActivityPeriod[]> = {
+  'ai-weekend-2026': [
+    {
+      id: 'sz-weekend-p1',
+      name: '周末营 · AI解决学习痛点（深圳）',
+      date: '01/17 13:30 - 17:30',
+      deadline: '2026.01.16',
+      quota: '名额情况：已结束'
+    }
+  ],
+  'ai-weekend-2026-pm': [
+    {
+      id: 'sz-weekend-p2',
+      name: '周末营 · AI产品经理（深圳）',
+      date: '01/02 13:30 - 17:30',
+      deadline: '2026.01.01',
+      quota: '名额情况：已结束'
+    }
+  ],
+  'ai-challenge-2025-hz': [
+    {
+      id: 'hz-p1',
+      name: '第一期（杭州）',
+      date: '07/21 - 07/26',
+      deadline: '2025.07.20',
+      quota: '名额情况：已结束'
+    }
+  ],
   'ai-camp-2026': [
     {
       id: 'sz-p1',
@@ -77,7 +104,22 @@ const buildPeriodSnapshot = (period?: ActivityPeriod): PeriodSnapshot => ({
   quota: period?.quota || ''
 })
 
+const activityCoverMap: Record<string, string> = {
+  'ai-weekend-2026': '/assets/poster/weekend-cover.png',
+  'ai-weekend-2026-pm': '/assets/poster/weekend2-cover.png',
+  'ai-challenge-2025-hz': '/assets/poster/future-unicorn-cover.png',
+  'ai-camp-2026': '/assets/poster/01-cover.png',
+  'ai-camp-2026-copy': '/assets/poster/youth-cover-detail.png'
+}
+
+const getActivityCoverPath = (activityId: string) => {
+  return activityCoverMap[activityId] || activityCoverMap[defaultActivityId]
+}
+
 const activityFeeMapYuan: Record<string, number> = {
+  'ai-weekend-2026': 498,
+  'ai-weekend-2026-pm': 498,
+  'ai-challenge-2025-hz': 18800,
   'ai-camp-2026': 18800,
   'ai-camp-2026-copy': 18800
 }
@@ -115,6 +157,7 @@ Component({
   data: {
     activityId: defaultActivityId,
     summary: getActivitySummary(defaultActivityId),
+    summaryCoverPath: getActivityCoverPath(defaultActivityId),
     ...buildPriceState(defaultActivityId, [{ name: '' }]),
     posterUrls: getPosterFallbackUrls(),
     periods: getActivityPeriods(defaultActivityId),
@@ -200,6 +243,7 @@ Component({
           submissionStatus: nextSubmissionId ? this.data.submissionStatus : '',
           activityId: nextActivityId,
           summary: getActivitySummary(nextActivityId),
+          summaryCoverPath: getActivityCoverPath(nextActivityId),
           periods: nextPeriods,
           selectedPeriodIndex
         },
