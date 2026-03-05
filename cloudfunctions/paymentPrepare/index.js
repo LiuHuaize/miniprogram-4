@@ -9,6 +9,18 @@ const { resolveAlumniDiscount } = require('./alumni-discount')
 const padNumber = (value, length = 2) => String(value).padStart(length, '0')
 
 const activityPaymentConfigMap = {
+  'ai-weekend-2026': {
+    totalFee: 49800,
+    periodIds: ['sz-weekend-p1']
+  },
+  'ai-weekend-2026-pm': {
+    totalFee: 49800,
+    periodIds: ['sz-weekend-p2']
+  },
+  'ai-challenge-2025-hz': {
+    totalFee: 1880000,
+    periodIds: ['hz-p1']
+  },
   'ai-camp-2026': {
     totalFee: 1880000,
     periodIds: ['sz-p1']

@@ -1,35 +1,38 @@
 ---
 name: miniprogram-data-binding-debug
-description: Debug WXML data binding and `setData` issues in WeChat Mini Programs. Use when data exists but UI does not update, `wx:for` lists render incorrectly, or bindings/conditions behave unexpectedly.
+description: Debug WXML data binding and `setData` issues in WeChat Mini Programs. Use when data exists but UI does not update, `wx:for` lists render incorrectly, route params do not switch activity views, or tab/branch conditions render the wrong section.
 ---
 
 # Miniprogram Data Binding Debug
 
-## Overview
-Fix common binding and rendering mistakes in WXML + `setData` flows.
-
 ## Workflow
 
-### 1) Verify data shape
-- Log data before and after `setData` to ensure the expected shape.
-- Avoid mutating `this.data` directly; always call `this.setData`.
+### 1) Verify data source and route params
+- Log route params and decoded values first (especially `activityId`, `periodId`).
+- Confirm page/component `data` initializes with safe defaults before async load.
+- Ensure derived state is recomputed from one source of truth when route changes.
 
-### 2) Check WXML conditions
-- Verify `wx:if`, `wx:elif`, `wx:else`, or `hidden` conditions are correct.
-- Ensure conditions are not relying on `undefined` or empty arrays.
-
-### 3) Fix list rendering
-- Use `wx:for` with a stable `wx:key`.
-- Ensure the list is an array and exists before render.
-
-### 4) Update nested paths correctly
-- Use path updates for nested fields:
+### 2) Verify `setData` writes the exact fields WXML consumes
+- Do not mutate `this.data` directly; update via `this.setData`.
+- Match WXML bindings to exact keys (`summaryCoverPath`, `weekendContentPaths`, etc.).
+- For nested updates, use path syntax:
 ```
 this.setData({
   'form.user.name': value
 })
 ```
 
-### 5) Timing and async
-- If `setData` happens after async requests, confirm the request succeeded and `setData` is called in the callback.
-- Use `wx.nextTick` if you need to read layout after rendering.
+### 3) Validate branch conditions for multi-activity UI
+- Confirm mutually exclusive flags are correct (`isFutureCamp`, `isSummerCamp`, `isWeekendCamp`, `isWinterCamp`).
+- Check `activeTab` always exists in current `tabs`; fallback when activity type changes.
+- Verify `wx:if` branches match the intended activity archetype.
+
+### 4) Validate list rendering and poster arrays
+- Ensure `wx:for` data is always an array (never `undefined`/`null`).
+- Use stable keys (`wx:key="*this"` for unique string arrays, or explicit ids for object arrays).
+- For poster paths, verify fallback expression returns a valid URL/path (`posterUrls[item] || item`).
+
+### 5) Check async timing and post-render measurements
+- Confirm async calls succeed before relying on updated UI state.
+- Use `wx.nextTick` before `createSelectorQuery` layout reads.
+- Remove temporary logs after the root cause is confirmed.

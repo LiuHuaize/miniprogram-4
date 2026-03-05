@@ -21,8 +21,8 @@
       <image
         class="summary-thumb"
         mode="aspectFill"
-        src="{{posterUrls['/assets/poster/01-cover.png']}}"
-        data-src="{{posterUrls['/assets/poster/01-cover.png']}}"
+        src="{{posterUrls[summaryCoverPath] || summaryCoverPath}}"
+        data-src="{{posterUrls[summaryCoverPath] || summaryCoverPath}}"
         binderror="onImageError"
       />
       <view class="summary-main">
