@@ -6,7 +6,12 @@ const db = cloud.database()
 const submissions = db.collection('submissions')
 const { resolveAlumniDiscount } = require('./alumni-discount')
 
+const scholarshipDiscountAmount = 250000
+const scholarshipLabel = '新学员奖学金兑换码'
+
 const padNumber = (value, length = 2) => String(value).padStart(length, '0')
+const normalizeText = (value) => (typeof value === 'string' ? value.trim() : '')
+const normalizeScholarshipCode = (value) => normalizeText(value).toUpperCase().replace(/[^A-Z]/g, '')
 
 const activityPaymentConfigMap = {
   'ai-weekend-2026': {
@@ -29,6 +34,13 @@ const activityPaymentConfigMap = {
     totalFee: 1880000,
     periodIds: ['sz-p1', 'hz-p2', 'bj-p3']
   }
+}
+
+const clearPayScholarshipDraft = {
+  payScholarshipCode: '',
+  payScholarshipDiscount: 0,
+  payScholarshipLabel: '',
+  payScholarshipHoldExpiresAt: 0
 }
 
 const buildOutTradeNo = (openid) => {
@@ -65,7 +77,7 @@ const toPositiveInteger = (value) => {
   return 0
 }
 
-const resolveTotalFee = (activityId, periodId) => {
+const resolveFeeConfig = (activityId) => {
   const config = activityPaymentConfigMap[activityId]
   if (!config || !config.totalFee) {
     return {
@@ -73,16 +85,124 @@ const resolveTotalFee = (activityId, periodId) => {
       message: 'Activity payment config missing'
     }
   }
-  if (periodId && Array.isArray(config.periodIds) && config.periodIds.length && !config.periodIds.includes(periodId)) {
+  return {
+    ok: true,
+    config
+  }
+}
+
+const resolvePeriodId = (periodId, periodIds = []) => {
+  const normalizedPeriodId = periodId ? String(periodId).trim() : ''
+  const configuredPeriodIds = Array.isArray(periodIds) ? periodIds.filter(Boolean) : []
+  if (!configuredPeriodIds.length) {
+    return { ok: true, periodId: normalizedPeriodId }
+  }
+  if (normalizedPeriodId) {
+    if (!configuredPeriodIds.includes(normalizedPeriodId)) {
+      return {
+        ok: false,
+        message: 'Invalid periodId for activity'
+      }
+    }
     return {
-      ok: false,
-      message: 'Invalid periodId for activity'
+      ok: true,
+      periodId: normalizedPeriodId
+    }
+  }
+  if (configuredPeriodIds.length === 1) {
+    return {
+      ok: true,
+      periodId: configuredPeriodIds[0]
     }
   }
   return {
-    ok: true,
-    totalFee: Number(config.totalFee)
+    ok: false,
+    message: 'periodId is required'
   }
+}
+
+const resolveTotalFee = (activityId) => {
+  const configResult = resolveFeeConfig(activityId)
+  if (!configResult.ok) {
+    return configResult
+  }
+  const config = configResult.config
+  return {
+    ok: true,
+    totalFee: Number(config.totalFee),
+    periodIds: Array.isArray(config.periodIds) ? config.periodIds : []
+  }
+}
+
+const shouldRequirePeriodId = (activityId) => {
+  const configResult = resolveFeeConfig(activityId)
+  if (!configResult.ok) {
+    return false
+  }
+  const periodIds = Array.isArray(configResult.config.periodIds) ? configResult.config.periodIds.filter(Boolean) : []
+  return periodIds.length > 1
+}
+
+const decideOutTradeNo = (existingOrderNo, existingPayAmount, nextPayAmount, openid) => {
+  if (!existingOrderNo) {
+    return {
+      outTradeNo: buildOutTradeNo(openid),
+      reusedOrderNo: false
+    }
+  }
+  if (existingPayAmount !== nextPayAmount) {
+    return {
+      outTradeNo: buildOutTradeNo(openid),
+      reusedOrderNo: false
+    }
+  }
+  return {
+    outTradeNo: existingOrderNo,
+    reusedOrderNo: true
+  }
+}
+
+const validateRequestPeriod = (activityId, periodId, submissionId) => {
+  if (submissionId || !activityId) {
+    return { ok: true }
+  }
+  if (!shouldRequirePeriodId(activityId) || periodId) {
+    return { ok: true }
+  }
+  return {
+    ok: false,
+    message: 'periodId is required'
+  }
+}
+
+const callScholarshipCodeManage = async (action, payload) => {
+  try {
+    const res = await cloud.callFunction({
+      name: 'scholarshipCodeManage',
+      data: {
+        action,
+        ...payload
+      }
+    })
+    return res && res.result ? res.result : { ok: false, message: '奖学金服务返回为空' }
+  } catch (error) {
+    return { ok: false, message: error.message || '奖学金服务暂不可用' }
+  }
+}
+
+const joinDiscountTypes = (discountApplied, scholarshipApplied) => {
+  const result = []
+  if (discountApplied) {
+    result.push('alumni_mixed')
+  }
+  if (scholarshipApplied) {
+    result.push('scholarship_code')
+  }
+  return result.join(',')
+}
+
+const joinDiscountLabels = (discountLabel, scholarshipDiscountLabel) => {
+  return [discountLabel || '', scholarshipDiscountLabel || ''].filter(Boolean).join('；')
 }
 
 exports.main = async (event) => {
@@ -99,6 +219,10 @@ exports.main = async (event) => {
     })
     if (!activityId && !submissionId) {
       return { ok: false, message: 'activityId is required' }
+    }
+    const periodValidationResult = validateRequestPeriod(activityId, periodId, submissionId)
+    if (!periodValidationResult.ok) {
+      return { ok: false, message: periodValidationResult.message || 'periodId is required' }
     }
 
     const submissionRes = submissionId
@@ -139,24 +263,88 @@ exports.main = async (event) => {
     }
 
     const resolvedActivityId = submissionRes.data.activityId || activityId
-    const resolvedPeriodId = periodId || submissionRes.data.periodId || ''
-    const feeResult = resolveTotalFee(resolvedActivityId, resolvedPeriodId)
+    const feeResult = resolveTotalFee(resolvedActivityId)
     if (!feeResult.ok) {
       console.warn('[paymentPrepare] fee config invalid', {
         resolvedActivityId,
-        resolvedPeriodId,
+        resolvedPeriodId: periodId || submissionRes.data.periodId || '',
         message: feeResult.message
       })
       return { ok: false, message: feeResult.message || 'Payment config invalid' }
     }
+    const periodResult = resolvePeriodId(periodId || submissionRes.data.periodId || '', feeResult.periodIds)
+    if (!periodResult.ok) {
+      console.warn('[paymentPrepare] period invalid', {
+        resolvedActivityId,
+        requestPeriodId: periodId,
+        submissionPeriodId: submissionRes.data.periodId || '',
+        message: periodResult.message
+      })
+      return { ok: false, message: periodResult.message || 'periodId is required' }
+    }
+    const resolvedPeriodId = periodResult.periodId
 
     const existingOrderNo = submissionRes.data.payOrderNo ? String(submissionRes.data.payOrderNo).trim() : ''
     const existingPayAmount = toPositiveInteger(submissionRes.data.payAmount)
-    const outTradeNo = existingOrderNo || buildOutTradeNo(OPENID)
     const regularFee = feeResult.totalFee
     const discountResult = resolveAlumniDiscount(submissionRes.data.childrenSnapshot, regularFee)
     const computedTotalFee = discountResult.camperCount > 0 ? discountResult.totalFee : regularFee
-    const totalFee = existingPayAmount || computedTotalFee
+    const scholarshipCode = normalizeScholarshipCode(submissionRes.data.scholarshipCode)
+    const existingPayScholarshipCode = normalizeScholarshipCode(submissionRes.data.payScholarshipCode)
+    const hasNewCamper = discountResult.regularCount > 0
+
+    if (existingPayScholarshipCode && existingPayScholarshipCode !== scholarshipCode) {
+      await callScholarshipCodeManage('release', {
+        code: existingPayScholarshipCode,
+        activityId: resolvedActivityId,
+        submissionId: docId,
+        outTradeNo: existingOrderNo,
+        ownerOpenid: OPENID
+      })
+    }
+
+    if (scholarshipCode && !hasNewCamper) {
+      return { ok: false, message: '奖学金兑换码仅限新学员使用' }
+    }
+
+    let scholarshipApplied = false
+    let scholarshipDiscount = 0
+    let scholarshipHoldExpiresAt = 0
+    let scholarshipDiscountLabel = ''
+
+    let totalFee = computedTotalFee
+    if (scholarshipCode) {
+      totalFee = Math.max(computedTotalFee - scholarshipDiscountAmount, 0)
+    }
+
+    const orderNoResult = decideOutTradeNo(existingOrderNo, existingPayAmount, totalFee, OPENID)
+    const outTradeNo = orderNoResult.outTradeNo
+
+    if (scholarshipCode) {
+      const holdResult = await callScholarshipCodeManage('hold', {
+        code: scholarshipCode,
+        activityId: resolvedActivityId,
+        submissionId: docId,
+        outTradeNo,
+        ownerOpenid: OPENID
+      })
+      if (!holdResult.ok) {
+        return { ok: false, message: holdResult.message || '奖学金兑换码不可用' }
+      }
+      scholarshipApplied = true
+      scholarshipDiscount = toPositiveInteger(holdResult.discountAmount) || scholarshipDiscountAmount
+      scholarshipHoldExpiresAt = toPositiveInteger(holdResult.holdExpiresAt)
+      scholarshipDiscountLabel = holdResult.label || scholarshipLabel
+      totalFee = Math.max(computedTotalFee - scholarshipDiscount, 0)
+    } else if (existingPayScholarshipCode) {
+      await callScholarshipCodeManage('release', {
+        code: existingPayScholarshipCode,
+        activityId: resolvedActivityId,
+        submissionId: docId,
+        outTradeNo: existingOrderNo,
+        ownerOpenid: OPENID
+      })
+    }
 
     const now = db.serverDate()
     await submissions.doc(docId).update({
@@ -171,23 +359,36 @@ exports.main = async (event) => {
         payCamperCount: discountResult.camperCount,
         payAlumniCount: discountResult.alumniCount,
         payRegularCount: discountResult.regularCount,
-        payDiscountType: discountResult.discountApplied ? 'alumni_mixed' : '',
-        payDiscountLabel: discountResult.discountLabel,
+        payDiscountType: joinDiscountTypes(discountResult.discountApplied, scholarshipApplied),
+        payDiscountLabel: joinDiscountLabels(discountResult.discountLabel, scholarshipApplied ? scholarshipDiscountLabel : ''),
         payDiscountMatchedNames: discountResult.matchedNames,
-        updatedAt: now
+        scholarshipStatus: scholarshipApplied ? 'held' : scholarshipCode ? 'pending' : '',
+        scholarshipDiscountAmount: scholarshipCode ? scholarshipDiscountAmount : 0,
+        scholarshipLabel: scholarshipCode ? scholarshipLabel : '',
+        scholarshipRedeemedAt: null,
+        scholarshipRedeemedOrderNo: '',
+        payScholarshipCode: scholarshipApplied ? scholarshipCode : '',
+        payScholarshipDiscount: scholarshipApplied ? scholarshipDiscount : 0,
+        payScholarshipLabel: scholarshipApplied ? scholarshipDiscountLabel : '',
+        payScholarshipHoldExpiresAt: scholarshipApplied ? scholarshipHoldExpiresAt : 0,
+        updatedAt: now,
+        ...(scholarshipApplied ? {} : clearPayScholarshipDraft)
       }
     })
 
     console.info('[paymentPrepare] ready', {
       outTradeNo,
       totalFee,
-      reusedOrderNo: !!existingOrderNo,
+      reusedOrderNo: orderNoResult.reusedOrderNo,
       resolvedActivityId,
       resolvedPeriodId,
       discountApplied: discountResult.discountApplied,
       camperCount: discountResult.camperCount,
       alumniCount: discountResult.alumniCount,
       regularCount: discountResult.regularCount,
+      scholarshipApplied,
+      scholarshipCode,
+      scholarshipHoldExpiresAt,
       regularFee,
       matchedNames: discountResult.matchedNames
     })
@@ -204,10 +405,15 @@ exports.main = async (event) => {
       alumniCount: discountResult.alumniCount,
       regularCount: discountResult.regularCount,
       regularFee,
-      matchedNames: discountResult.matchedNames
+      matchedNames: discountResult.matchedNames,
+      scholarshipCode: scholarshipApplied ? scholarshipCode : '',
+      scholarshipDiscount: scholarshipApplied ? scholarshipDiscount : 0,
+      scholarshipLabel: scholarshipApplied ? scholarshipDiscountLabel : '',
+      scholarshipHoldExpiresAt: scholarshipApplied ? scholarshipHoldExpiresAt : 0
     }
   } catch (err) {
     console.error('[paymentPrepare] error', err)
     return { ok: false, message: err.message || 'Server error' }
   }
 }
+

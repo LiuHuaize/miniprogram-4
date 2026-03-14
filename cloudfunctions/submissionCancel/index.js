@@ -5,6 +5,8 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
 const submissions = db.collection('submissions')
 
+const normalizeScholarshipCode = (value) => (typeof value === 'string' ? value.trim().toUpperCase().replace(/[^A-Z]/g, '') : '')
+
 const getLatestSubmitted = async (openid, activityId, periodId) => {
   const where = {
     ownerOpenid: openid,
@@ -47,6 +49,22 @@ exports.main = async (event) => {
   }
 
   const docId = existing.data._id || submissionId
+  const scholarshipCode = normalizeScholarshipCode(existing.data.payScholarshipCode || existing.data.scholarshipCode || '')
+  const payOrderNo = existing.data.payOrderNo ? String(existing.data.payOrderNo).trim() : ''
+  if (scholarshipCode) {
+    await cloud.callFunction({
+      name: 'scholarshipCodeManage',
+      data: {
+        action: 'release',
+        code: scholarshipCode,
+        activityId: existing.data.activityId || activityId,
+        submissionId: docId,
+        outTradeNo: payOrderNo,
+        ownerOpenid: OPENID
+      }
+    }).catch(() => null)
+  }
+
   const now = db.serverDate()
   await submissions.doc(docId).update({
     data: {
@@ -58,3 +76,4 @@ exports.main = async (event) => {
 
   return { ok: true }
 }
+

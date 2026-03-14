@@ -99,7 +99,7 @@ page {
   display: flex;
   gap: 12px;
   padding: 14px;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .summary-thumb {
@@ -144,6 +144,31 @@ page {
   gap: 4px;
 }
 
+.summary-price-wrap {
+  flex-shrink: 0;
+  max-width: 140px;
+}
+
+.summary-price-wrap .summary-price,
+.summary-price-wrap .price-detail {
+  width: 100%;
+  text-align: right;
+}
+
+.summary-price-wrap .price-detail {
+  white-space: normal;
+  color: #7b8a99;
+}
+
+.period-price-wrap {
+  max-width: 150px;
+}
+
+.period-price-wrap .price-detail {
+  text-align: right;
+  white-space: normal;
+}
+
 .price-detail {
   font-size: 10px;
   line-height: 1.3;
@@ -152,13 +177,13 @@ page {
 
 .discount-tag {
   font-size: 10px;
-  line-height: 1.2;
-  color: #b45309;
-  padding: 2px 6px;
+  line-height: 1.3;
+  color: #4c7385;
+  padding: 3px 8px;
   border-radius: 999px;
-  border: 1px solid rgba(245, 158, 11, 0.45);
-  background: rgba(254, 243, 199, 0.85);
-  white-space: nowrap;
+  border: 1px solid rgba(124, 160, 176, 0.45);
+  background: rgba(124, 160, 176, 0.16);
+  text-align: center;
 }
 
 .period-card {
@@ -272,6 +297,10 @@ page {
   padding: 0 12px;
 }
 
+.scholarship-card {
+  padding-bottom: 12px;
+}
+
 .field-row {
   display: flex;
   align-items: center;
@@ -286,6 +315,10 @@ page {
   border-bottom: none;
 }
 
+.field-row--stack {
+  align-items: flex-start;
+}
+
 .field-label {
   color: #1f2937;
   font-weight: 500;
@@ -293,11 +326,20 @@ page {
   line-height: 1.4;
 }
 
+.field-label--multi {
+  padding-top: 8px;
+}
+
 .field-value {
   flex: 1;
   min-width: 0;
   display: flex;
   justify-content: flex-start;
+}
+
+.field-value--with-action {
+  align-items: center;
+  gap: 12px;
 }
 
 .field-input {
@@ -309,15 +351,42 @@ page {
   --td-input-default-text-color: #1f2937;
 }
 
-.picker-value {
+.code-action {
+  flex: 0 0 auto;
+  min-width: 64px;
+  height: 30px;
+  border-radius: 999px;
+  background: rgba(124, 160, 176, 0.14);
+  color: #4c7385;
+  border: 1px solid rgba(124, 160, 176, 0.4);
   display: flex;
   align-items: center;
-  gap: 4px;
-  color: #94a3b8;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
 }
 
-.picker-text {
-  color: #94a3b8;
+.scholarship-helper {
+  margin: 10px 4px 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.scholarship-helper--success {
+  color: #2f7d75;
+  background: rgba(47, 125, 117, 0.08);
+  border-color: rgba(47, 125, 117, 0.2);
+}
+
+.scholarship-helper--warning {
+  color: #b45309;
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.2);
 }
 
 .bottom-bar {
@@ -361,7 +430,8 @@ page {
 .discount-note {
   margin-top: 2px;
   font-size: 10px;
-  color: #b45309;
+  color: #4c7385;
+  line-height: 1.3;
   display: block;
 }
 
@@ -377,20 +447,6 @@ page {
   font-weight: 700;
   border-radius: 999px;
   box-shadow: 0 10px 18px rgba(124, 160, 176, 0.24);
-}
-
-.home-indicator {
-  position: fixed;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 4px;
-  border-radius: 999px;
-  background: #0f172a;
-  opacity: 0.12;
-  pointer-events: none;
-  z-index: 11;
 }
 
 .period-mask {
@@ -495,3 +551,4 @@ page {
   font-size: 13px;
   font-weight: 600;
 }
+

@@ -44,6 +44,10 @@ const formatAmount = (totalFee: number) => {
   if (!totalFee) return '¥ --'
   return `¥ ${(totalFee / 100).toFixed(2)}`
 }
+const formatDiscountAmount = (totalFee: number) => {
+  if (!totalFee) return '--'
+  return `-¥ ${(totalFee / 100).toFixed(2)}`
+}
 const buildStatusText = (status?: string) => {
   if (status === 'paid') return '已支付'
   if (status === 'submitted') return '已提交'
@@ -69,6 +73,10 @@ Component({
     orderTimeText: '--',
     totalFee: 0,
     amountText: '¥ --',
+    scholarshipCode: '',
+    scholarshipDiscountAmount: 0,
+    scholarshipDiscountText: '',
+    scholarshipStatusText: '',
     travelText: '--',
     guardian: {
       name: '--',
@@ -96,7 +104,7 @@ Component({
   pageLifetimes: {
     show() {
       const pages = getCurrentPages()
-      const current = pages[pages.length - 1] as WechatMiniprogram.Page.Instance & {
+      const current = pages[pages.length - 1] as WechatMiniprogram.Page.Instance<any, any> & {
         options?: Record<string, string>
       }
       const options = current?.options || {}
@@ -107,6 +115,11 @@ Component({
       const orderNo = decodeValue(options.outTradeNo || options.orderNo) || storage.outTradeNo || ''
       const totalFee =
         toNumber(options.totalFee || options.total_fee) || Number(storage.totalFee) || this.data.totalFee || 0
+      const scholarshipCode = decodeValue(options.scholarshipCode) || storage.scholarshipCode || ''
+      const scholarshipDiscountAmount =
+        toNumber(options.scholarshipDiscount || options.scholarship_discount) ||
+        Number(storage.scholarshipDiscount) ||
+        0
 
       this.setData({
         activityId,
@@ -115,10 +128,14 @@ Component({
         summary: getActivitySummary(activityId),
         orderNo: orderNo || this.data.orderNo,
         totalFee,
-        amountText: formatAmount(totalFee)
+        amountText: formatAmount(totalFee),
+        scholarshipCode,
+        scholarshipDiscountAmount,
+        scholarshipDiscountText: formatDiscountAmount(scholarshipDiscountAmount),
+        scholarshipStatusText: scholarshipCode ? '待支付完成核销' : ''
       })
 
-      logInfo('page show', { activityId, periodId, submissionId, orderNo })
+      logInfo('page show', { activityId, periodId, submissionId, orderNo, scholarshipCode })
       this.logLayout('page-show')
       this.ensureLogin().then(() => {
         this.loadDetail()
@@ -195,6 +212,11 @@ Component({
               paidAt?: unknown
               payOrderNo?: string
               payAmount?: number
+              scholarshipCode?: string
+              scholarshipStatus?: string
+              scholarshipDiscountAmount?: number
+              payScholarshipCode?: string
+              payScholarshipDiscount?: number
               guardianSnapshot: {
                 name: string
                 phone: string
@@ -223,6 +245,14 @@ Component({
           const orderTimeText = formatDateTime(data.createdAt || data.paidAt || data.updatedAt)
           const guardian = data.guardianSnapshot || { name: '', phone: '', idNo: '', idNoMask: '' }
           const campersRaw = Array.isArray(data.childrenSnapshot) ? data.childrenSnapshot : []
+          const scholarshipCode = data.payScholarshipCode || data.scholarshipCode || ''
+          const scholarshipDiscountAmount =
+            Number(data.payScholarshipDiscount) || Number(data.scholarshipDiscountAmount) || 0
+          const scholarshipStatusText = scholarshipCode
+            ? data.status === 'paid' || data.scholarshipStatus === 'redeemed'
+              ? '已核销'
+              : '待支付生效'
+            : ''
           const campers =
             campersRaw.length > 0
               ? campersRaw.map((item) => ({
@@ -257,6 +287,10 @@ Component({
             totalFee,
             amountText: formatAmount(totalFee),
             orderTimeText,
+            scholarshipCode,
+            scholarshipDiscountAmount,
+            scholarshipDiscountText: formatDiscountAmount(scholarshipDiscountAmount),
+            scholarshipStatusText,
             guardian: {
               name: guardian.name || '--',
               phone: guardian.phone || '--',
@@ -281,3 +315,4 @@ Component({
     }
   }
 })
+

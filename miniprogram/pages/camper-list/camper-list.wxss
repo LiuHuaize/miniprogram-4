@@ -120,6 +120,12 @@ page {
   background: rgba(47, 125, 117, 0.06);
 }
 
+.camper-item.disabled {
+  border-color: rgba(148, 163, 184, 0.18);
+  background: #f8fafc;
+  box-shadow: none;
+}
+
 .radio {
   width: 18px;
   height: 18px;
@@ -132,6 +138,10 @@ page {
 
 .camper-item.active .radio {
   border-color: #2f7d75;
+}
+
+.camper-item.disabled .radio {
+  border-color: #dbe3ec;
 }
 
 .radio-dot {
@@ -152,12 +162,24 @@ page {
   display: block;
 }
 
+.camper-lock {
+  margin-top: 4px;
+  font-size: 10px;
+  color: #9a6b1f;
+  display: block;
+}
+
 .camper-sub {
   margin-top: 4px;
   font-size: 11px;
   color: #7b8a99;
   display: block;
   line-height: 1.5;
+}
+
+.camper-item.disabled .camper-name,
+.camper-item.disabled .camper-sub {
+  color: #94a3b8;
 }
 
 .empty {
@@ -193,16 +215,3 @@ page {
   width: 100%;
 }
 
-.home-indicator {
-  position: fixed;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 4px;
-  border-radius: 999px;
-  background: #0f172a;
-  opacity: 0.12;
-  pointer-events: none;
-  z-index: 6;
-}

@@ -34,6 +34,14 @@
         <text class="detail-label">订单号</text>
         <text class="detail-value">{{orderNo}}</text>
       </view>
+      <view class="detail-row" wx:if="{{scholarshipCode}}">
+        <text class="detail-label">兑换码</text>
+        <text class="detail-value">{{scholarshipCode}}</text>
+      </view>
+      <view class="detail-row" wx:if="{{scholarshipDiscountAmount}}">
+        <text class="detail-label">奖学金抵扣</text>
+        <text class="detail-value detail-value--success">{{scholarshipDiscountText}}</text>
+      </view>
       <view class="detail-row">
         <text class="detail-label">支付金额</text>
         <text class="detail-value detail-value--price">{{amountText}}</text>
@@ -52,5 +60,5 @@
     <view class="hint">如需修改信息，可前往“我的订单”联系老师协助。</view>
   </scroll-view>
 
-  <view class="home-indicator"></view>
 </view>
+

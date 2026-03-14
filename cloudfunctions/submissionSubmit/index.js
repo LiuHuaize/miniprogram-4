@@ -10,12 +10,37 @@ const submissions = db.collection('submissions')
 const {
   maskIdNo,
   normalizeText,
+  normalizeScholarshipCode,
+  scholarshipDiscountAmount,
+  scholarshipLabel,
   createGetOrCreateUser,
   createGetLatestSubmitted
 } = require('./backend-common')
 
 const getOrCreateUser = createGetOrCreateUser(users)
 const getLatestSubmitted = createGetLatestSubmitted(submissions)
+const resetPaymentDraft = {
+  payOrderNo: '',
+  payAmount: 0,
+  payCurrency: '',
+  payUnitAmount: 0,
+  payAlumniUnitAmount: 0,
+  payCamperCount: 0,
+  payAlumniCount: 0,
+  payRegularCount: 0,
+  payDiscountType: '',
+  payDiscountLabel: '',
+  payDiscountMatchedNames: [],
+  payScholarshipCode: '',
+  payScholarshipDiscount: 0,
+  payScholarshipLabel: '',
+  payScholarshipHoldExpiresAt: 0,
+  payVerifiedAt: null,
+  payVerifiedAmount: 0,
+  payVerifiedCurrency: '',
+  payTransactionId: '',
+  paidAt: null
+}
 
 const buildGuardianSnapshot = (guardianInput, existingSubmission, existingUser) => {
   const name = normalizeText(guardianInput.name)
@@ -122,6 +147,21 @@ const buildPeriodSnapshot = (periodInput, periodId) => {
   }
 }
 
+const buildScholarshipSnapshot = (event) => {
+  const code = normalizeScholarshipCode(event && event.scholarshipCode ? event.scholarshipCode : '')
+  if (code && (code.length < 5 || code.length > 6)) {
+    throw new Error('奖学金兑换码格式不正确')
+  }
+  return {
+    code,
+    discountAmount: code ? scholarshipDiscountAmount : 0,
+    label: code ? scholarshipLabel : '',
+    status: code ? 'pending' : '',
+    redeemedAt: null,
+    redeemedOrderNo: ''
+  }
+}
+
 exports.main = async (event) => {
   try {
     const { OPENID } = cloud.getWXContext()
@@ -138,6 +178,7 @@ exports.main = async (event) => {
     const guardianInput = event.guardian || {}
     const childIds = Array.isArray(event.childIds) ? event.childIds.filter(Boolean) : []
     const periodSnapshot = buildPeriodSnapshot(event.periodSnapshot, periodId)
+    const scholarshipSnapshot = buildScholarshipSnapshot(event)
 
     const user = await getOrCreateUser(OPENID, now)
     const existingSubmitted = await getLatestSubmitted(OPENID, activityId, periodId)
@@ -155,8 +196,15 @@ exports.main = async (event) => {
       guardianSnapshot: guardianResult.snapshot,
       childrenSnapshot,
       childIds,
+      scholarshipCode: scholarshipSnapshot.code,
+      scholarshipDiscountAmount: scholarshipSnapshot.discountAmount,
+      scholarshipStatus: scholarshipSnapshot.status,
+      scholarshipLabel: scholarshipSnapshot.label,
+      scholarshipRedeemedAt: scholarshipSnapshot.redeemedAt,
+      scholarshipRedeemedOrderNo: scholarshipSnapshot.redeemedOrderNo,
       updatedAt: now,
-      cancelledAt: null
+      cancelledAt: null,
+      ...resetPaymentDraft
     }
 
     let submissionId = ''
@@ -181,3 +229,4 @@ exports.main = async (event) => {
     return { ok: false, message: err.message || 'Server error' }
   }
 }
+
