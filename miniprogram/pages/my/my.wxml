@@ -71,8 +71,6 @@
     </t-tab-bar-item>
   </t-tab-bar>
 
-  <view class="home-indicator"></view>
-
   <view wx:if="{{profileEditorVisible}}" class="profile-editor-mask">
     <view class="profile-editor">
       <text class="profile-editor-title">完善头像昵称</text>
