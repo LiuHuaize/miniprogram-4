@@ -6,7 +6,6 @@
   - `pages/` contains feature pages (e.g., `pages/index`, `pages/order-form`). Each page folder follows the `.ts` + `.wxml` + `.wxss` + `.json` pattern.
   - `utils/` holds shared helpers.
   - `miniprogram_npm/` is generated output from npm build in WeChat DevTools; avoid manual edits.
-- `prototype/` contains static HTML prototypes used for UI reference only.
 - Root config: `project.config.json`, `project.private.config.json`, `tsconfig.json`, and `typings/`.
 
 ## Build, Test, and Development Commands
@@ -19,11 +18,13 @@
 - Languages: TypeScript (`.ts`), WXML templates, WXSS styles, JSON config.
 - Indentation: 2 spaces; keep files semicolon-free to match existing style.
 - Prefer single quotes in `.ts` unless a key requires quotes (e.g., `"userInfo.nickName"`).
-- Page folders are kebab-case (e.g., `order-detail`, `pay-success`).
+- Page folders are kebab-case and should carry concrete business context when the page is business-specific (e.g., `order-detail`, `9-9-survey-questionnaire`, `2026-0425-activity-poster`).
+- Avoid vague route/page names like `report`, `activity`, `pay-success`; prefer names with identifiable business information such as price, date, season, or specific activity code. Only truly shared infrastructure pages may use generic business nouns such as `registration-payment-success`.
+- Cloud function names should follow the same rule: prefer concrete business identifiers for business-specific functions (e.g., `survey99PaymentCreate`), and reserve generic names only for truly shared infrastructure.
 
 ## Testing Guidelines
 - There is no test framework or test directory in the current repo.
-- When changing behavior, document manual verification steps in the PR (e.g., “opened `pages/order-form`, submitted, reached `pages/pay-success`”).
+- When changing behavior, document manual verification steps in the PR (e.g., “opened `pages/order-form`, submitted, reached `pages/registration-payment-success`”).
 
 ## Commit & Pull Request Guidelines
 - Git history uses short, single-line messages (e.g., `初始化`). Keep commits concise and descriptive.

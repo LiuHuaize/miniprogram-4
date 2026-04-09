@@ -1,17 +1,19 @@
 const cloud = require('wx-server-sdk')
 const {
-  scholarshipCodeBatchId,
+  scholarshipSeedVersion,
   scholarshipEligibleActivityIds,
-  scholarshipDiscountAmount,
-  scholarshipDiscountYuan,
   scholarshipLabel,
-  scholarshipDescription,
-  initialScholarshipCodes
+  interviewFeeDiscountAmount,
+  defaultScholarshipAmount,
+  defaultScholarshipDiscountAmount,
+  buildScholarshipDescription,
+  initialScholarshipCodeDocs
 } = require('./codes')
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 
 const db = cloud.database()
+const _ = db.command
 const submissions = db.collection('submissions')
 const scholarshipCodes = db.collection('scholarship_codes')
 
@@ -34,28 +36,38 @@ const chunk = (items, size) => {
   return result
 }
 
-const buildCodeDoc = (code) => ({
-  code,
-  batchId: scholarshipCodeBatchId,
-  label: scholarshipLabel,
-  description: scholarshipDescription,
-  discountAmount: scholarshipDiscountAmount,
-  activityIds: scholarshipEligibleActivityIds,
-  status: 'unused',
-  holdSubmissionId: '',
-  holdActivityId: '',
-  holdOpenid: '',
-  holdOrderNo: '',
-  holdPlacedAt: 0,
-  holdExpiresAt: 0,
-  redeemedSubmissionId: '',
-  redeemedActivityId: '',
-  redeemedByOpenid: '',
-  redeemedOrderNo: '',
-  redeemedAt: null,
-  createdAt: db.serverDate(),
-  updatedAt: db.serverDate()
-})
+const buildCodeDoc = (codeDocInput) => {
+  const scholarshipAmount = toNumber(codeDocInput && codeDocInput.scholarshipAmount) || defaultScholarshipAmount
+  const interviewDiscountAmount =
+    toNumber(codeDocInput && codeDocInput.interviewFeeDiscountAmount) || interviewFeeDiscountAmount
+  const discountAmount =
+    toNumber(codeDocInput && codeDocInput.discountAmount) || scholarshipAmount + interviewDiscountAmount
+
+  return {
+    code: codeDocInput.code,
+    batchId: codeDocInput.batchId || scholarshipSeedVersion,
+    label: codeDocInput.label || scholarshipLabel,
+    description: codeDocInput.description || buildScholarshipDescription(scholarshipAmount),
+    scholarshipAmount,
+    interviewFeeDiscountAmount: interviewDiscountAmount,
+    discountAmount,
+    activityIds: scholarshipEligibleActivityIds,
+    status: codeDocInput.initialStatus || 'unused',
+    holdSubmissionId: '',
+    holdActivityId: '',
+    holdOpenid: '',
+    holdOrderNo: '',
+    holdPlacedAt: 0,
+    holdExpiresAt: 0,
+    redeemedSubmissionId: '',
+    redeemedActivityId: '',
+    redeemedByOpenid: '',
+    redeemedOrderNo: '',
+    redeemedAt: null,
+    createdAt: db.serverDate(),
+    updatedAt: db.serverDate()
+  }
+}
 
 const isActivityEligible = (activityId) => eligibleActivityIdSet.has(activityId)
 
@@ -87,31 +99,59 @@ const resolveOperatorOpenid = (event, context) => {
   return normalizeText(event && event.ownerOpenid ? event.ownerOpenid : '')
 }
 
+const normalizeCodeDoc = (doc) => {
+  const scholarshipAmount = toNumber(doc && doc.scholarshipAmount) || defaultScholarshipAmount
+  const interviewDiscountAmount =
+    toNumber(doc && doc.interviewFeeDiscountAmount) || interviewFeeDiscountAmount
+  const discountAmount =
+    toNumber(doc && doc.discountAmount) || scholarshipAmount + interviewDiscountAmount || defaultScholarshipDiscountAmount
+
+  return {
+    scholarshipAmount,
+    scholarshipYuan: scholarshipAmount / 100,
+    interviewFeeDiscountAmount: interviewDiscountAmount,
+    interviewFeeDiscountYuan: interviewDiscountAmount / 100,
+    discountAmount,
+    discountYuan: discountAmount / 100,
+    label: doc && doc.label ? doc.label : scholarshipLabel,
+    description: doc && doc.description ? doc.description : buildScholarshipDescription(scholarshipAmount)
+  }
+}
+
+const formatPreviewMessage = (normalizedCodeDoc) => {
+  return `兑换码可用，支付时可抵扣¥${normalizedCodeDoc.discountYuan}（奖学金¥${normalizedCodeDoc.scholarshipYuan} + 面试抵扣¥${normalizedCodeDoc.interviewFeeDiscountYuan}）`
+}
+
 const ensureSeeded = async () => {
   const metaRes = await scholarshipCodes.doc(seedMetaId).get().catch(() => null)
-  if (metaRes && metaRes.data && metaRes.data.version === scholarshipCodeBatchId) {
-    return
+  if (metaRes && metaRes.data && metaRes.data.version === scholarshipSeedVersion) {
+    return { seeded: 0, totalCodes: initialScholarshipCodeDocs.length }
   }
 
-  const existingRes = await scholarshipCodes.where({ batchId: scholarshipCodeBatchId }).limit(200).get().catch(() => ({ data: [] }))
+  const existingRes = await scholarshipCodes.where({ batchId: _.in([...new Set(initialScholarshipCodeDocs.map((item) => item.batchId))]) }).limit(200).get().catch(() => ({ data: [] }))
   const existingCodeSet = new Set((existingRes.data || []).map((item) => normalizeScholarshipCode(item.code || item._id || '')))
-  const missingCodes = initialScholarshipCodes.filter((code) => !existingCodeSet.has(code))
+  const missingCodeDocs = initialScholarshipCodeDocs.filter((item) => !existingCodeSet.has(item.code))
 
-  for (const group of chunk(missingCodes, 20)) {
+  for (const group of chunk(missingCodeDocs, 20)) {
     await Promise.all(
-      group.map((code) => scholarshipCodes.doc(code).set({ data: buildCodeDoc(code) }))
+      group.map((codeDoc) => scholarshipCodes.doc(codeDoc.code).set({ data: buildCodeDoc(codeDoc) }))
     )
   }
 
   await scholarshipCodes.doc(seedMetaId).set({
     data: {
       type: 'meta',
-      version: scholarshipCodeBatchId,
-      totalCodes: initialScholarshipCodes.length,
+      version: scholarshipSeedVersion,
+      totalCodes: initialScholarshipCodeDocs.length,
       updatedAt: db.serverDate(),
       seededAt: db.serverDate()
     }
   })
+
+  return {
+    seeded: missingCodeDocs.length,
+    totalCodes: initialScholarshipCodeDocs.length
+  }
 }
 
 const ensureSubmissionOwned = async (submissionId, ownerOpenid, activityId) => {
@@ -167,14 +207,11 @@ const previewCode = async (event, context) => {
     ok: true,
     available: true,
     normalizedCode: code,
-    discountAmount: toNumber(codeDoc.discountAmount) || scholarshipDiscountAmount,
-    discountYuan: scholarshipDiscountYuan,
-    label: codeDoc.label || scholarshipLabel,
-    description: codeDoc.description || scholarshipDescription,
+    ...normalizeCodeDoc(codeDoc),
     holdExpiresAt: hasActiveHold(codeDoc, nowMs) && codeDoc.holdSubmissionId === submissionId
       ? toNumber(codeDoc.holdExpiresAt)
       : 0,
-    message: '兑换码可用，支付时可抵扣¥2500'
+    message: formatPreviewMessage(normalizeCodeDoc(codeDoc))
   }
 }
 
@@ -235,19 +272,14 @@ const holdCode = async (event, context) => {
         }
       })
 
-      return {
-        discountAmount: toNumber(codeDoc.discountAmount) || scholarshipDiscountAmount,
-        label: codeDoc.label || scholarshipLabel
-      }
+      return normalizeCodeDoc(codeDoc)
     })
 
     return {
       ok: true,
       code,
       holdExpiresAt,
-      discountAmount: result.discountAmount,
-      discountYuan: result.discountAmount / 100,
-      label: result.label || scholarshipLabel,
+      ...result,
       message: '兑换码已锁定，等待支付完成'
     }
   } catch (error) {
@@ -320,6 +352,14 @@ const releaseCode = async (event, context) => {
 exports.main = async (event, context) => {
   const action = normalizeText(event && event.action) || 'preview'
 
+  if (action === 'seed') {
+    const seedResult = await ensureSeeded()
+    return {
+      ok: true,
+      ...seedResult,
+      version: scholarshipSeedVersion
+    }
+  }
   if (action === 'preview') {
     return previewCode(event, context)
   }

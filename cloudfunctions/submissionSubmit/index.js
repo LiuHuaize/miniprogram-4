@@ -11,7 +11,6 @@ const {
   maskIdNo,
   normalizeText,
   normalizeScholarshipCode,
-  scholarshipDiscountAmount,
   scholarshipLabel,
   createGetOrCreateUser,
   createGetLatestSubmitted
@@ -70,7 +69,7 @@ const buildGuardianSnapshot = (guardianInput, existingSubmission, existingUser) 
   }
 
   if (!idNo) {
-    throw new Error('Guardian ID card is required')
+    throw new Error('请填写监护人身份证明')
   }
 
   return {
@@ -119,7 +118,7 @@ const buildChildrenSnapshots = async (openid, childIds) => {
     const childIdNo = child ? child.idNo || '' : ''
     const childIdNoMask = child ? child.idNoMask || maskIdNo(childIdNo) : ''
     if (!child || !childIdNo) {
-      throw new Error('Child ID card is required')
+      throw new Error('请完善学员身份证明')
     }
     return {
       id: child._id,
@@ -147,16 +146,48 @@ const buildPeriodSnapshot = (periodInput, periodId) => {
   }
 }
 
-const buildScholarshipSnapshot = (event) => {
+const buildScholarshipSnapshot = async (activityId, submissionId, event) => {
   const code = normalizeScholarshipCode(event && event.scholarshipCode ? event.scholarshipCode : '')
   if (code && (code.length < 5 || code.length > 6)) {
     throw new Error('奖学金兑换码格式不正确')
   }
+  if (!code) {
+    return {
+      code: '',
+      discountAmount: 0,
+      label: '',
+      status: '',
+      redeemedAt: null,
+      redeemedOrderNo: ''
+    }
+  }
+
+  const previewRes = await cloud.callFunction({
+    name: 'scholarshipCodeManage',
+    data: {
+      action: 'preview',
+      activityId,
+      submissionId,
+      code
+    }
+  }).catch((error) => ({
+    result: {
+      ok: false,
+      available: false,
+      message: error.message || '奖学金兑换码暂不可用'
+    }
+  }))
+
+  const previewResult = previewRes && previewRes.result ? previewRes.result : {}
+  if (!previewResult.ok || !previewResult.available) {
+    throw new Error(previewResult.message || '奖学金兑换码不可用')
+  }
+
   return {
-    code,
-    discountAmount: code ? scholarshipDiscountAmount : 0,
-    label: code ? scholarshipLabel : '',
-    status: code ? 'pending' : '',
+    code: previewResult.normalizedCode || code,
+    discountAmount: Number(previewResult.discountAmount) || 0,
+    label: previewResult.label || scholarshipLabel,
+    status: 'pending',
     redeemedAt: null,
     redeemedOrderNo: ''
   }
@@ -178,10 +209,14 @@ exports.main = async (event) => {
     const guardianInput = event.guardian || {}
     const childIds = Array.isArray(event.childIds) ? event.childIds.filter(Boolean) : []
     const periodSnapshot = buildPeriodSnapshot(event.periodSnapshot, periodId)
-    const scholarshipSnapshot = buildScholarshipSnapshot(event)
 
     const user = await getOrCreateUser(OPENID, now)
     const existingSubmitted = await getLatestSubmitted(OPENID, activityId, periodId)
+    const scholarshipSnapshot = await buildScholarshipSnapshot(
+      activityId,
+      existingSubmitted ? existingSubmitted._id || '' : '',
+      event
+    )
 
     const guardianResult = buildGuardianSnapshot(guardianInput, existingSubmitted, user)
     const childrenSnapshot = await buildChildrenSnapshots(OPENID, childIds)
@@ -229,4 +264,3 @@ exports.main = async (event) => {
     return { ok: false, message: err.message || 'Server error' }
   }
 }
-

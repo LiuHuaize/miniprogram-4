@@ -1,0 +1,281 @@
+<view class="page">
+  <view class="status-spacer"></view>
+
+  <view class="nav-bar">
+    <view class="nav-left" bindtap="onBack">
+      <view class="nav-icon-wrap">
+        <t-icon name="chevron-left" size="32rpx" />
+      </view>
+      <text class="nav-text">返回</text>
+    </view>
+    <text class="nav-title">任务详情</text>
+    <view class="nav-right"></view>
+  </view>
+
+  <scroll-view class="scroll-area" scroll-y show-scrollbar="{{false}}">
+    <view class="hero-card">
+      <image class="hero-cover" src="{{coverUrl}}" mode="aspectFill"></image>
+      <view class="hero-mask"></view>
+      <view class="hero-month">{{monthLabel}}</view>
+      <view class="hero-status hero-status--{{statusClass}}">{{status}}</view>
+    </view>
+
+    <view class="info-card">
+      <view class="info-main">
+        <view class="info-left">
+          <text class="info-title">{{title}}</text>
+          <text class="info-sub">{{brief}}</text>
+        </view>
+        <view class="info-right">
+          <text class="info-deadline">截止 {{deadline}}</text>
+          <text class="info-people">{{participantLabel}}</text>
+        </view>
+      </view>
+      <view class="info-meta">
+        <view class="meta-chip">
+          <t-icon name="time" size="24rpx" />
+          <text>月度任务</text>
+        </view>
+        <view class="meta-chip">
+          <t-icon name="image" size="24rpx" />
+          <text>图片提交</text>
+        </view>
+        <view class="meta-chip">
+          <t-icon name="edit-1" size="24rpx" />
+          <text>文字说明</text>
+        </view>
+      </view>
+    </view>
+
+    <scroll-view class="tabs" scroll-x show-scrollbar="{{false}}">
+      <view class="tab-list">
+        <view
+          class="tab-item {{activeTab === item.key ? 'active' : ''}}"
+          wx:for="{{tabs}}"
+          wx:key="key"
+          data-key="{{item.key}}"
+          bindtap="onTab"
+        >
+          {{item.label}}
+        </view>
+      </view>
+    </scroll-view>
+
+    <view wx:if="{{activeTab === 'brief'}}" class="section-block">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">任务简介</text>
+          <text class="section-en">TASK BRIEF</text>
+        </view>
+        <text class="section-brand">YOUTH MAKER</text>
+      </view>
+
+      <view class="section-card intro-article-card">
+        <text class="intro-main">{{brief}}</text>
+        <image wx:if="{{posterUrl}}" class="article-image" src="{{posterUrl}}" mode="widthFix" bindtap="onPreviewPoster"></image>
+        <text class="intro-prompt">{{prompt}}</text>
+      </view>
+
+      <view class="section-head section-head--sub">
+        <view class="section-left">
+          <text class="section-title">任务要点</text>
+          <text class="section-en">KEY POINTS</text>
+        </view>
+      </view>
+      <view class="point-list">
+        <view class="point-item" wx:for="{{challengePoints}}" wx:key="*this">
+          <view class="point-index">{{index + 1}}</view>
+          <text class="point-text">{{item}}</text>
+        </view>
+      </view>
+
+      <view class="section-head section-head--sub">
+        <view class="section-left">
+          <text class="section-title">提交时要回答的问题</text>
+          <text class="section-en">QUESTIONS</text>
+        </view>
+      </view>
+      <view class="question-list">
+        <view class="question-card" wx:for="{{questions}}" wx:key="label">
+          <text class="question-label">{{item.label}}</text>
+          <text class="question-answer">{{item.answer}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{activeTab === 'ranking'}}" class="section-block">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">排行榜</text>
+          <text class="section-en">LEADERBOARD</text>
+        </view>
+        <text class="section-brand">TOP IDEAS</text>
+      </view>
+
+      <view class="rank-list">
+        <view
+          class="rank-card"
+          wx:for="{{leaderboard}}"
+          wx:key="id"
+          data-gallery-id="{{item.galleryId}}"
+          bindtap="onPreviewGallery"
+        >
+          <view class="rank-left">
+            <view class="rank-order">{{index + 1}}</view>
+            <view class="rank-avatar">{{item.initials}}</view>
+            <view class="rank-copy">
+              <view class="rank-row">
+                <text class="rank-name">{{item.name}}</text>
+                <text class="rank-tag">{{item.tag}}</text>
+              </view>
+            </view>
+          </view>
+          <view class="rank-right">
+            <text class="rank-status">{{item.statusLabel}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{activeTab === 'gallery'}}" class="section-block">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">学员展厅</text>
+          <text class="section-en">SHOWCASE</text>
+        </view>
+        <text class="section-brand">STUDENT WORKS</text>
+      </view>
+
+      <view class="gallery-tip">
+        <text>这里会展示学员提交的海报、项目简介、问题回答和作品链接。</text>
+      </view>
+
+      <view class="gallery-list">
+        <view
+          class="gallery-card"
+          wx:for="{{gallery}}"
+          wx:key="id"
+          data-gallery-id="{{item.id}}"
+          bindtap="onPreviewGallery"
+        >
+          <view class="gallery-head">
+            <view class="gallery-user">
+              <view class="gallery-avatar">{{item.initials}}</view>
+              <view class="gallery-user-copy">
+                <text class="gallery-name">{{item.name}}</text>
+                <text class="gallery-site">{{item.siteName}}</text>
+              </view>
+            </view>
+            <view class="gallery-badge">作品展示</view>
+          </view>
+          <view class="gallery-body">
+            <text class="gallery-title">{{item.title}}</text>
+            <text class="gallery-summary">{{item.summary}}</text>
+
+            <image class="gallery-inset-image" src="{{item.coverUrl}}" mode="aspectFill"></image>
+
+            <view class="qa-card">
+              <view class="qa-item">
+                <text class="qa-q">针对人群</text>
+                <text class="qa-a">{{item.audience}}</text>
+              </view>
+              <view class="qa-item">
+                <text class="qa-q">解决问题</text>
+                <text class="qa-a">{{item.problem}}</text>
+              </view>
+              <view class="qa-item">
+                <text class="qa-q">解决方案</text>
+                <text class="qa-a">{{item.solution}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="bottom-bar">
+    <view class="bottom-bar-inner">
+      <view class="bottom-hint">
+        <t-icon name="browse" size="34rpx" color="#64748b" />
+        <text class="bottom-hint-text">作品将同步展示到展厅</text>
+      </view>
+      <view class="bottom-btn-wrap">
+        <t-button class="submit-btn" theme="primary" shape="round" size="large" bindtap="onOpenSubmit">{{submitLabel}}</t-button>
+      </view>
+    </view>
+  </view>
+
+  <view class="submit-mask" wx:if="{{submitPopupVisible}}" bindtap="onCloseSubmit">
+    <view class="submit-sheet" catchtap>
+      <view class="submit-head">
+        <text class="submit-title">提交任务</text>
+      </view>
+
+      <scroll-view class="submit-scroll" scroll-y show-scrollbar="{{false}}">
+        <view class="form-section">
+          <text class="form-title">上传作品图片</text>
+          <view class="upload-grid">
+            <view class="upload-item upload-add" bindtap="onChooseImages">
+              <t-icon name="add" size="36rpx" color="#94a3b8" />
+              <text class="upload-add-text">添加图片</text>
+            </view>
+            <view class="upload-item upload-preview" wx:for="{{draftImages}}" wx:key="*this">
+              <image class="upload-image" src="{{item}}" mode="aspectFill"></image>
+              <view class="upload-remove" data-index="{{index}}" bindtap="onRemoveImage">×</view>
+            </view>
+          </view>
+        </view>
+
+        <view class="form-section">
+          <text class="form-title">你针对的是什么样的人群？</text>
+          <textarea
+            class="form-textarea"
+            placeholder="例如：三四年级、做题容易焦虑、看到数学就想逃避的学生"
+            value="{{draftAudience}}"
+            data-field="draftAudience"
+            bindinput="onDraftInput"
+          />
+        </view>
+
+        <view class="form-section">
+          <text class="form-title">你想解决什么问题？</text>
+          <textarea
+            class="form-textarea"
+            placeholder="例如：孩子觉得数学枯燥、不会拆题、做错就放弃"
+            value="{{draftProblem}}"
+            data-field="draftProblem"
+            bindinput="onDraftInput"
+          />
+        </view>
+
+        <view class="form-section">
+          <text class="form-title">你的作品怎么解决它？</text>
+          <textarea
+            class="form-textarea"
+            placeholder="例如：通过闯关、勋章、AI 提示、成长记录等方式提升兴趣"
+            value="{{draftSolution}}"
+            data-field="draftSolution"
+            bindinput="onDraftInput"
+          />
+        </view>
+
+        <view class="form-section">
+          <text class="form-title">作品链接（可选）</text>
+          <textarea
+            class="form-textarea form-textarea--small"
+            placeholder="可以填写网站链接 / Figma 链接 / 项目地址"
+            value="{{draftLink}}"
+            data-field="draftLink"
+            bindinput="onDraftInput"
+          />
+        </view>
+      </scroll-view>
+
+      <view class="submit-actions">
+        <view class="submit-cancel" bindtap="onCloseSubmit">取消</view>
+        <view class="submit-confirm" bindtap="onMockSubmit">确认提交</view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -6,7 +6,9 @@ const db = cloud.database()
 const submissions = db.collection('submissions')
 const { resolveAlumniDiscount } = require('./alumni-discount')
 
-const scholarshipDiscountAmount = 250000
+const interviewFeeDiscountAmount = 50000
+const defaultScholarshipAmount = 200000
+const defaultScholarshipDiscountAmount = defaultScholarshipAmount + interviewFeeDiscountAmount
 const scholarshipLabel = '新学员奖学金兑换码'
 
 const padNumber = (value, length = 2) => String(value).padStart(length, '0')
@@ -190,6 +192,22 @@ const callScholarshipCodeManage = async (action, payload) => {
   }
 }
 
+const resolveScholarshipResult = (result = {}) => {
+  const scholarshipAmount = toPositiveInteger(result.scholarshipAmount)
+  const interviewFeeAmount = toPositiveInteger(result.interviewFeeDiscountAmount) || interviewFeeDiscountAmount
+  const discountAmount =
+    toPositiveInteger(result.discountAmount) ||
+    scholarshipAmount + interviewFeeAmount ||
+    defaultScholarshipDiscountAmount
+
+  return {
+    scholarshipAmount,
+    interviewFeeDiscountAmount: interviewFeeAmount,
+    discountAmount,
+    label: result.label || scholarshipLabel
+  }
+}
+
 const joinDiscountTypes = (discountApplied, scholarshipApplied) => {
   const result = []
   if (discountApplied) {
@@ -314,7 +332,18 @@ exports.main = async (event) => {
 
     let totalFee = computedTotalFee
     if (scholarshipCode) {
-      totalFee = Math.max(computedTotalFee - scholarshipDiscountAmount, 0)
+      const previewResult = await callScholarshipCodeManage('preview', {
+        code: scholarshipCode,
+        activityId: resolvedActivityId,
+        submissionId: docId
+      })
+      if (!previewResult.ok || !previewResult.available) {
+        return { ok: false, message: previewResult.message || '奖学金兑换码不可用' }
+      }
+      const previewScholarship = resolveScholarshipResult(previewResult)
+      scholarshipDiscount = previewScholarship.discountAmount
+      scholarshipDiscountLabel = previewScholarship.label
+      totalFee = Math.max(computedTotalFee - scholarshipDiscount, 0)
     }
 
     const orderNoResult = decideOutTradeNo(existingOrderNo, existingPayAmount, totalFee, OPENID)
@@ -331,10 +360,11 @@ exports.main = async (event) => {
       if (!holdResult.ok) {
         return { ok: false, message: holdResult.message || '奖学金兑换码不可用' }
       }
+      const heldScholarship = resolveScholarshipResult(holdResult)
       scholarshipApplied = true
-      scholarshipDiscount = toPositiveInteger(holdResult.discountAmount) || scholarshipDiscountAmount
+      scholarshipDiscount = heldScholarship.discountAmount
       scholarshipHoldExpiresAt = toPositiveInteger(holdResult.holdExpiresAt)
-      scholarshipDiscountLabel = holdResult.label || scholarshipLabel
+      scholarshipDiscountLabel = heldScholarship.label
       totalFee = Math.max(computedTotalFee - scholarshipDiscount, 0)
     } else if (existingPayScholarshipCode) {
       await callScholarshipCodeManage('release', {
@@ -363,8 +393,8 @@ exports.main = async (event) => {
         payDiscountLabel: joinDiscountLabels(discountResult.discountLabel, scholarshipApplied ? scholarshipDiscountLabel : ''),
         payDiscountMatchedNames: discountResult.matchedNames,
         scholarshipStatus: scholarshipApplied ? 'held' : scholarshipCode ? 'pending' : '',
-        scholarshipDiscountAmount: scholarshipCode ? scholarshipDiscountAmount : 0,
-        scholarshipLabel: scholarshipCode ? scholarshipLabel : '',
+        scholarshipDiscountAmount: scholarshipCode ? scholarshipDiscount : 0,
+        scholarshipLabel: scholarshipCode ? scholarshipDiscountLabel || scholarshipLabel : '',
         scholarshipRedeemedAt: null,
         scholarshipRedeemedOrderNo: '',
         payScholarshipCode: scholarshipApplied ? scholarshipCode : '',
@@ -416,4 +446,3 @@ exports.main = async (event) => {
     return { ok: false, message: err.message || 'Server error' }
   }
 }
-

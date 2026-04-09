@@ -18,7 +18,10 @@
         <view class="add-icon">
           <t-icon name="add" size="26rpx" />
         </view>
-        <text class="add-text">新增报名人信息</text>
+        <view class="add-copy">
+          <text class="add-text">新增报名人信息</text>
+          <text class="add-sub">创建新的常用营员档案</text>
+        </view>
       </view>
       <t-icon name="chevron-right" size="26rpx" />
     </view>
@@ -35,10 +38,14 @@
         <view class="radio-dot" wx:if="{{selectedId === item.id}}"></view>
       </view>
       <view class="camper-main">
-        <text class="camper-name">{{item.name}}</text>
-        <text class="camper-lock" wx:if="{{item.disabled}}">已在其他营员中选择</text>
-        <text class="camper-sub">身份证号：{{item.idNoMask || '未填写'}}　身高：{{item.height || '未填写'}}　体重：{{item.weight || '未填写'}}</text>
+        <view class="camper-head">
+          <text class="camper-name">{{item.name}}</text>
+          <text class="camper-lock" wx:if="{{item.disabled}}">已在其他营员中选择</text>
+          <text class="camper-selected" wx:if="{{selectedId === item.id && !item.disabled}}">当前选择</text>
+        </view>
+        <text class="camper-sub">身份证明：{{item.idNoMask || '未填写'}}　身高：{{item.height || '未填写'}}　体重：{{item.weight || '未填写'}}</text>
       </view>
+      <t-icon class="camper-arrow" name="chevron-right" size="26rpx" />
     </view>
 
     <view class="empty" wx:if="{{!campers.length}}">
@@ -47,7 +54,9 @@
   </scroll-view>
 
   <view class="bottom-bar">
-    <t-button class="confirm-btn" theme="primary" shape="round" size="small" bindtap="onConfirm">确认</t-button>
+    <view class="confirm-btn" bindtap="onConfirm">
+      <text class="confirm-btn-text">确认</text>
+    </view>
   </view>
 
 </view>

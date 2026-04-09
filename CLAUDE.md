@@ -38,7 +38,7 @@ index (activity listing)
   → detail?activityId=...          activity detail + period/price display
     → order-form?activityId=...&periodId=...   registration + payment
         ↔ camper-list / camper-info            child profile management
-          → pay-success?outTradeNo=...
+          → registration-payment-success?outTradeNo=...
 my (profile/login tab)
   → my-submissions                 order history
     → order-detail                 single order view
@@ -86,7 +86,9 @@ Order number format: `MP{YYYYMMDDHHMMSS}{6-digit-random}{last-4-of-openid}`
 - TypeScript `.ts`, WXML templates, WXSS styles
 - 2-space indentation; **no semicolons**
 - Single quotes in `.ts` (except where keys require double quotes)
-- Page folders: kebab-case (`order-detail`, `pay-success`)
+- Page folders: kebab-case with business-identifying information when the page is business-specific (`order-detail`, `9-9-survey-questionnaire`, `2026-0425-activity-poster`)
+- Avoid vague route/page names like `report`, `activity`, `pay-success`; prefer names that include concrete business identifiers such as price, date, season, or activity code. Only truly shared infrastructure pages may use generic business nouns such as `registration-payment-success`.
+- Cloud function names should follow the same principle: business-specific functions should carry concrete identifiers, while only shared infrastructure should use generic names.
 - Do not manually edit `miniprogram/miniprogram_npm/` — it's generated
 
 ## Known Issues

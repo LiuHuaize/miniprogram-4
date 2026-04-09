@@ -1,0 +1,106 @@
+<view class="page">
+  <view class="status-spacer"></view>
+
+  <view class="nav-bar">
+    <view class="nav-left" bindtap="onBack">
+      <view class="nav-icon-wrap">
+        <t-icon name="chevron-left" size="32rpx" />
+      </view>
+      <text class="nav-text">返回</text>
+    </view>
+    <text class="nav-title">活动门票</text>
+    <view class="nav-right"></view>
+  </view>
+
+  <scroll-view class="scroll-area" scroll-y show-scrollbar="{{false}}">
+    <view class="ticket-page-copy">
+      <text class="ticket-page-label">2026 EVENT CALENDAR</text>
+      <text class="ticket-page-title">门票已生成</text>
+      <text class="ticket-page-sub">保存此页，联系顾问老师进群</text>
+    </view>
+
+    <view class="ticket-card">
+      <view class="ticket-bg-word ticket-bg-word--top">SUMMIT</view>
+      <view class="ticket-bg-word ticket-bg-word--bottom">EVENT</view>
+
+      <view class="ticket-side">
+        <text class="ticket-side-city">峰会</text>
+        <text class="ticket-side-city-en">SUMMIT</text>
+      </view>
+
+      <view class="ticket-main">
+        <view class="ticket-top-row">
+          <view class="ticket-brand">
+            <text class="ticket-brand-year">2026</text>
+            <text class="ticket-brand-text">EVENT TICKET</text>
+          </view>
+          <view class="ticket-status">已报名</view>
+        </view>
+
+        <view class="ticket-title-wrap">
+          <text class="ticket-title">{{title}}</text>
+          <text class="ticket-welcome">{{welcomeText}}</text>
+        </view>
+
+        <view class="ticket-info-grid">
+          <view class="ticket-info-item">
+            <text class="ticket-info-label">日期</text>
+            <text class="ticket-info-value">{{dateText}}</text>
+          </view>
+          <view class="ticket-info-item">
+            <text class="ticket-info-label">时间</text>
+            <text class="ticket-info-value">{{timeText}}</text>
+          </view>
+          <view class="ticket-info-item">
+            <text class="ticket-info-label">票种</text>
+            <text class="ticket-info-value">家长入场门票</text>
+          </view>
+          <view class="ticket-info-item">
+            <text class="ticket-info-label">金额</text>
+            <text class="ticket-info-value ticket-info-value--price">{{amountText}}</text>
+          </view>
+        </view>
+
+        <view class="ticket-cutline">
+          <view class="ticket-cutline-dot ticket-cutline-dot--left"></view>
+          <view class="ticket-cutline-line"></view>
+          <view class="ticket-cutline-dot ticket-cutline-dot--right"></view>
+        </view>
+
+        <view class="ticket-bottom-row">
+          <view class="ticket-no-block">
+            <text class="ticket-no-label">NO.</text>
+            <text class="ticket-no-value">{{ticketNo}}</text>
+          </view>
+          <view class="barcode">
+            <block wx:for="{{barcodeSegments}}" wx:key="index">
+              <text class="barcode-segment">{{item}}</text>
+            </block>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="guide-card">
+      <text class="guide-text">{{guideText}}</text>
+    </view>
+
+    <view class="detail-card">
+      <text class="detail-card-title">报名信息</text>
+      <view class="detail-row">
+        <text class="detail-label">家长真实姓名</text>
+        <text class="detail-value">{{parentName || '--'}}</text>
+      </view>
+      <view class="detail-row">
+        <text class="detail-label">联系电话</text>
+        <text class="detail-value">{{phone || '--'}}</text>
+      </view>
+      <view class="detail-row">
+        <text class="detail-label">孩子年龄</text>
+        <text class="detail-value">{{childAgeText}}</text>
+      </view>
+    </view>
+
+    <t-button class="home-btn" theme="primary" shape="round" bindtap="onGoHome">返回首页</t-button>
+  </scroll-view>
+</view>

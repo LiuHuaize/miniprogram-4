@@ -1,0 +1,95 @@
+<view class="page">
+  <view class="status-spacer"></view>
+
+  <view class="nav-bar">
+    <view class="nav-left" bindtap="onBack">
+      <view class="nav-icon-wrap">
+        <t-icon name="chevron-left" size="32rpx" />
+      </view>
+      <text class="nav-text">返回</text>
+    </view>
+    <text class="nav-title">能力测评问卷</text>
+    <view class="nav-right"></view>
+  </view>
+
+  <scroll-view class="scroll-area" scroll-y show-scrollbar="{{false}}">
+    <view class="content-shell">
+      <view class="card intro-card">
+        <text class="intro-title">少年独角兽能力矩阵评估问卷</text>
+        <text class="intro-desc">请根据孩子在过去三个月中的真实表现频率进行选择。</text>
+        <view class="intro-rule-box">
+          <view class="intro-rule-list">
+            <text class="intro-rule-item">1分: 从不</text>
+            <text class="intro-rule-item">2分: 很少</text>
+            <text class="intro-rule-item">3分: 有时</text>
+            <text class="intro-rule-item">4分: 经常</text>
+            <text class="intro-rule-item">5分: 总是</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="section">
+        <view class="section-title">基本信息</view>
+        <view class="card field-card">
+          <view class="field-label">1. 孩子的名字及年龄</view>
+          <textarea
+            class="field-textarea"
+            placeholder="例如：李明，10岁"
+            placeholder-class="field-placeholder"
+            maxlength="80"
+            auto-height
+            value="{{childNameAge}}"
+            bindinput="onChildInfoInput"
+          />
+        </view>
+      </view>
+
+      <view class="section section-last">
+        <view class="section-title">量表题</view>
+        <view
+          class="card question-card"
+          wx:for="{{questions}}"
+          wx:key="id"
+          wx:for-item="question"
+        >
+          <view class="question-title-row">
+            <text class="question-index">{{question.no}}.</text>
+            <text class="question-title">{{question.title}}</text>
+          </view>
+          <view class="score-row">
+            <view
+              class="score-pill-wrap"
+              wx:for="{{scoreOptions}}"
+              wx:key="*this"
+              wx:for-item="option"
+              data-no="{{question.no}}"
+              data-score="{{option}}"
+              bindtap="onSelectScore"
+            >
+              <view class="score-pill {{question.score === option ? 'score-pill--active' : ''}}">
+                {{option}}
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="scroll-bottom-spacer"></view>
+  </scroll-view>
+
+  <view class="bottom-bar">
+    <view class="bottom-panel">
+      <view class="bottom-left">
+        <view class="bottom-count">
+          <text class="bottom-count-label">已完成 </text>
+          <text class="bottom-count-number">{{answeredCount}} / {{questionCount}}</text>
+        </view>
+        <text class="bottom-note">提交后进入后续测评解读流程</text>
+      </view>
+      <button class="submit-btn" disabled="{{submitting}}" bindtap="onSubmit">
+        {{submitting ? '提交中...' : '提交问卷'}}
+      </button>
+    </view>
+  </view>
+</view>

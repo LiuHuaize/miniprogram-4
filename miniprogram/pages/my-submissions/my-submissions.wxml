@@ -14,7 +14,7 @@
 
   <scroll-view class="scroll-area" scroll-y show-scrollbar="{{false}}">
     <view
-      class="card submission-card"
+      class="card submission-card {{item.status === 'submitted' ? 'submission-card--pending' : ''}}"
       wx:for="{{list}}"
       wx:key="id"
       data-activity-id="{{item.activityId}}"
@@ -28,42 +28,48 @@
           <text class="card-title">{{item.summary.title}}</text>
           <text class="card-sub">{{item.summary.sub}}</text>
         </view>
-        <view class="status-tag {{item.status === 'paid' ? 'status-tag--active' : 'status-tag--muted'}}">
+        <view class="status-tag {{item.status === 'paid' ? 'status-tag--paid' : 'status-tag--pending'}}">
           {{item.statusText}}
         </view>
       </view>
-      <view class="card-meta">
-        <text>{{item.childrenCount}} 人报名</text>
-        <text>{{item.updatedLabel || '--'}}</text>
-      </view>
-      <view class="card-actions" catchtap>
-        <t-button
-          class="action-btn"
-          theme="primary"
-          shape="round"
-          size="small"
-          data-activity-id="{{item.activityId}}"
-          data-period-id="{{item.periodId}}"
-          data-submission-id="{{item.id}}"
-          data-status="{{item.status}}"
-          bindtap="onOpen"
-        >
-          {{item.status === 'paid' ? '查看' : '查看/修改'}}
-        </t-button>
-        <t-button
-          wx:if="{{item.status === 'submitted'}}"
-          class="action-btn"
-          theme="default"
-          shape="round"
-          size="small"
-          data-activity-id="{{item.activityId}}"
-          data-period-id="{{item.periodId}}"
-          data-submission-id="{{item.id}}"
-          data-status="{{item.status}}"
-          bindtap="onCancel"
-        >
-          撤销
-        </t-button>
+      <view class="card-divider"></view>
+      <view class="card-footer">
+        <text class="card-meta-inline">{{item.childrenCount}} 人报名 · {{item.updatedLabel || '--'}}</text>
+        <view class="card-actions" catchtap>
+          <view
+            wx:if="{{item.status === 'paid'}}"
+            class="detail-link"
+            data-activity-id="{{item.activityId}}"
+            data-period-id="{{item.periodId}}"
+            data-submission-id="{{item.id}}"
+            data-status="{{item.status}}"
+            bindtap="onOpen"
+          >
+            <text class="detail-link-text">查看详情</text>
+          </view>
+          <block wx:else>
+            <view
+              class="action-btn action-btn--default"
+              data-activity-id="{{item.activityId}}"
+              data-period-id="{{item.periodId}}"
+              data-submission-id="{{item.id}}"
+              data-status="{{item.status}}"
+              bindtap="onCancel"
+            >
+              <text>撤销</text>
+            </view>
+            <view
+              class="action-btn action-btn--primary"
+              data-activity-id="{{item.activityId}}"
+              data-period-id="{{item.periodId}}"
+              data-submission-id="{{item.id}}"
+              data-status="{{item.status}}"
+              bindtap="onOpen"
+            >
+              <text>继续支付</text>
+            </view>
+          </block>
+        </view>
       </view>
     </view>
 
@@ -71,6 +77,4 @@
       <text>暂无填写记录</text>
     </view>
   </scroll-view>
-
-  <view class="home-indicator"></view>
 </view>

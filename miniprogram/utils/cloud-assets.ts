@@ -60,9 +60,9 @@ const posterUrlMap: PosterUrlMap = {
   '/assets/poster/youth-content-1.png':
     'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%9B%BE%E6%96%872026.3.3/3.png',
   '/assets/poster/youth-content-2.png':
-    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%9B%BE%E6%96%872026.3.3/4.png',
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%9B%BE%E6%96%872026.3.3/%E5%B8%88%E8%B5%84.png',
   '/assets/poster/youth-schedule.png':
-    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%9B%BE%E6%96%872026.3.3/5.png',
+    'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%9B%BE%E6%96%872026.3.3/%E8%AF%BE%E8%A1%A8.png',
   '/assets/poster/youth-service.png':
     'https://636c-cloudbase-9g9y5ajj044396e0-1395213680.tcb.qcloud.la/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%9B%BE%E6%96%872026.3.3/6.png',
   '/assets/poster/youth-notice.png':

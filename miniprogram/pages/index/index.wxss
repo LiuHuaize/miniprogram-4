@@ -6,10 +6,12 @@ page {
 }
 
 .page {
+  height: 100vh;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   position: relative;
+  box-sizing: border-box;
 }
 
 .status-spacer {
@@ -27,7 +29,7 @@ page {
 .filter-row {
   display: flex;
   align-items: center;
-  padding: 4px 16px 14px;
+  padding: 4px 14px 14px;
   font-size: 14px;
   font-weight: 500;
   color: #4b5563;
@@ -49,7 +51,7 @@ page {
 }
 
 .search-section {
-  padding: 6px 16px 16px;
+  padding: 6px 14px 16px;
 }
 
 .search {
@@ -66,20 +68,20 @@ page {
 .scroll-area {
   flex: 1;
   min-height: 0;
-  padding: 0 16px;
-  padding-bottom: calc(140px + env(safe-area-inset-bottom));
+  margin-bottom: calc(96rpx + env(safe-area-inset-bottom) + 28px);
+  padding: 0 14px;
   box-sizing: border-box;
 }
 
 .card-list {
-  padding-bottom: 20px;
+  padding-bottom: 24px;
 }
 
 .card {
   background: #ffffff;
   border-radius: 0;
   overflow: hidden;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 .card:last-child {
@@ -89,15 +91,34 @@ page {
 .card-hero {
   position: relative;
   width: 100%;
-  line-height: 0;
+  aspect-ratio: 1.4 / 1;
+  background-color: #f3f4f6;
+  animation: skeleton-loading 1.4s ease-in-out infinite;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: #f3f4f6;
+  }
+  50% {
+    background-color: #e5e7eb;
+  }
+  100% {
+    background-color: #f3f4f6;
+  }
 }
 
 .card-hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
+  z-index: 0;
 }
 
 .card-hero-overlay {
@@ -116,7 +137,7 @@ page {
 }
 
 .card-hero-sub {
-  font-size: 11px;
+  font-size: 12px;
   opacity: 0.9;
   margin-left: 8px;
 }
@@ -131,13 +152,13 @@ page {
 }
 
 .card-hero-title {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 600;
   line-height: 1.35;
 }
 
 .card-hero-desc {
-  font-size: 11px;
+  font-size: 12px;
   opacity: 0.9;
   margin-top: 4px;
   line-height: 1.45;
@@ -162,13 +183,13 @@ page {
 }
 
 .card-body {
-  padding: 10px 0 0;
+  padding: 12px 0 0;
   display: flex;
   flex-direction: column;
 }
 
 .card-title {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
   color: #111827;
   margin-bottom: 6px;
@@ -176,28 +197,45 @@ page {
 }
 
 .card-meta {
-  font-size: 11.5px;
+  font-size: 13px;
   color: #6b7280;
   line-height: 1.6;
 }
 
 .card-tag {
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1;
-  padding: 8rpx 12rpx;
+  padding: 10rpx 14rpx;
   border-radius: 2rpx;
   font-weight: 500;
   letter-spacing: 0.2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .card-tag--active {
-  background: rgba(255, 255, 255, 0.95);
+  background: #ffffff;
   color: #111827;
+  box-shadow: 0 6rpx 18rpx rgba(15, 23, 42, 0.08);
 }
 
 .card-tag--ended {
-  background: rgba(255, 255, 255, 0.95);
-  color: #94a3b8;
+  background: #ffffff;
+  color: #64748b;
+  box-shadow: 0 6rpx 18rpx rgba(15, 23, 42, 0.08);
+}
+
+.bottom-bar-cover {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(96rpx + env(safe-area-inset-bottom));
+  height: 28px;
+  background: #ffffff;
+  pointer-events: none;
+  z-index: 9;
 }
 
 .bottom-bar {
@@ -206,26 +244,14 @@ page {
   --td-tab-bar-border-color: #e2e8f0;
   --td-tab-bar-height: 96rpx;
   --td-font-body-extraSmall: 22rpx;
-  background-color: rgba(255, 255, 255, 0.94);
+  background-color: #ffffff;
   backdrop-filter: blur(10px);
+  box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.06);
+  z-index: 10;
 }
 
 .tab-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.home-indicator {
-  position: fixed;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 4px;
-  border-radius: 999px;
-  background: #0f172a;
-  opacity: 0.12;
-  pointer-events: none;
-  z-index: 6;
 }

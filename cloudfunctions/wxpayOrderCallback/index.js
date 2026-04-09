@@ -5,6 +5,8 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
 const submissions = db.collection('submissions')
 const scholarshipCodes = db.collection('scholarship_codes')
+const posterSignupOrders = db.collection('poster_signup_orders')
+const normalizeText = (value) => (typeof value === 'string' ? value.trim() : '')
 
 const toPositiveInteger = (value) => {
   const num = Number(value)
@@ -68,6 +70,51 @@ const buildPaidSubmissionData = (expectedCurrency, paidAmount, paidCurrency, tra
   payTransactionId: transactionId
 })
 
+const buildPaidPosterOrderData = (expectedCurrency, paidAmount, paidCurrency, transactionId) => ({
+  status: 'paid',
+  paidAt: db.serverDate(),
+  updatedAt: db.serverDate(),
+  transactionId,
+  payVerifiedAt: db.serverDate(),
+  payVerifiedAmount: paidAmount,
+  payVerifiedCurrency: paidCurrency || expectedCurrency || 'CNY',
+  payment: {
+    status: 'paid',
+    totalFee: paidAmount,
+    currency: paidCurrency || expectedCurrency || 'CNY',
+    paidAt: db.serverDate(),
+    transactionId
+  }
+})
+const syncPosterOrderToFeishu = async (order) => {
+  try {
+    const syncRes = await cloud.callFunction({
+      name: 'posterSignupFeishuSync',
+      data: {
+        orderId: normalizeText(order?._id || ''),
+        outTradeNo: normalizeText(order?.outTradeNo || '')
+      }
+    })
+    const result = syncRes?.result || {}
+    if (!result.ok && !result.skipped) {
+      console.warn('[wxpayOrderCallback] poster feishu sync failed', {
+        orderId: normalizeText(order?._id || ''),
+        message: normalizeText(result.message || '')
+      })
+    }
+    return result
+  } catch (err) {
+    console.error('[wxpayOrderCallback] poster feishu sync error', {
+      orderId: normalizeText(order?._id || ''),
+      message: normalizeText(err?.message || '')
+    })
+    return {
+      ok: false,
+      message: normalizeText(err?.message || 'feishu sync failed')
+    }
+  }
+}
+
 exports.main = async (event) => {
   try {
     const eventType = event && event.event_type ? String(event.event_type) : ''
@@ -83,8 +130,85 @@ exports.main = async (event) => {
 
     const res = await submissions.where({ payOrderNo: outTradeNo }).limit(1).get()
     if (!res.data || !res.data.length) {
-      console.warn('[wxpayOrderCallback] submission not found', {
-        outTradeNoSuffix: outTradeNo.slice(-6)
+      const posterOrderRes = await posterSignupOrders.where({ outTradeNo }).limit(1).get()
+      if (!posterOrderRes.data || !posterOrderRes.data.length) {
+        console.warn('[wxpayOrderCallback] order not found', {
+          outTradeNoSuffix: outTradeNo.slice(-6)
+        })
+        return event
+      }
+
+      const posterOrder = posterOrderRes.data[0]
+      const posterDocId = posterOrder._id || ''
+      if (!posterDocId) {
+        return event
+      }
+      if (posterOrder.status === 'paid') {
+        console.info('[wxpayOrderCallback] poster order duplicate callback ignored', { docId: posterDocId })
+        await syncPosterOrderToFeishu(posterOrder)
+        return event
+      }
+      if (posterOrder.status !== 'pending') {
+        console.warn('[wxpayOrderCallback] poster order invalid status', {
+          docId: posterDocId,
+          status: posterOrder.status || ''
+        })
+        return event
+      }
+
+      const expectedAmount = toPositiveInteger(posterOrder.totalFee)
+      if (!expectedAmount) {
+        console.error('[wxpayOrderCallback] poster order missing expected amount', {
+          docId: posterDocId,
+          outTradeNoSuffix: outTradeNo.slice(-6)
+        })
+        return event
+      }
+
+      const paidAmount = getPaidAmount(event)
+      if (!paidAmount || expectedAmount !== paidAmount) {
+        console.error('[wxpayOrderCallback] poster order amount mismatch', {
+          docId: posterDocId,
+          outTradeNoSuffix: outTradeNo.slice(-6),
+          expectedAmount,
+          paidAmount
+        })
+        return event
+      }
+
+      const expectedCurrency = normalizeCurrency(posterOrder.currency || 'CNY')
+      const paidCurrency = getPaidCurrency(event)
+      if (paidCurrency && expectedCurrency && paidCurrency !== expectedCurrency) {
+        console.error('[wxpayOrderCallback] poster order currency mismatch', {
+          docId: posterDocId,
+          outTradeNoSuffix: outTradeNo.slice(-6),
+          expectedCurrency,
+          paidCurrency
+        })
+        return event
+      }
+
+      const payerOpenid = getPayerOpenid(event)
+      if (payerOpenid && posterOrder.ownerOpenid && payerOpenid !== posterOrder.ownerOpenid) {
+        console.error('[wxpayOrderCallback] poster order payer mismatch', {
+          docId: posterDocId,
+          outTradeNoSuffix: outTradeNo.slice(-6),
+          payerOpenidSuffix: payerOpenid.slice(-6),
+          ownerOpenidSuffix: String(posterOrder.ownerOpenid).slice(-6)
+        })
+        return event
+      }
+
+      const transactionId = getTransactionId(event)
+      const updateRes = await posterSignupOrders.where({ _id: posterDocId, status: 'pending' }).update({
+        data: buildPaidPosterOrderData(expectedCurrency, paidAmount || expectedAmount, paidCurrency, transactionId)
+      })
+      if (!updateRes || !updateRes.stats || updateRes.stats.updated !== 1) {
+        console.info('[wxpayOrderCallback] poster order status unchanged', { docId: posterDocId })
+      }
+      await syncPosterOrderToFeishu({
+        ...posterOrder,
+        status: 'paid'
       })
       return event
     }
@@ -239,4 +363,3 @@ exports.main = async (event) => {
 
   return event
 }
-

@@ -140,7 +140,7 @@ page {
 }
 
 .bottom-bar {
-  --td-tab-bar-active-color: #2f7d75;
+  --td-tab-bar-active-color: #7ca0b0;
   --td-tab-bar-color: #94a3b8;
   --td-tab-bar-border-color: #e2e8f0;
   --td-tab-bar-height: 96rpx;
