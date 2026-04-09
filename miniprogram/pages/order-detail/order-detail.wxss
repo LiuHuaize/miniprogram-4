@@ -164,7 +164,8 @@ page {
   font-weight: 600;
 }
 
-.info-value--success {
+.info-value--success,
+.field-value--success {
   color: #10b981;
 }
 
@@ -191,6 +192,7 @@ page {
   padding: 10px 4px;
   font-size: 13px;
   border-bottom: 1px solid #edf0f3;
+  gap: 12px;
 }
 
 .field-row--last {
@@ -203,6 +205,7 @@ page {
 
 .field-value {
   color: #0f172a;
+  text-align: right;
 }
 
 .note-card {
@@ -251,16 +254,3 @@ page {
   font-weight: 600;
 }
 
-.home-indicator {
-  position: fixed;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 4px;
-  border-radius: 999px;
-  background: #0f172a;
-  opacity: 0.12;
-  pointer-events: none;
-  z-index: 6;
-}

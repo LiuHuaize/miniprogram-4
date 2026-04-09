@@ -24,10 +24,11 @@
     </view>
 
     <view
-      class="card camper-item {{selectedId === item.id ? 'active' : ''}}"
+      class="card camper-item {{item.disabled ? 'disabled' : ''}} {{selectedId === item.id && !item.disabled ? 'active' : ''}}"
       wx:for="{{campers}}"
       wx:key="id"
       data-id="{{item.id}}"
+      data-disabled="{{item.disabled}}"
       bindtap="onSelect"
     >
       <view class="radio">
@@ -35,6 +36,7 @@
       </view>
       <view class="camper-main">
         <text class="camper-name">{{item.name}}</text>
+        <text class="camper-lock" wx:if="{{item.disabled}}">已在其他营员中选择</text>
         <text class="camper-sub">身份证号：{{item.idNoMask || '未填写'}}　身高：{{item.height || '未填写'}}　体重：{{item.weight || '未填写'}}</text>
       </view>
     </view>
@@ -48,5 +50,4 @@
     <t-button class="confirm-btn" theme="primary" shape="round" size="small" bindtap="onConfirm">确认</t-button>
   </view>
 
-  <view class="home-indicator"></view>
 </view>

@@ -41,6 +41,24 @@
       </view>
     </view>
 
+    <view class="section" wx:if="{{scholarshipCode || scholarshipDiscountAmount}}">
+      <view class="section-title">优惠信息</view>
+      <view class="card form-card">
+        <view class="field-row" wx:if="{{scholarshipCode}}">
+          <text class="field-label">兑换码</text>
+          <text class="field-value">{{scholarshipCode}}</text>
+        </view>
+        <view class="field-row" wx:if="{{scholarshipDiscountAmount}}">
+          <text class="field-label">奖学金抵扣</text>
+          <text class="field-value field-value--success">{{scholarshipDiscountText}}</text>
+        </view>
+        <view class="field-row field-row--last" wx:if="{{scholarshipStatusText}}">
+          <text class="field-label">兑换状态</text>
+          <text class="field-value field-value--success">{{scholarshipStatusText}}</text>
+        </view>
+      </view>
+    </view>
+
     <view class="section">
       <view class="section-title">学员信息</view>
       <view class="card form-card" wx:for="{{campers}}" wx:key="id">
@@ -94,5 +112,5 @@
     <t-button class="paid-btn" theme="primary" shape="round" size="small" disabled>{{statusText}}</t-button>
   </view>
 
-  <view class="home-indicator"></view>
 </view>
+

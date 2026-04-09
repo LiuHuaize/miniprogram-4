@@ -14,6 +14,14 @@ const maskIdNo = (value) => {
   return `${text.slice(0, 3)}${'*'.repeat(text.length - 7)}${text.slice(-4)}`
 }
 
+const toPositiveInteger = (value) => {
+  const parsed = Number(value)
+  if (Number.isFinite(parsed) && parsed > 0) {
+    return Math.floor(parsed)
+  }
+  return 0
+}
+
 const sanitizeGuardian = (guardian = {}) => ({
   name: guardian.name || '',
   phone: guardian.phone || '',
@@ -87,7 +95,18 @@ exports.main = async (event) => {
       paidAt: doc.paidAt || null,
       guardianSnapshot,
       childrenSnapshot,
-      childIds: doc.childIds || []
+      childIds: doc.childIds || [],
+      scholarshipCode: doc.scholarshipCode || '',
+      scholarshipDiscountAmount: toPositiveInteger(doc.scholarshipDiscountAmount),
+      scholarshipStatus: doc.scholarshipStatus || '',
+      scholarshipLabel: doc.scholarshipLabel || '',
+      scholarshipRedeemedAt: doc.scholarshipRedeemedAt || null,
+      scholarshipRedeemedOrderNo: doc.scholarshipRedeemedOrderNo || '',
+      payScholarshipCode: doc.payScholarshipCode || '',
+      payScholarshipDiscount: toPositiveInteger(doc.payScholarshipDiscount),
+      payScholarshipLabel: doc.payScholarshipLabel || '',
+      payScholarshipHoldExpiresAt: toPositiveInteger(doc.payScholarshipHoldExpiresAt)
     }
   }
 }
+

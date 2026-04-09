@@ -8,6 +8,9 @@ const maskIdNo = (value) => {
 }
 
 const normalizeText = (value) => (typeof value === 'string' ? value.trim() : '')
+const normalizeScholarshipCode = (value) => normalizeText(value).toUpperCase().replace(/[^A-Z]/g, '')
+const scholarshipDiscountAmount = 250000
+const scholarshipLabel = '新学员奖学金兑换码'
 
 const createGetOrCreateUser = (users) => async (openid, now) => {
   const existing = await users.where({ ownerOpenid: openid }).limit(1).get()
@@ -42,6 +45,9 @@ const createGetLatestSubmitted = (submissions) => async (openid, activityId, per
 module.exports = {
   maskIdNo,
   normalizeText,
+  normalizeScholarshipCode,
+  scholarshipDiscountAmount,
+  scholarshipLabel,
   createGetOrCreateUser,
   createGetLatestSubmitted
 }

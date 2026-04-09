@@ -31,8 +31,9 @@
       </view>
       <view class="summary-price-wrap">
         <text class="summary-price">{{displayPrice}}</text>
-        <text class="price-detail" wx:if="{{priceDetailText}}">{{priceDetailText}}</text>
-        <text class="discount-tag" wx:if="{{isAlumniDiscount}}">{{alumniDiscountText}}</text>
+        <text class="price-detail" wx:if="{{summaryPriceDetailText}}">{{summaryPriceDetailText}}</text>
+        <text class="discount-tag" wx:if="{{isAlumniDiscount}}">{{alumniDiscountTagText}}</text>
+        <text class="discount-tag" wx:if="{{hasScholarshipDiscount}}">{{scholarshipDiscountTagText}}</text>
       </view>
     </view>
 
@@ -135,6 +136,29 @@
       </view>
     </view>
 
+    <view class="section" wx:if="{{showScholarshipSection}}">
+      <view class="section-title">奖学金兑换码</view>
+      <view class="card form-card scholarship-card">
+        <view class="field-row field-row--stack">
+          <view class="field-label field-label--multi">兑换码</view>
+          <view class="field-value field-value--with-action">
+            <t-input
+              class="field-input"
+              placeholder="请输入兑换码"
+              borderless
+              align="left"
+              value="{{scholarshipCodeInput}}"
+              bindchange="onScholarshipCodeChange"
+            />
+            <view class="code-action" bindtap="onVerifyScholarshipCode">验证</view>
+          </view>
+        </view>
+        <view class="scholarship-helper scholarship-helper--{{scholarshipStatusType}}" wx:if="{{scholarshipStatusText}}">
+          <text>{{scholarshipStatusText}}</text>
+        </view>
+      </view>
+    </view>
+
     <view class="scroll-bottom-spacer"></view>
   </scroll-view>
 
@@ -144,6 +168,7 @@
       <text class="bottom-price">{{displayPrice}}</text>
       <text class="price-detail" wx:if="{{priceDetailText}}">{{priceDetailText}}</text>
       <text class="discount-note" wx:if="{{isAlumniDiscount}}">{{alumniDiscountText}}</text>
+      <text class="discount-note" wx:if="{{hasScholarshipDiscount}}">{{scholarshipDiscountText}}</text>
     </view>
     <t-button
       class="submit-btn"
@@ -164,8 +189,9 @@
           <text class="period-title">{{summary.title}}</text>
           <view class="period-price-wrap">
             <text class="period-price">{{displayPrice}}</text>
-            <text class="price-detail" wx:if="{{priceDetailText}}">{{priceDetailText}}</text>
-            <text class="discount-tag" wx:if="{{isAlumniDiscount}}">{{alumniDiscountText}}</text>
+            <text class="price-detail" wx:if="{{summaryPriceDetailText}}">{{summaryPriceDetailText}}</text>
+            <text class="discount-tag" wx:if="{{isAlumniDiscount}}">{{alumniDiscountTagText}}</text>
+            <text class="discount-tag" wx:if="{{hasScholarshipDiscount}}">{{scholarshipDiscountTagText}}</text>
           </view>
         </view>
         <view class="period-sub">报名截止：{{periods[selectedPeriodIndex].deadline}}</view>
@@ -187,5 +213,4 @@
     </view>
   </view>
 
-  <view class="home-indicator"></view>
 </view>

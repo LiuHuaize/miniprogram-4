@@ -18,7 +18,46 @@ type PeriodSnapshot = {
   quota: string
 }
 
+type CamperItem = {
+  id: string
+  name: string
+  idNoMask: string
+  height: string
+  weight: string
+  allergies: string
+  personality: string
+}
+
+type ScholarshipPriceInput = {
+  applied: boolean
+}
+
+type PaymentSnapshot = {
+  outTradeNo: string
+  totalFee: number
+  activityId: string
+  periodId: string
+  activityTitle: string
+  submissionId: string
+  scholarshipCode: string
+  scholarshipDiscount: number
+  scholarshipLabel: string
+}
+
 const defaultActivityId = 'ai-camp-2026'
+const scholarshipDiscountAmount = 250000
+const scholarshipDiscountYuan = scholarshipDiscountAmount / 100
+const scholarshipLabel = '新学员奖学金兑换码'
+const scholarshipEligibleActivityIdSet = new Set(['ai-camp-2026-copy'])
+
+const defaultScholarshipState = {
+  scholarshipCodeInput: '',
+  scholarshipAppliedCode: '',
+  scholarshipApplied: false,
+  scholarshipStatusText: '',
+  scholarshipStatusType: '',
+  scholarshipStatus: ''
+}
 
 const activityPeriodsMap: Record<string, ActivityPeriod[]> = {
   'ai-weekend-2026': [
@@ -104,6 +143,16 @@ const buildPeriodSnapshot = (period?: ActivityPeriod): PeriodSnapshot => ({
   quota: period?.quota || ''
 })
 
+const createEmptyCamper = (): CamperItem => ({
+  id: '',
+  name: '',
+  idNoMask: '',
+  height: '',
+  weight: '',
+  allergies: '',
+  personality: ''
+})
+
 const activityCoverMap: Record<string, string> = {
   'ai-weekend-2026': '/assets/poster/weekend-cover.png',
   'ai-weekend-2026-pm': '/assets/poster/weekend2-cover.png',
@@ -129,25 +178,83 @@ const getActivityFeeYuan = (activityId: string) => {
 }
 
 const formatFeeText = (feeYuan: number) => `¥${feeYuan}`
+const normalizeScholarshipCode = (value?: string) => (value ? value.toUpperCase().replace(/[^A-Z]/g, '') : '')
+const isScholarshipActivity = (activityId: string) => scholarshipEligibleActivityIdSet.has(activityId)
+const hasNamedCamper = (camper?: { name?: string }) => !!((camper?.name || '').trim())
 
-const buildPriceState = (activityId: string, campers: Array<{ name?: string }>) => {
+const buildSavedScholarshipState = (code: string, status: string) => {
+  if (!code) {
+    return { ...defaultScholarshipState }
+  }
+  return {
+    scholarshipCodeInput: code,
+    scholarshipAppliedCode: code,
+    scholarshipApplied: true,
+    scholarshipStatus: status || 'pending',
+    scholarshipStatusType: 'success',
+    scholarshipStatusText:
+      status === 'redeemed'
+        ? `奖学金兑换码 ${code} 已核销`
+        : `奖学金兑换码 ${code} 已保存，支付时可抵扣¥${scholarshipDiscountYuan}`
+  }
+}
+
+const buildPriceState = (
+  activityId: string,
+  campers: Array<{ name?: string }>,
+  scholarshipInput: ScholarshipPriceInput = { applied: false }
+) => {
   const regularFeeYuan = getActivityFeeYuan(activityId)
+  const discountPerCamperYuan = Math.max(regularFeeYuan - alumniDiscountFeeYuan, 0)
+  const selectedCampers = campers.filter((item) => hasNamedCamper(item))
+  const pricingCampers = selectedCampers.length > 0 ? selectedCampers : campers
   const result = resolveAlumniPrice(
-    campers.map((item) => item.name || ''),
+    pricingCampers.map((item) => item.name || ''),
     regularFeeYuan
   )
   const isAlumniDiscount = result.alumniCount > 0
+  const scholarshipSupported = isScholarshipActivity(activityId)
+  const selectedCampersResult = resolveAlumniPrice(
+    selectedCampers.map((item) => item.name || ''),
+    regularFeeYuan
+  )
+  const showScholarshipSection = scholarshipSupported && selectedCampersResult.regularCount > 0
+  const hasScholarshipDiscount = showScholarshipSection && scholarshipInput.applied
+  const totalFeeYuan = Math.max(result.totalFeeYuan - (hasScholarshipDiscount ? scholarshipDiscountYuan : 0), 0)
   const priceDetailParts = [
     result.alumniCount > 0 ? `老学员${result.alumniCount}人 × ¥${alumniDiscountFeeYuan}` : '',
-    result.regularCount > 0 ? `新学员${result.regularCount}人 × ¥${regularFeeYuan}` : ''
+    result.regularCount > 0 ? `新学员${result.regularCount}人 × ¥${regularFeeYuan}` : '',
+    hasScholarshipDiscount ? `${scholarshipLabel} -¥${scholarshipDiscountYuan}` : ''
   ].filter(Boolean)
+  const summaryPriceDetailParts = [
+    result.alumniCount > 0 ? `老学员${result.alumniCount}人` : '',
+    result.regularCount > 0 ? `新学员${result.regularCount}人` : '',
+    hasScholarshipDiscount ? `奖学金码 -¥${scholarshipDiscountYuan}` : ''
+  ].filter(Boolean)
+  const summaryPriceDetailText = summaryPriceDetailParts.join(' · ') || priceDetailParts.join('，')
 
   return {
-    displayPrice: formatFeeText(result.totalFeeYuan),
+    displayPrice: formatFeeText(totalFeeYuan),
     priceDetailText: priceDetailParts.join('，'),
+    summaryPriceDetailText,
+    totalFeeYuan,
+    regularCount: result.regularCount,
+    alumniCount: result.alumniCount,
+    scholarshipSupported,
+    showScholarshipSection,
     isAlumniDiscount,
+    hasScholarshipDiscount,
+    alumniDiscountTagText: isAlumniDiscount
+      ? discountPerCamperYuan > 0
+        ? `老学员优惠 -¥${discountPerCamperYuan}`
+        : '老学员优惠'
+      : '',
+    scholarshipDiscountTagText: hasScholarshipDiscount ? `奖学金优惠 -¥${scholarshipDiscountYuan}` : '',
     alumniDiscountText: isAlumniDiscount
       ? `${alumniDiscountLabel}（减免${result.alumniCount}人）`
+      : '',
+    scholarshipDiscountText: hasScholarshipDiscount
+      ? `${scholarshipLabel}（减¥${scholarshipDiscountYuan}）`
       : '',
     matchedAlumniNames: result.matchedAlumniNames
   }
@@ -158,6 +265,7 @@ Component({
     activityId: defaultActivityId,
     summary: getActivitySummary(defaultActivityId),
     summaryCoverPath: getActivityCoverPath(defaultActivityId),
+    ...defaultScholarshipState,
     ...buildPriceState(defaultActivityId, [{ name: '' }]),
     posterUrls: getPosterFallbackUrls(),
     periods: getActivityPeriods(defaultActivityId),
@@ -170,17 +278,7 @@ Component({
       phone: '',
       wechat: ''
     },
-    campers: [
-      {
-        id: '',
-        name: '',
-        idNoMask: '',
-        height: '',
-        weight: '',
-        allergies: '',
-        personality: ''
-      }
-    ],
+    campers: [createEmptyCamper()],
     maxCampers: 6,
     submissionId: '',
     submissionStatus: '',
@@ -194,7 +292,7 @@ Component({
     show() {
       this.loadPosterUrls()
       const pages = getCurrentPages()
-      const current = pages[pages.length - 1] as WechatMiniprogram.Page.Instance & {
+      const current = pages[pages.length - 1] as WechatMiniprogram.Page.Instance<any, any> & {
         options?: Record<string, string>
       }
       const options = current?.options || {}
@@ -224,19 +322,31 @@ Component({
       const nextPeriods =
         periodDate && periods[selectedPeriodIndex] && periods[selectedPeriodIndex].date !== periodDate
           ? periods.map((item, index) => {
-              if (index === selectedPeriodIndex) {
-                return {
-                  ...item,
-                  date: periodDate
-                }
+            if (index === selectedPeriodIndex) {
+              return {
+                ...item,
+                date: periodDate
               }
-              return item
-            })
+            }
+            return item
+          })
           : periods
       const currentPeriodId = this.data.periods[this.data.selectedPeriodIndex]?.id || ''
       const nextPeriodId = nextPeriods[selectedPeriodIndex]?.id || ''
       const samePeriod = sameActivity && nextPeriodId === currentPeriodId
       const nextSubmissionId = submissionId || (samePeriod ? this.data.submissionId : '')
+      const preserveScholarshipDraft = sameActivity && samePeriod
+      const scholarshipState = preserveScholarshipDraft
+        ? {
+            scholarshipCodeInput: this.data.scholarshipCodeInput,
+            scholarshipAppliedCode: this.data.scholarshipAppliedCode,
+            scholarshipApplied: this.data.scholarshipApplied,
+            scholarshipStatusText: this.data.scholarshipStatusText,
+            scholarshipStatusType: this.data.scholarshipStatusType,
+            scholarshipStatus: this.data.scholarshipStatus
+          }
+        : { ...defaultScholarshipState }
+
       this.setData(
         {
           submissionId: nextSubmissionId,
@@ -245,10 +355,13 @@ Component({
           summary: getActivitySummary(nextActivityId),
           summaryCoverPath: getActivityCoverPath(nextActivityId),
           periods: nextPeriods,
-          selectedPeriodIndex
+          selectedPeriodIndex,
+          ...scholarshipState,
+          ...buildPriceState(nextActivityId, this.data.campers, {
+            applied: scholarshipState.scholarshipApplied
+          })
         },
         () => {
-          this.refreshPriceState(nextActivityId, this.data.campers)
           if (
             nextActivityId &&
             (this.data.loadedActivityId !== nextActivityId ||
@@ -260,9 +373,11 @@ Component({
               loadedSubmissionId: nextSubmissionId,
               loadedPeriodId: nextPeriodId
             })
-            this.ensureLogin().then(() => {
-              this.loadSubmission(nextSubmissionId, nextPeriodId)
-            })
+            if (nextSubmissionId) {
+              this.ensureLogin().then(() => {
+                this.loadSubmission(nextSubmissionId, nextPeriodId)
+              })
+            }
           }
         }
       )
@@ -275,13 +390,23 @@ Component({
     getSelectedPeriodId() {
       return this.getSelectedPeriod()?.id || ''
     },
-    refreshPriceState(activityId?: string, campers?: Array<{ name?: string }>) {
-      const priceState = buildPriceState(activityId || this.data.activityId, campers || this.data.campers)
-      this.setData(priceState)
+    getSubmissionScholarshipCode() {
+      if (!this.data.showScholarshipSection || !this.data.scholarshipApplied) {
+        return ''
+      }
+      return this.data.scholarshipAppliedCode || normalizeScholarshipCode(this.data.scholarshipCodeInput)
     },
-    onImageError(event: WechatMiniprogram.ImageErrorEvent) {
+    getPriceState(activityId?: string, campers?: CamperItem[], scholarshipApplied?: boolean) {
+      return buildPriceState(
+        activityId || this.data.activityId,
+        campers || this.data.campers,
+        { applied: scholarshipApplied !== undefined ? scholarshipApplied : this.data.scholarshipApplied }
+      )
+    },
+    onImageError(event: WechatMiniprogram.BaseEvent) {
       const dataset = event.currentTarget.dataset as { src?: string }
-      console.warn('image-load-failed', dataset?.src || '', event.detail?.errMsg || '')
+      const detail = (event as WechatMiniprogram.BaseEvent & { detail?: { errMsg?: string } }).detail
+      console.warn('image-load-failed', dataset?.src || '', detail?.errMsg || '')
     },
     loadPosterUrls() {
       loadPosterUrls().then((posterUrls) => {
@@ -338,6 +463,8 @@ Component({
               activityId?: string
               periodId?: string
               status: string
+              scholarshipCode?: string
+              scholarshipStatus?: string
               guardianSnapshot: {
                 name: string
                 phone: string
@@ -345,15 +472,7 @@ Component({
                 idNo: string
                 idNoMask: string
               }
-              childrenSnapshot: Array<{
-                id: string
-                name: string
-                idNoMask: string
-                height: string
-                weight: string
-                allergies: string
-                personality: string
-              }>
+              childrenSnapshot: CamperItem[]
             } | null
           }
           if (!result.ok) {
@@ -372,42 +491,35 @@ Component({
             activityId: this.data.activityId,
             periodId: periodIdFromData,
             status: result.data.status,
-            campersCount: result.data.childrenSnapshot?.length || 0
+            campersCount: result.data.childrenSnapshot?.length || 0,
+            scholarshipCode: result.data.scholarshipCode || ''
           })
           const guardian = result.data.guardianSnapshot
-          const campers = result.data.childrenSnapshot.length
-            ? result.data.childrenSnapshot
-            : [
-                {
-                  id: '',
-                  name: '',
-                  idNoMask: '',
-                  height: '',
-                  weight: '',
-                  allergies: '',
-                  personality: ''
-                }
-              ]
-          this.setData(
-            {
-              submissionId: result.data.id || '',
-              submissionStatus: result.data.status,
-              selectedPeriodIndex,
-              loadedSubmissionId: result.data.id || this.data.loadedSubmissionId,
-              loadedPeriodId: periodIdFromData || this.data.loadedPeriodId,
-              guardian: {
-                name: guardian.name || '',
-                phone: guardian.phone || '',
-                wechat: guardian.wechat || '',
-                idNo: guardian.idNo || '',
-                idNoMask: guardian.idNoMask || ''
-              },
-              campers
-            },
-            () => {
-              this.refreshPriceState(this.data.activityId, campers)
-            }
+          const campers = result.data.childrenSnapshot.length ? result.data.childrenSnapshot : [createEmptyCamper()]
+          const scholarshipCode = normalizeScholarshipCode(result.data.scholarshipCode || '')
+          const scholarshipState = buildSavedScholarshipState(
+            scholarshipCode,
+            result.data.scholarshipStatus || ''
           )
+          this.setData({
+            submissionId: result.data.id || '',
+            submissionStatus: result.data.status,
+            selectedPeriodIndex,
+            loadedSubmissionId: result.data.id || this.data.loadedSubmissionId,
+            loadedPeriodId: periodIdFromData || this.data.loadedPeriodId,
+            guardian: {
+              name: guardian.name || '',
+              phone: guardian.phone || '',
+              wechat: guardian.wechat || '',
+              idNo: guardian.idNo || '',
+              idNoMask: guardian.idNoMask || ''
+            },
+            campers,
+            ...scholarshipState,
+            ...buildPriceState(this.data.activityId, campers, {
+              applied: scholarshipState.scholarshipApplied
+            })
+          })
         },
         fail: () => {
           wx.showToast({ title: '加载失败', icon: 'none' })
@@ -415,6 +527,33 @@ Component({
         complete: () => {
           this.setData({ loading: false })
         }
+      })
+    },
+    releaseScholarshipHold(snapshot?: Partial<PaymentSnapshot>) {
+      const scholarshipCode = normalizeScholarshipCode(snapshot?.scholarshipCode)
+      const outTradeNo = snapshot?.outTradeNo || ''
+      const submissionId = snapshot?.submissionId || this.data.submissionId
+      const activityId = snapshot?.activityId || this.data.activityId
+      if (!wx.cloud || !scholarshipCode || !outTradeNo || !submissionId) {
+        return Promise.resolve(false)
+      }
+      return new Promise((resolve) => {
+        wx.cloud.callFunction({
+          name: 'scholarshipCodeManage',
+          data: {
+            action: 'release',
+            code: scholarshipCode,
+            activityId,
+            submissionId,
+            outTradeNo
+          },
+          success: () => {
+            resolve(true)
+          },
+          fail: () => {
+            resolve(false)
+          }
+        })
       })
     },
     onBack() {
@@ -456,10 +595,9 @@ Component({
         submissionStatus: '',
         loadedActivityId: this.data.activityId,
         loadedSubmissionId: '',
-        loadedPeriodId: periodId
-      })
-      this.ensureLogin().then(() => {
-        this.loadSubmission('', periodId)
+        loadedPeriodId: periodId,
+        ...defaultScholarshipState,
+        ...this.getPriceState(this.data.activityId, this.data.campers, false)
       })
     },
     onChangeCount(event: WechatMiniprogram.BaseEvent) {
@@ -475,24 +613,12 @@ Component({
       }
       const campers = this.data.campers.slice(0, next)
       while (campers.length < next) {
-        campers.push({
-          id: '',
-          name: '',
-          idNoMask: '',
-          height: '',
-          weight: '',
-          allergies: '',
-          personality: ''
-        })
+        campers.push(createEmptyCamper())
       }
-      this.setData(
-        {
-          campers
-        },
-        () => {
-          this.refreshPriceState(this.data.activityId, campers)
-        }
-      )
+      this.setData({
+        campers,
+        ...this.getPriceState(this.data.activityId, campers)
+      })
     },
     onGuardianNameChange(e: WechatMiniprogram.CustomEvent) {
       this.setData({
@@ -527,29 +653,125 @@ Component({
         }
       })
     },
+    onScholarshipCodeChange(e: WechatMiniprogram.CustomEvent) {
+      const nextCode = normalizeScholarshipCode(e.detail.value)
+      const keepApplied = nextCode && nextCode === this.data.scholarshipAppliedCode && this.data.scholarshipApplied
+      this.setData({
+        scholarshipCodeInput: nextCode,
+        scholarshipAppliedCode: keepApplied ? this.data.scholarshipAppliedCode : '',
+        scholarshipApplied: !!keepApplied,
+        scholarshipStatus: keepApplied ? this.data.scholarshipStatus : nextCode ? 'pending' : '',
+        scholarshipStatusText: keepApplied ? this.data.scholarshipStatusText : '',
+        scholarshipStatusType: keepApplied ? this.data.scholarshipStatusType : '',
+        ...this.getPriceState(this.data.activityId, this.data.campers, !!keepApplied)
+      })
+    },
+    onVerifyScholarshipCode() {
+      if (!wx.cloud) {
+        wx.showToast({ title: '云开发未初始化', icon: 'none' })
+        return
+      }
+      if (!this.data.showScholarshipSection) {
+        wx.showToast({ title: '当前订单暂无可用的新学员名额', icon: 'none' })
+        return
+      }
+      const code = normalizeScholarshipCode(this.data.scholarshipCodeInput)
+      if (!code) {
+        wx.showToast({ title: '请输入兑换码', icon: 'none' })
+        return
+      }
+      wx.showLoading({ title: '验证中' })
+      wx.cloud.callFunction({
+        name: 'scholarshipCodeManage',
+        data: {
+          action: 'preview',
+          code,
+          activityId: this.data.activityId,
+          submissionId: this.data.submissionId
+        },
+        success: (res) => {
+          const result = (res.result || {}) as {
+            ok?: boolean
+            available?: boolean
+            message?: string
+            normalizedCode?: string
+          }
+          if (!result.ok || !result.available) {
+            this.setData({
+              scholarshipCodeInput: code,
+              scholarshipAppliedCode: '',
+              scholarshipApplied: false,
+              scholarshipStatus: '',
+              scholarshipStatusText: result.message || '兑换码不可用',
+              scholarshipStatusType: 'warning',
+              ...this.getPriceState(this.data.activityId, this.data.campers, false)
+            })
+            return
+          }
+          const normalizedCode = result.normalizedCode || code
+          this.setData({
+            scholarshipCodeInput: normalizedCode,
+            scholarshipAppliedCode: normalizedCode,
+            scholarshipApplied: true,
+            scholarshipStatus: 'pending',
+            scholarshipStatusText: result.message || `兑换码可用，已抵扣¥${scholarshipDiscountYuan}`,
+            scholarshipStatusType: 'success',
+            ...this.getPriceState(this.data.activityId, this.data.campers, true)
+          })
+        },
+        fail: () => {
+          wx.showToast({ title: '兑换码验证失败', icon: 'none' })
+        },
+        complete: () => {
+          wx.hideLoading()
+        }
+      })
+    },
     onOpenCamper(event: WechatMiniprogram.BaseEvent) {
       const { index } = event.currentTarget.dataset as { index?: number }
       if (index === undefined) {
         return
       }
-      const camper = this.data.campers[index]
+      const targetIndex = Number(index)
+      if (!Number.isFinite(targetIndex) || !this.data.campers[targetIndex]) {
+        return
+      }
+      const camper = this.data.campers[targetIndex]
+      const blockedIds = Array.from(
+        new Set(
+          this.data.campers
+            .map((item, camperIndex) => (camperIndex === targetIndex ? '' : item.id || ''))
+            .filter(Boolean)
+        )
+      )
+      const blockedIdsParam = encodeURIComponent(JSON.stringify(blockedIds))
       wx.navigateTo({
-        url: `/pages/camper-list/camper-list?index=${index}&selectedId=${encodeURIComponent(camper.id || '')}`,
+        url: `/pages/camper-list/camper-list?index=${targetIndex}&selectedId=${encodeURIComponent(camper?.id || '')}&blockedIds=${blockedIdsParam}`,
         events: {
-          selected: (payload: { index: number; camper: { id: string; name: string; idNoMask?: string; height: string; weight: string; allergies: string; personality: string } }) => {
+          selected: (payload: { camper?: CamperItem }) => {
+            if (!payload?.camper) {
+              return
+            }
             const campers = [...this.data.campers]
-            if (campers[payload.index]) {
-              campers[payload.index] = {
+            if (campers[targetIndex]) {
+              campers[targetIndex] = {
                 ...payload.camper,
                 idNoMask: payload.camper.idNoMask || ''
               }
-              this.setData({ campers }, () => {
-                this.refreshPriceState(this.data.activityId, campers)
+              this.setData({
+                campers,
+                ...this.getPriceState(this.data.activityId, campers)
               })
             }
           }
         },
-        success: () => {}
+        success: (res) => {
+          res.eventChannel.emit('init', {
+            index: targetIndex,
+            selectedId: camper?.id || '',
+            blockedIds
+          })
+        }
       })
     },
     validateForm() {
@@ -570,6 +792,13 @@ Component({
         wx.showToast({ title: '请先选择营员', icon: 'none' })
         return false
       }
+      if (this.data.showScholarshipSection) {
+        const code = normalizeScholarshipCode(this.data.scholarshipCodeInput)
+        if (code && !this.data.scholarshipApplied) {
+          wx.showToast({ title: '请先验证奖学金兑换码', icon: 'none' })
+          return false
+        }
+      }
       return true
     },
     startPayment() {
@@ -584,7 +813,8 @@ Component({
       console.info('order-form:startPayment', {
         activityId: this.data.activityId,
         periodId,
-        submissionStatus: this.data.submissionStatus
+        submissionStatus: this.data.submissionStatus,
+        scholarshipCode: this.getSubmissionScholarshipCode()
       })
       this.setData({ paying: true })
       wx.showLoading({ title: '发起支付' })
@@ -604,6 +834,9 @@ Component({
             activityId?: string
             periodId?: string
             submissionId?: string
+            scholarshipCode?: string
+            scholarshipDiscount?: number
+            scholarshipLabel?: string
           }
           console.info('order-form:paymentPrepare:result', result)
           if (!result.ok || !result.outTradeNo || !result.totalFee) {
@@ -618,13 +851,16 @@ Component({
               loadedSubmissionId: result.submissionId
             })
           }
-          const paymentSnapshot = {
+          const paymentSnapshot: PaymentSnapshot = {
             outTradeNo: result.outTradeNo,
             totalFee: result.totalFee,
             activityId: result.activityId || this.data.activityId,
             periodId: result.periodId || periodId,
             activityTitle: this.data.summary.title || '活动报名',
-            submissionId: result.submissionId || this.data.submissionId || ''
+            submissionId: result.submissionId || this.data.submissionId || '',
+            scholarshipCode: normalizeScholarshipCode(result.scholarshipCode || ''),
+            scholarshipDiscount: Number(result.scholarshipDiscount) || 0,
+            scholarshipLabel: result.scholarshipLabel || scholarshipLabel
           }
           wx.cloud.callFunction({
             name: 'wxpayFunctions',
@@ -644,19 +880,24 @@ Component({
                   wx.showToast({ title: '订单已支付，可再次购买', icon: 'none' })
                   this.setData({ submissionStatus: 'paid', submissionId: '' })
                 } else {
+                  this.releaseScholarshipHold(paymentSnapshot)
                   wx.showToast({ title: '支付发起失败', icon: 'none' })
                 }
                 this.setData({ paying: false })
                 return
               }
-              const paymentData = (callRes.result || {}).data as {
-                timeStamp?: string
-                nonceStr?: string
-                package?: string
-                packageVal?: string
-                paySign?: string
-                signType?: string
-              }
+              const paymentResult =
+                (typeof callRes.result === 'object' && callRes.result ? callRes.result : {}) as {
+                  data?: {
+                    timeStamp?: string
+                    nonceStr?: string
+                    package?: string
+                    packageVal?: string
+                    paySign?: string
+                    signType?: string
+                  }
+                }
+              const paymentData = paymentResult.data
               const packageValue = paymentData ? paymentData.packageVal || paymentData.package || '' : ''
               console.info('order-form:wxpayFunctions:parsed', {
                 hasTimeStamp: !!paymentData?.timeStamp,
@@ -667,6 +908,7 @@ Component({
               })
               if (!paymentData || !paymentData.timeStamp || !paymentData.nonceStr || !packageValue) {
                 wx.hideLoading()
+                this.releaseScholarshipHold(paymentSnapshot)
                 console.warn('order-form:payment-missing', {
                   result: callRes?.result || null
                 })
@@ -680,7 +922,7 @@ Component({
                 nonceStr: paymentData.nonceStr,
                 package: packageValue,
                 paySign: paymentData.paySign || '',
-                signType: paymentData.signType || 'RSA',
+                signType: (paymentData.signType || 'RSA') as 'RSA' | 'MD5' | 'HMAC-SHA256',
                 success: () => {
                   this.setData({ submissionStatus: 'paid' })
                   wx.setStorageSync('last_pay_success', {
@@ -699,6 +941,12 @@ Component({
                       : '',
                     paymentSnapshot.submissionId
                       ? `submissionId=${encodeURIComponent(paymentSnapshot.submissionId)}`
+                      : '',
+                    paymentSnapshot.scholarshipCode
+                      ? `scholarshipCode=${encodeURIComponent(paymentSnapshot.scholarshipCode)}`
+                      : '',
+                    paymentSnapshot.scholarshipDiscount
+                      ? `scholarshipDiscount=${encodeURIComponent(String(paymentSnapshot.scholarshipDiscount))}`
                       : ''
                   ]
                     .filter(Boolean)
@@ -708,6 +956,7 @@ Component({
                   })
                 },
                 fail: (err) => {
+                  this.releaseScholarshipHold(paymentSnapshot)
                   const errMsg = err && typeof err === 'object' && 'errMsg' in err ? String(err.errMsg) : ''
                   if (errMsg.includes('cancel')) {
                     wx.showToast({ title: '已取消支付', icon: 'none' })
@@ -722,6 +971,7 @@ Component({
             },
             fail: () => {
               wx.hideLoading()
+              this.releaseScholarshipHold(paymentSnapshot)
               wx.showToast({ title: '支付发起失败', icon: 'none' })
               this.setData({ paying: false })
             }
@@ -753,6 +1003,7 @@ Component({
       const childIds = this.data.campers.map((item) => item.id).filter(Boolean)
       const isUpdate = this.data.submissionStatus === 'submitted' && !!this.data.submissionId
       const functionName = isUpdate ? 'submissionUpdate' : 'submissionSubmit'
+      const scholarshipCode = this.getSubmissionScholarshipCode()
 
       console.info('order-form:submit', {
         activityId: this.data.activityId,
@@ -760,7 +1011,8 @@ Component({
         submissionStatus: this.data.submissionStatus,
         campersCount: this.data.campers.length,
         childIdsCount: childIds.length,
-        functionName
+        functionName,
+        scholarshipCode
       })
 
       wx.showLoading({ title: '提交中' })
@@ -777,7 +1029,8 @@ Component({
             wechat: this.data.guardian.wechat,
             idNo: this.data.guardian.idNo
           },
-          childIds
+          childIds,
+          scholarshipCode
         },
         success: (res) => {
           const result = (res.result || {}) as { ok?: boolean; message?: string; submissionId?: string }
