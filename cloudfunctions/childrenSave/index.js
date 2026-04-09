@@ -43,11 +43,11 @@ exports.main = async (event) => {
       idNo = existing.data.idNo || ''
       idNoMask = existing.data.idNoMask || maskIdNo(existing.data.idNo || '')
     } else {
-      return { ok: false, message: 'ID card is required' }
+      return { ok: false, message: '请填写身份证明' }
     }
 
     if (!idNo) {
-      return { ok: false, message: 'ID card is required' }
+      return { ok: false, message: '请填写身份证明' }
     }
 
     const data = {

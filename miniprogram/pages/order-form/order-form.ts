@@ -30,6 +30,8 @@ type CamperItem = {
 
 type ScholarshipPriceInput = {
   applied: boolean
+  discountAmount?: number
+  label?: string
 }
 
 type PaymentSnapshot = {
@@ -45,8 +47,7 @@ type PaymentSnapshot = {
 }
 
 const defaultActivityId = 'ai-camp-2026'
-const scholarshipDiscountAmount = 250000
-const scholarshipDiscountYuan = scholarshipDiscountAmount / 100
+const interviewFeeDiscountYuan = 500
 const scholarshipLabel = '新学员奖学金兑换码'
 const scholarshipEligibleActivityIdSet = new Set(['ai-camp-2026-copy'])
 
@@ -54,6 +55,8 @@ const defaultScholarshipState = {
   scholarshipCodeInput: '',
   scholarshipAppliedCode: '',
   scholarshipApplied: false,
+  scholarshipDiscountAmount: 0,
+  scholarshipLabel,
   scholarshipStatusText: '',
   scholarshipStatusType: '',
   scholarshipStatus: ''
@@ -178,11 +181,24 @@ const getActivityFeeYuan = (activityId: string) => {
 }
 
 const formatFeeText = (feeYuan: number) => `¥${feeYuan}`
+const splitPriceLabel = (priceLabel: string) => {
+  const match = priceLabel.match(/^([^\d]*)([\d.,]+)(.*)$/)
+  if (!match) {
+    return {
+      displayPriceUnit: '',
+      displayPriceValue: priceLabel
+    }
+  }
+  return {
+    displayPriceUnit: match[1] || '',
+    displayPriceValue: match[2] || priceLabel
+  }
+}
 const normalizeScholarshipCode = (value?: string) => (value ? value.toUpperCase().replace(/[^A-Z]/g, '') : '')
 const isScholarshipActivity = (activityId: string) => scholarshipEligibleActivityIdSet.has(activityId)
 const hasNamedCamper = (camper?: { name?: string }) => !!((camper?.name || '').trim())
 
-const buildSavedScholarshipState = (code: string, status: string) => {
+const buildSavedScholarshipState = (code: string, status: string, discountAmount = 0, label = scholarshipLabel) => {
   if (!code) {
     return { ...defaultScholarshipState }
   }
@@ -190,12 +206,14 @@ const buildSavedScholarshipState = (code: string, status: string) => {
     scholarshipCodeInput: code,
     scholarshipAppliedCode: code,
     scholarshipApplied: true,
+    scholarshipDiscountAmount: Math.max(Number(discountAmount) || 0, 0),
+    scholarshipLabel: label || scholarshipLabel,
     scholarshipStatus: status || 'pending',
     scholarshipStatusType: 'success',
     scholarshipStatusText:
       status === 'redeemed'
         ? `奖学金兑换码 ${code} 已核销`
-        : `奖学金兑换码 ${code} 已保存，支付时可抵扣¥${scholarshipDiscountYuan}`
+        : `奖学金兑换码 ${code} 已保存`
   }
 }
 
@@ -214,6 +232,11 @@ const buildPriceState = (
   )
   const isAlumniDiscount = result.alumniCount > 0
   const scholarshipSupported = isScholarshipActivity(activityId)
+  const scholarshipDiscountYuan = Math.max(Number(scholarshipInput.discountAmount) || 0, 0) / 100
+  const interviewDiscountYuan = scholarshipDiscountYuan > 0
+    ? Math.min(scholarshipDiscountYuan, interviewFeeDiscountYuan)
+    : 0
+  const scholarshipOnlyDiscountYuan = Math.max(scholarshipDiscountYuan - interviewDiscountYuan, 0)
   const selectedCampersResult = resolveAlumniPrice(
     selectedCampers.map((item) => item.name || ''),
     regularFeeYuan
@@ -224,19 +247,15 @@ const buildPriceState = (
   const priceDetailParts = [
     result.alumniCount > 0 ? `老学员${result.alumniCount}人 × ¥${alumniDiscountFeeYuan}` : '',
     result.regularCount > 0 ? `新学员${result.regularCount}人 × ¥${regularFeeYuan}` : '',
-    hasScholarshipDiscount ? `${scholarshipLabel} -¥${scholarshipDiscountYuan}` : ''
+    hasScholarshipDiscount && scholarshipOnlyDiscountYuan > 0 ? `奖学金兑换码 -¥${scholarshipOnlyDiscountYuan}` : '',
+    hasScholarshipDiscount && interviewDiscountYuan > 0 ? `面试费抵扣 -¥${interviewDiscountYuan}` : ''
   ].filter(Boolean)
-  const summaryPriceDetailParts = [
-    result.alumniCount > 0 ? `老学员${result.alumniCount}人` : '',
-    result.regularCount > 0 ? `新学员${result.regularCount}人` : '',
-    hasScholarshipDiscount ? `奖学金码 -¥${scholarshipDiscountYuan}` : ''
-  ].filter(Boolean)
-  const summaryPriceDetailText = summaryPriceDetailParts.join(' · ') || priceDetailParts.join('，')
+  const displayPrice = formatFeeText(totalFeeYuan)
 
   return {
-    displayPrice: formatFeeText(totalFeeYuan),
+    displayPrice,
+    ...splitPriceLabel(displayPrice),
     priceDetailText: priceDetailParts.join('，'),
-    summaryPriceDetailText,
     totalFeeYuan,
     regularCount: result.regularCount,
     alumniCount: result.alumniCount,
@@ -244,18 +263,10 @@ const buildPriceState = (
     showScholarshipSection,
     isAlumniDiscount,
     hasScholarshipDiscount,
-    alumniDiscountTagText: isAlumniDiscount
-      ? discountPerCamperYuan > 0
-        ? `老学员优惠 -¥${discountPerCamperYuan}`
-        : '老学员优惠'
-      : '',
-    scholarshipDiscountTagText: hasScholarshipDiscount ? `奖学金优惠 -¥${scholarshipDiscountYuan}` : '',
-    alumniDiscountText: isAlumniDiscount
-      ? `${alumniDiscountLabel}（减免${result.alumniCount}人）`
-      : '',
-    scholarshipDiscountText: hasScholarshipDiscount
-      ? `${scholarshipLabel}（减¥${scholarshipDiscountYuan}）`
-      : '',
+    alumniDiscountTagText: isAlumniDiscount && discountPerCamperYuan > 0 ? `老学员优惠 -¥${discountPerCamperYuan}` : '',
+    scholarshipDiscountTagText: '',
+    alumniDiscountText: '',
+    scholarshipDiscountText: '',
     matchedAlumniNames: result.matchedAlumniNames
   }
 }
@@ -341,6 +352,8 @@ Component({
             scholarshipCodeInput: this.data.scholarshipCodeInput,
             scholarshipAppliedCode: this.data.scholarshipAppliedCode,
             scholarshipApplied: this.data.scholarshipApplied,
+            scholarshipDiscountAmount: this.data.scholarshipDiscountAmount,
+            scholarshipLabel: this.data.scholarshipLabel,
             scholarshipStatusText: this.data.scholarshipStatusText,
             scholarshipStatusType: this.data.scholarshipStatusType,
             scholarshipStatus: this.data.scholarshipStatus
@@ -358,7 +371,9 @@ Component({
           selectedPeriodIndex,
           ...scholarshipState,
           ...buildPriceState(nextActivityId, this.data.campers, {
-            applied: scholarshipState.scholarshipApplied
+            applied: scholarshipState.scholarshipApplied,
+            discountAmount: scholarshipState.scholarshipDiscountAmount,
+            label: scholarshipState.scholarshipLabel
           })
         },
         () => {
@@ -400,14 +415,14 @@ Component({
       return buildPriceState(
         activityId || this.data.activityId,
         campers || this.data.campers,
-        { applied: scholarshipApplied !== undefined ? scholarshipApplied : this.data.scholarshipApplied }
+        {
+          applied: scholarshipApplied !== undefined ? scholarshipApplied : this.data.scholarshipApplied,
+          discountAmount: this.data.scholarshipDiscountAmount,
+          label: this.data.scholarshipLabel
+        }
       )
     },
-    onImageError(event: WechatMiniprogram.BaseEvent) {
-      const dataset = event.currentTarget.dataset as { src?: string }
-      const detail = (event as WechatMiniprogram.BaseEvent & { detail?: { errMsg?: string } }).detail
-      console.warn('image-load-failed', dataset?.src || '', detail?.errMsg || '')
-    },
+    onImageError() {},
     loadPosterUrls() {
       loadPosterUrls().then((posterUrls) => {
         this.setData({ posterUrls })
@@ -464,7 +479,9 @@ Component({
               periodId?: string
               status: string
               scholarshipCode?: string
+              scholarshipDiscountAmount?: number
               scholarshipStatus?: string
+              scholarshipLabel?: string
               guardianSnapshot: {
                 name: string
                 phone: string
@@ -487,19 +504,14 @@ Component({
             ? this.data.periods.findIndex((item) => item.id === periodIdFromData)
             : -1
           const selectedPeriodIndex = periodIndex !== -1 ? periodIndex : this.data.selectedPeriodIndex
-          console.info('order-form:loadSubmission', {
-            activityId: this.data.activityId,
-            periodId: periodIdFromData,
-            status: result.data.status,
-            campersCount: result.data.childrenSnapshot?.length || 0,
-            scholarshipCode: result.data.scholarshipCode || ''
-          })
           const guardian = result.data.guardianSnapshot
           const campers = result.data.childrenSnapshot.length ? result.data.childrenSnapshot : [createEmptyCamper()]
           const scholarshipCode = normalizeScholarshipCode(result.data.scholarshipCode || '')
           const scholarshipState = buildSavedScholarshipState(
             scholarshipCode,
-            result.data.scholarshipStatus || ''
+            result.data.scholarshipStatus || '',
+            Number(result.data.scholarshipDiscountAmount) || 0,
+            result.data.scholarshipLabel || scholarshipLabel
           )
           this.setData({
             submissionId: result.data.id || '',
@@ -517,7 +529,9 @@ Component({
             campers,
             ...scholarshipState,
             ...buildPriceState(this.data.activityId, campers, {
-              applied: scholarshipState.scholarshipApplied
+              applied: scholarshipState.scholarshipApplied,
+              discountAmount: scholarshipState.scholarshipDiscountAmount,
+              label: scholarshipState.scholarshipLabel
             })
           })
         },
@@ -660,6 +674,8 @@ Component({
         scholarshipCodeInput: nextCode,
         scholarshipAppliedCode: keepApplied ? this.data.scholarshipAppliedCode : '',
         scholarshipApplied: !!keepApplied,
+        scholarshipDiscountAmount: keepApplied ? this.data.scholarshipDiscountAmount : 0,
+        scholarshipLabel: keepApplied ? this.data.scholarshipLabel : scholarshipLabel,
         scholarshipStatus: keepApplied ? this.data.scholarshipStatus : nextCode ? 'pending' : '',
         scholarshipStatusText: keepApplied ? this.data.scholarshipStatusText : '',
         scholarshipStatusType: keepApplied ? this.data.scholarshipStatusType : '',
@@ -695,12 +711,16 @@ Component({
             available?: boolean
             message?: string
             normalizedCode?: string
+            discountAmount?: number
+            label?: string
           }
           if (!result.ok || !result.available) {
             this.setData({
               scholarshipCodeInput: code,
               scholarshipAppliedCode: '',
               scholarshipApplied: false,
+              scholarshipDiscountAmount: 0,
+              scholarshipLabel,
               scholarshipStatus: '',
               scholarshipStatusText: result.message || '兑换码不可用',
               scholarshipStatusType: 'warning',
@@ -709,14 +729,21 @@ Component({
             return
           }
           const normalizedCode = result.normalizedCode || code
+          const scholarshipDiscountAmount = Number(result.discountAmount) || 0
           this.setData({
             scholarshipCodeInput: normalizedCode,
             scholarshipAppliedCode: normalizedCode,
             scholarshipApplied: true,
+            scholarshipDiscountAmount,
+            scholarshipLabel: result.label || scholarshipLabel,
             scholarshipStatus: 'pending',
-            scholarshipStatusText: result.message || `兑换码可用，已抵扣¥${scholarshipDiscountYuan}`,
+            scholarshipStatusText: '兑换码可用',
             scholarshipStatusType: 'success',
-            ...this.getPriceState(this.data.activityId, this.data.campers, true)
+            ...buildPriceState(this.data.activityId, this.data.campers, {
+              applied: true,
+              discountAmount: scholarshipDiscountAmount,
+              label: result.label || scholarshipLabel
+            })
           })
         },
         fail: () => {
@@ -784,7 +811,7 @@ Component({
         return false
       }
       if (!this.data.guardian.idNo && !this.data.guardian.idNoMask) {
-        wx.showToast({ title: '请填写监护人身份证号', icon: 'none' })
+        wx.showToast({ title: '请填写监护人身份证明', icon: 'none' })
         return false
       }
       const missing = this.data.campers.find((item) => !item.id)
@@ -810,12 +837,6 @@ Component({
         return
       }
       const periodId = this.getSelectedPeriodId()
-      console.info('order-form:startPayment', {
-        activityId: this.data.activityId,
-        periodId,
-        submissionStatus: this.data.submissionStatus,
-        scholarshipCode: this.getSubmissionScholarshipCode()
-      })
       this.setData({ paying: true })
       wx.showLoading({ title: '发起支付' })
       wx.cloud.callFunction({
@@ -838,7 +859,6 @@ Component({
             scholarshipDiscount?: number
             scholarshipLabel?: string
           }
-          console.info('order-form:paymentPrepare:result', result)
           if (!result.ok || !result.outTradeNo || !result.totalFee) {
             wx.hideLoading()
             wx.showToast({ title: result.message || '支付发起失败', icon: 'none' })
@@ -860,7 +880,7 @@ Component({
             submissionId: result.submissionId || this.data.submissionId || '',
             scholarshipCode: normalizeScholarshipCode(result.scholarshipCode || ''),
             scholarshipDiscount: Number(result.scholarshipDiscount) || 0,
-            scholarshipLabel: result.scholarshipLabel || scholarshipLabel
+            scholarshipLabel: result.scholarshipLabel || this.data.scholarshipLabel || scholarshipLabel
           }
           wx.cloud.callFunction({
             name: 'wxpayFunctions',
@@ -871,7 +891,6 @@ Component({
               description: this.data.summary.title || '活动报名'
             },
             success: (callRes) => {
-              console.info('order-form:wxpayFunctions:raw', callRes)
               const rawResult = (callRes.result || {}) as { errcode?: string; errmsg?: string }
               const errMsg = typeof rawResult.errmsg === 'string' ? rawResult.errmsg : ''
               if (rawResult.errcode || errMsg) {
@@ -899,19 +918,9 @@ Component({
                 }
               const paymentData = paymentResult.data
               const packageValue = paymentData ? paymentData.packageVal || paymentData.package || '' : ''
-              console.info('order-form:wxpayFunctions:parsed', {
-                hasTimeStamp: !!paymentData?.timeStamp,
-                hasNonceStr: !!paymentData?.nonceStr,
-                hasPackage: !!packageValue,
-                signType: paymentData?.signType || '',
-                keys: paymentData ? Object.keys(paymentData) : []
-              })
               if (!paymentData || !paymentData.timeStamp || !paymentData.nonceStr || !packageValue) {
                 wx.hideLoading()
                 this.releaseScholarshipHold(paymentSnapshot)
-                console.warn('order-form:payment-missing', {
-                  result: callRes?.result || null
-                })
                 wx.showToast({ title: '支付参数缺失', icon: 'none' })
                 this.setData({ paying: false })
                 return
@@ -925,7 +934,7 @@ Component({
                 signType: (paymentData.signType || 'RSA') as 'RSA' | 'MD5' | 'HMAC-SHA256',
                 success: () => {
                   this.setData({ submissionStatus: 'paid' })
-                  wx.setStorageSync('last_pay_success', {
+                  wx.setStorageSync('last_payment_success_context', {
                     ...paymentSnapshot,
                     paidAt: Date.now()
                   })
@@ -952,7 +961,9 @@ Component({
                     .filter(Boolean)
                     .join('&')
                   wx.redirectTo({
-                    url: query ? `/pages/pay-success/pay-success?${query}` : '/pages/pay-success/pay-success'
+                    url: query
+                      ? `/pages/registration-payment-success/registration-payment-success?${query}`
+                      : '/pages/registration-payment-success/registration-payment-success'
                   })
                 },
                 fail: (err) => {
@@ -1005,16 +1016,6 @@ Component({
       const functionName = isUpdate ? 'submissionUpdate' : 'submissionSubmit'
       const scholarshipCode = this.getSubmissionScholarshipCode()
 
-      console.info('order-form:submit', {
-        activityId: this.data.activityId,
-        periodId: selectedPeriod.id,
-        submissionStatus: this.data.submissionStatus,
-        campersCount: this.data.campers.length,
-        childIdsCount: childIds.length,
-        functionName,
-        scholarshipCode
-      })
-
       wx.showLoading({ title: '提交中' })
       wx.cloud.callFunction({
         name: functionName,
@@ -1034,7 +1035,6 @@ Component({
         },
         success: (res) => {
           const result = (res.result || {}) as { ok?: boolean; message?: string; submissionId?: string }
-          console.info('order-form:submit:result', result)
           if (!result.ok) {
             wx.showToast({ title: result.message || '提交失败', icon: 'none' })
             wx.hideLoading()

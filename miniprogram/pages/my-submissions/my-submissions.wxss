@@ -1,6 +1,6 @@
 page {
   height: 100vh;
-  background: linear-gradient(180deg, #f8fafc 0%, #eef3f8 100%);
+  background: #f2f5f8;
   color: #1f2a37;
   font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
@@ -65,21 +65,27 @@ page {
 .scroll-area {
   flex: 1;
   min-height: 0;
-  padding: 0 16px 24px;
+  padding: 16px;
   box-sizing: border-box;
 }
 
 .card {
   background: #ffffff;
   border-radius: 16px;
+  border: 1px solid transparent;
+  box-shadow: 0 6px 20px rgba(107, 135, 152, 0.05);
   margin-bottom: 16px;
 }
 
 .submission-card {
-  padding: 14px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+}
+
+.submission-card--pending {
+  border-color: #f0e8d5;
 }
 
 .card-header {
@@ -94,65 +100,117 @@ page {
 }
 
 .card-title {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
-  color: #0f172a;
+  color: #2c3e50;
   display: block;
-  line-height: 1.4;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
 }
 
 .card-sub {
-  font-size: 12px;
-  color: #64748b;
+  font-size: 13px;
+  color: #98a7b5;
   display: block;
   margin-top: 4px;
 }
 
 .status-tag {
-  padding: 4px 10px;
-  border-radius: 999px;
+  padding: 4px 8px;
+  border-radius: 6px;
   font-size: 12px;
+  font-weight: 500;
   border: 1px solid transparent;
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
-.status-tag--active {
-  background: rgba(124, 160, 176, 0.1);
-  color: #7ca0b0;
-  border-color: rgba(124, 160, 176, 0.2);
+.status-tag--paid {
+  background: #f4f6f8;
+  color: #a0aebc;
+  border-color: transparent;
 }
 
-.status-tag--muted {
-  background: rgba(148, 163, 184, 0.2);
-  color: #64748b;
-  border-color: rgba(148, 163, 184, 0.3);
+.status-tag--pending {
+  background: #fcf9f2;
+  color: #b08c5d;
+  border-color: #f0e8d5;
 }
 
-.card-meta {
+.card-divider {
+  height: 1px;
+  background: #ebf0f4;
+  margin: 6px 0 2px;
+}
+
+.card-footer {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-meta-inline {
   font-size: 12px;
-  color: #64748b;
+  color: #98a7b5;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
 }
 
 .card-actions {
   display: flex;
-  gap: 8px;
+  gap: 12px;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .action-btn {
-  flex: 1;
-  --td-button-primary-bg-color: rgba(124, 160, 176, 0.08);
-  --td-button-primary-border-color: transparent;
-  --td-button-primary-color: #7ca0b0;
-  --td-button-primary-active-bg-color: rgba(124, 160, 176, 0.15);
-  --td-button-primary-active-border-color: transparent;
-  
-  --td-button-default-bg-color: #f8fafc;
-  --td-button-default-border-color: transparent;
-  --td-button-default-color: #64748b;
-  --td-button-default-active-bg-color: #f1f5f9;
-  --td-button-default-active-border-color: transparent;
+  min-width: 72px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.action-btn--primary {
+  background: linear-gradient(135deg, #7e9aa9 0%, #6b8798 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(107, 135, 152, 0.3);
+}
+
+.action-btn--default {
+  background: transparent;
+  color: #6b8798;
+  border: 1px solid #d1dbe0;
+}
+
+.detail-link {
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b8798;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+.detail-link::after {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-left: 4px;
+  border-top: 1.5px solid #8ba4b4;
+  border-right: 1.5px solid #8ba4b4;
+  transform: rotate(45deg);
+}
+
+.detail-link-text {
+  color: #6b8798;
 }
 
 .empty {
@@ -160,8 +218,4 @@ page {
   color: #94a3b8;
   font-size: 14px;
   margin-top: 40px;
-}
-
-.home-indicator {
-  height: 34px;
 }

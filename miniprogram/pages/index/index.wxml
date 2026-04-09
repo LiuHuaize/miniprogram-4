@@ -5,8 +5,7 @@
 
   <view class="filter-row">
     <view class="filter-item filter-item--active">综合排序</view>
-    <view class="filter-item">类型 <t-icon name="chevron-down" size="32rpx" color="#9ca3af" class="filter-icon" /></view>
-    <view class="filter-item">年龄 <t-icon name="chevron-down" size="32rpx" color="#9ca3af" class="filter-icon" /></view>
+    <view class="filter-item" bindtap="onTypeFilterTap">{{currentTypeFilter}} <t-icon name="chevron-down" size="32rpx" color="#9ca3af" class="filter-icon" /></view>
   </view>
 
   <view class="search-section">
@@ -14,8 +13,9 @@
       class="search"
       shape="round"
       placeholder="请输入活动名称"
-      clearable="{{false}}"
-      value=""
+      clearable="{{true}}"
+      value="{{searchKeyword}}"
+      bindchange="onSearchChange"
     />
   </view>
 
@@ -24,7 +24,7 @@
       <block wx:for="{{cards}}" wx:key="id">
         <view class="card" bindtap="onCardTap" data-id="{{item.id}}" data-activity-id="{{item.activityId}}">
           <view class="card-hero {{item.themeClass}}">
-            <image class="card-hero-bg" src="{{item.coverUrl}}" mode="widthFix"></image>
+            <image class="card-hero-bg" src="{{item.coverUrl}}" mode="aspectFill" lazy-load="true"></image>
             <view wx:if="{{item.overlayStyle}}" class="card-hero-overlay" style="{{item.overlayStyle}}"></view>
             <view class="card-hero-bottom">
               <text class="card-tag {{item.statusClass}}">{{item.status}}</text>
@@ -40,6 +40,8 @@
       </block>
     </view>
   </scroll-view>
+
+  <view class="bottom-bar-cover"></view>
 
   <t-tab-bar
     class="bottom-bar"
@@ -63,5 +65,4 @@
     </t-tab-bar-item>
   </t-tab-bar>
 
-  <view class="home-indicator"></view>
 </view>

@@ -9,21 +9,21 @@
       <text class="nav-text">返回</text>
     </view>
     <text class="nav-title">订单详情</text>
-    <view class="nav-right">
-      <view class="nav-action">
-        <t-icon name="ellipsis" size="32rpx" />
-      </view>
-    </view>
+    <view class="nav-right"></view>
   </view>
 
   <scroll-view class="scroll-area" scroll-y show-scrollbar="{{false}}">
     <view class="card summary-card">
       <view class="summary-thumb"></view>
       <view class="summary-main">
+        <text class="summary-kicker">ORDER SUMMARY</text>
         <text class="summary-title">{{summary.title || '--'}}</text>
         <text class="summary-sub">{{summary.sub || '--'}}</text>
       </view>
-      <text class="summary-price">{{amountText}}</text>
+      <view class="summary-price-line">
+        <text class="summary-price-unit">{{amountUnit}}</text>
+        <text class="summary-price">{{amountValue}}</text>
+      </view>
     </view>
 
     <view class="card info-card">
@@ -67,7 +67,7 @@
           <text class="field-value">{{item.name || '--'}}</text>
         </view>
         <view class="field-row">
-          <text class="field-label">身份证号</text>
+          <text class="field-label">身份证明</text>
           <text class="field-value">{{item.idNo || '--'}}</text>
         </view>
         <view class="field-row">
@@ -89,7 +89,7 @@
           <text class="field-value">{{guardian.name || '--'}}</text>
         </view>
         <view class="field-row">
-          <text class="field-label">身份证号</text>
+          <text class="field-label">身份证明</text>
           <text class="field-value">{{guardian.idNo || '--'}}</text>
         </view>
         <view class="field-row field-row--last">
@@ -105,12 +105,14 @@
   </scroll-view>
 
   <view class="bottom-bar">
-    <view>
+    <view class="bottom-left">
       <text class="bottom-label">合计金额</text>
-      <text class="bottom-price">{{amountText}}</text>
+      <view class="bottom-price-line">
+        <text class="bottom-price-unit">{{amountUnit}}</text>
+        <text class="bottom-price">{{amountValue}}</text>
+      </view>
     </view>
-    <t-button class="paid-btn" theme="primary" shape="round" size="small" disabled>{{statusText}}</t-button>
+    <view class="paid-btn">{{statusText}}</view>
   </view>
 
 </view>
-

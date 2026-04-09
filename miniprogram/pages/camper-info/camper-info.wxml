@@ -19,36 +19,38 @@
         <view class="field-value">
           <t-input
             class="field-input"
-            placeholder="请输入"
+            placeholder="姓名"
             borderless
-            align="left"
+            align="right"
             value="{{camper.name}}"
             bindchange="onNameChange"
           />
         </view>
       </view>
       <view class="field-row">
-        <view class="field-label">孩子身份证号</view>
+        <view class="field-label">孩子身份证明</view>
         <view class="field-value">
           <t-input
             class="field-input"
-            placeholder="{{camper.idNoMask ? '已保存，重新输入以修改' : '请输入'}}"
+            placeholder="身份证/护照等有效证件"
             borderless
-            align="left"
-            type="idcard"
+            align="right"
             value="{{camper.idNo}}"
             bindchange="onIdChange"
           />
         </view>
+      </view>
+      <view class="field-helper" wx:if="{{camper.idNoMask}}">
+        <text>已保存证件信息，重新输入将覆盖原记录</text>
       </view>
       <view class="field-row">
         <view class="field-label">身高</view>
         <view class="field-value">
           <t-input
             class="field-input"
-            placeholder="请输入"
+            placeholder="身高"
             borderless
-            align="left"
+            align="right"
             type="number"
             value="{{camper.height}}"
             bindchange="onHeightChange"
@@ -60,9 +62,9 @@
         <view class="field-value">
           <t-input
             class="field-input"
-            placeholder="请输入"
+            placeholder="体重"
             borderless
-            align="left"
+            align="right"
             type="number"
             value="{{camper.weight}}"
             bindchange="onWeightChange"
@@ -74,9 +76,9 @@
         <view class="field-value">
           <t-input
             class="field-input"
-            placeholder="请输入"
+            placeholder="忌口/过敏原"
             borderless
-            align="left"
+            align="right"
             value="{{camper.allergies}}"
             bindchange="onAllergiesChange"
           />
@@ -86,8 +88,8 @@
         <view class="field-label">一句话介绍孩子的性格</view>
         <view class="field-value">
           <t-input
-            class="field-input"
-            placeholder="请输入"
+            class="field-input field-input--stacked"
+            placeholder="一句话描述孩子的性格特点"
             borderless
             align="left"
             value="{{camper.personality}}"
@@ -99,8 +101,9 @@
   </scroll-view>
 
   <view class="bottom-bar">
-    <t-button class="save-btn" theme="primary" shape="round" size="small" bindtap="onSave">确认</t-button>
+    <view class="save-btn" bindtap="onSave">
+      <text class="save-btn-text">确认</text>
+    </view>
   </view>
 
-  <view class="home-indicator"></view>
 </view>

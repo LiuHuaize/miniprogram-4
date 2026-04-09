@@ -1,0 +1,33 @@
+<view class="page">
+  <view class="status-spacer"></view>
+
+  <view class="nav-bar">
+    <view class="nav-left" bindtap="onBack">
+      <view class="nav-icon-wrap">
+        <t-icon name="chevron-left" size="32rpx" />
+      </view>
+      <text class="nav-text">首页</text>
+    </view>
+    <text class="nav-title">提交完成</text>
+    <view class="nav-right"></view>
+  </view>
+
+  <view class="content">
+    <view class="result-icon">
+      <t-icon name="check-circle" size="56rpx" />
+    </view>
+    <text class="result-title">问卷提交完成</text>
+    <text class="result-desc">请联系小助手获取专属报告</text>
+    <text class="countdown-text">{{countdown}}s 后自动返回首页</text>
+
+    <t-button
+      class="home-btn"
+      theme="primary"
+      shape="round"
+      size="large"
+      bindtap="onGoHome"
+    >
+      立即返回首页
+    </t-button>
+  </view>
+</view>

@@ -1,15 +1,20 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/tasks/tasks",
     "pages/detail/detail",
+    "pages/task-detail/task-detail",
     "pages/my/my",
     "pages/my-submissions/my-submissions",
     "pages/order-form/order-form",
     "pages/camper-list/camper-list",
     "pages/camper-info/camper-info",
     "pages/order-detail/order-detail",
-    "pages/pay-success/pay-success",
-    "pages/logs/logs"
+    "pages/registration-payment-success/registration-payment-success",
+    "pages/9-9-survey-payment/9-9-survey-payment",
+    "pages/2026-0425-activity-poster/2026-0425-activity-poster",
+    "pages/9-9-survey-questionnaire/9-9-survey-questionnaire",
+    "pages/9-9-survey-submit-success/9-9-survey-submit-success"
   ],
   "window": {
     "navigationBarTextStyle": "black",

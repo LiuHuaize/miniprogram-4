@@ -1,0 +1,68 @@
+<view class="page">
+  <view class="status-spacer"></view>
+
+  <view class="page-title">任务中心</view>
+  <view class="page-subtitle">每月一个小任务，把想法做成能被看见的作品</view>
+
+  <view class="filter-row">
+    <view class="filter-item filter-item--active">综合排序</view>
+    <view class="filter-item" bindtap="onTypeFilterTap">{{currentTypeFilter}} <t-icon name="chevron-down" size="32rpx" color="#9ca3af" class="filter-icon" /></view>
+  </view>
+
+  <view class="search-section">
+    <t-search
+      class="search"
+      shape="round"
+      placeholder="请输入任务名称"
+      clearable="{{true}}"
+      value="{{searchKeyword}}"
+      bindchange="onSearchChange"
+    />
+  </view>
+
+  <scroll-view class="scroll-area" scroll-y show-scrollbar="{{false}}">
+    <view class="card-list">
+      <view
+        class="task-card"
+        wx:for="{{tasks}}"
+        wx:key="id"
+        data-task-id="{{item.id}}"
+        bindtap="onTaskTap"
+      >
+        <image class="task-thumb" src="{{item.coverUrl}}" mode="aspectFill" lazy-load="true"></image>
+        <view class="task-info">
+          <view class="task-header">
+            <text class="task-status task-status--{{item.statusClass}}">{{item.status}}</text>
+            <text class="task-month">{{item.monthLabel}}</text>
+          </view>
+          <text class="task-title">{{item.title}}</text>
+          <text class="task-meta">{{item.meta}}</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="bottom-bar-cover"></view>
+
+  <t-tab-bar
+    class="bottom-bar"
+    value="{{tabValue}}"
+    fixed="{{true}}"
+    bordered="{{true}}"
+    safe-area-inset-bottom="{{true}}"
+    bindchange="onTabChange"
+  >
+    <t-tab-bar-item value="activity">
+      <view slot="icon" class="tab-icon">
+        <t-icon name="home" size="40rpx" />
+      </view>
+      活动
+    </t-tab-bar-item>
+    <t-tab-bar-item value="mine">
+      <view slot="icon" class="tab-icon">
+        <t-icon name="user-1" size="40rpx" />
+      </view>
+      我的
+    </t-tab-bar-item>
+  </t-tab-bar>
+</view>

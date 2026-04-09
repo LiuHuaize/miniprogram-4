@@ -38,15 +38,12 @@ Component({
     restoreSession() {
       const profile = wx.getStorageSync('user_profile')
       const userId = wx.getStorageSync('user_id')
-      console.log('[my] restoreSession', { profile, userId })
       if (profile && userId) {
         if (wx.cloud && profile.avatarFileId) {
-          console.log('[my] restoreSession refresh avatar', { avatarFileId: profile.avatarFileId })
           wx.cloud.getTempFileURL({
             fileList: [profile.avatarFileId],
             success: (res) => {
               const tempFileURL = res.fileList?.[0]?.tempFileURL || ''
-              console.log('[my] restoreSession temp avatar', { tempFileURL })
               const nextProfile = {
                 ...profile,
                 avatarUrl: tempFileURL || profile.avatarUrl
@@ -64,7 +61,6 @@ Component({
               })
             },
             fail: () => {
-              console.warn('[my] restoreSession temp avatar failed')
               this.setData({
                 hasLogin: true,
                 userInfo: profile,
@@ -103,7 +99,6 @@ Component({
         name: 'login',
         data: { profile },
         success: fnRes => {
-          console.log('[my] login cloud success', { profile, result: fnRes.result })
           const callResult = fnRes as WechatMiniprogram.Cloud.CallFunctionResult
           const result = (callResult.result || {}) as {
             userId?: string
@@ -124,7 +119,6 @@ Component({
           })
         },
         fail: () => {
-          console.warn('[my] login cloud failed')
           wx.showToast({ title: '登录失败', icon: 'none' })
         },
         complete: () => {
@@ -138,7 +132,6 @@ Component({
     onLoginTap() {
       if (this.data.hasLogin) {
         if (!this.isProfileComplete(this.data.userInfo as UserProfile)) {
-          console.log('[my] login tap while incomplete profile', { userInfo: this.data.userInfo })
           this.setData({
             profileEditorVisible: true,
             profileDraft: {
@@ -161,10 +154,8 @@ Component({
         desc: '用于完善会员资料',
         success: res => {
           const isDemote = Boolean((res.userInfo as { is_demote?: boolean })?.is_demote)
-          console.log('[my] getUserProfile success', { userInfo: res.userInfo, isDemote })
           const profile = this.normalizeProfile(res.userInfo)
           if (isDemote || !this.isProfileComplete(profile)) {
-            console.log('[my] getUserProfile incomplete', { profile })
             this.setData({
               profileEditorVisible: true,
               profileDraft: {
@@ -178,7 +169,6 @@ Component({
           this.saveProfile(profile)
         },
         fail: () => {
-          console.warn('[my] getUserProfile failed')
           this.setData({ loginLoading: false })
           wx.showToast({ title: '已取消授权', icon: 'none' })
         },
@@ -187,7 +177,6 @@ Component({
     onChooseAvatar(e: WechatMiniprogram.CustomEvent) {
       const avatarUrl = e.detail?.avatarUrl || ''
       if (!avatarUrl) return
-      console.log('[my] chooseAvatar', { avatarUrl })
       this.setData({
         'profileDraft.avatarUrl': avatarUrl
       })
@@ -201,13 +190,11 @@ Component({
     onNicknameBlur(e: WechatMiniprogram.Input) {
       const value = (e.detail?.value || '').trim()
       if (!value) return
-      console.log('[my] nickname blur', { nickName: value })
       this.setData({
         'profileDraft.nickName': value
       })
     },
     onProfileCancel() {
-      console.log('[my] profile cancel')
       this.setData({
         profileEditorVisible: false,
         profileDraft: {
@@ -232,7 +219,6 @@ Component({
         wx.showToast({ title: '请选择头像', icon: 'none' })
         return
       }
-      console.log('[my] profile confirm', { nickName, avatarUrl })
       this.setData({ profileSaving: true })
       const isRemote = avatarUrl.startsWith('http') || avatarUrl.startsWith('cloud://')
       if (isRemote) {
@@ -250,12 +236,10 @@ Component({
         filePath: avatarUrl,
         success: uploadRes => {
           const fileId = uploadRes.fileID
-          console.log('[my] avatar uploaded', { fileId })
           wx.cloud.getTempFileURL({
             fileList: [fileId],
             success: tempRes => {
               const tempFileURL = tempRes.fileList?.[0]?.tempFileURL || ''
-              console.log('[my] avatar temp url', { tempFileURL })
               this.saveProfile({
                 nickName,
                 avatarUrl: tempFileURL || avatarUrl,
@@ -263,7 +247,6 @@ Component({
               })
             },
             fail: () => {
-              console.warn('[my] avatar temp url failed')
               this.saveProfile({
                 nickName,
                 avatarUrl,
@@ -273,7 +256,6 @@ Component({
           })
         },
         fail: () => {
-          console.warn('[my] avatar upload failed')
           this.setData({ profileSaving: false })
           wx.showToast({ title: '头像上传失败', icon: 'none' })
         }

@@ -1,18 +1,5 @@
 import { getActivitySummary } from '../../utils/activities'
 
-const logPrefix = '[order-detail]'
-const logInfo = (message: string, payload?: unknown) => {
-  try {
-    if (payload !== undefined) {
-      console.log(logPrefix, message, payload)
-    } else {
-      console.log(logPrefix, message)
-    }
-  } catch (error) {
-    // ignore logging errors
-  }
-}
-
 const decodeValue = (value?: string) => (value ? decodeURIComponent(value) : '')
 const toNumber = (value?: unknown) => {
   const parsed = Number(value)
@@ -44,6 +31,19 @@ const formatAmount = (totalFee: number) => {
   if (!totalFee) return '¥ --'
   return `¥ ${(totalFee / 100).toFixed(2)}`
 }
+const splitAmount = (amountText: string) => {
+  const match = amountText.match(/^([^\d]*)([\d.,-]+)(.*)$/)
+  if (!match) {
+    return {
+      amountUnit: '',
+      amountValue: amountText
+    }
+  }
+  return {
+    amountUnit: match[1] || '',
+    amountValue: match[2] || amountText
+  }
+}
 const formatDiscountAmount = (totalFee: number) => {
   if (!totalFee) return '--'
   return `-¥ ${(totalFee / 100).toFixed(2)}`
@@ -73,6 +73,8 @@ Component({
     orderTimeText: '--',
     totalFee: 0,
     amountText: '¥ --',
+    amountUnit: '¥',
+    amountValue: '--',
     scholarshipCode: '',
     scholarshipDiscountAmount: 0,
     scholarshipDiscountText: '',
@@ -96,10 +98,7 @@ Component({
     loading: false
   },
   lifetimes: {
-    ready() {
-      logInfo('ready')
-      this.logLayout('ready')
-    }
+    ready() {}
   },
   pageLifetimes: {
     show() {
@@ -108,7 +107,7 @@ Component({
         options?: Record<string, string>
       }
       const options = current?.options || {}
-      const storage = wx.getStorageSync('last_pay_success') || {}
+      const storage = wx.getStorageSync('last_payment_success_context') || {}
       const activityId = decodeValue(options.activityId) || storage.activityId || this.data.activityId
       const periodId = decodeValue(options.periodId) || storage.periodId || ''
       const submissionId = decodeValue(options.submissionId) || storage.submissionId || ''
@@ -120,6 +119,8 @@ Component({
         toNumber(options.scholarshipDiscount || options.scholarship_discount) ||
         Number(storage.scholarshipDiscount) ||
         0
+      const amountText = formatAmount(totalFee)
+      const amountParts = splitAmount(amountText)
 
       this.setData({
         activityId,
@@ -128,37 +129,20 @@ Component({
         summary: getActivitySummary(activityId),
         orderNo: orderNo || this.data.orderNo,
         totalFee,
-        amountText: formatAmount(totalFee),
+        amountText,
+        amountUnit: amountParts.amountUnit,
+        amountValue: amountParts.amountValue,
         scholarshipCode,
         scholarshipDiscountAmount,
         scholarshipDiscountText: formatDiscountAmount(scholarshipDiscountAmount),
         scholarshipStatusText: scholarshipCode ? '待支付完成核销' : ''
       })
-
-      logInfo('page show', { activityId, periodId, submissionId, orderNo, scholarshipCode })
-      this.logLayout('page-show')
       this.ensureLogin().then(() => {
         this.loadDetail()
       })
     }
   },
   methods: {
-    logLayout(tag: string) {
-      try {
-        wx.nextTick(() => {
-          const query = wx.createSelectorQuery().in(this)
-          query.select('.scroll-area').boundingClientRect()
-          query.exec((res) => {
-            const [scrollArea] = res || []
-            logInfo(`layout ${tag}`, {
-              scrollArea
-            })
-          })
-        })
-      } catch (error) {
-        console.warn(logPrefix, 'logLayout failed', error)
-      }
-    },
     ensureLogin() {
       return new Promise((resolve) => {
         if (!wx.cloud) {
@@ -242,6 +226,8 @@ Component({
           const statusClass = data.status === 'paid' ? 'info-value--success' : ''
           const orderNo = data.payOrderNo || this.data.orderNo || '--'
           const totalFee = Number(data.payAmount) || this.data.totalFee || 0
+          const amountText = formatAmount(totalFee)
+          const amountParts = splitAmount(amountText)
           const orderTimeText = formatDateTime(data.createdAt || data.paidAt || data.updatedAt)
           const guardian = data.guardianSnapshot || { name: '', phone: '', idNo: '', idNoMask: '' }
           const campersRaw = Array.isArray(data.childrenSnapshot) ? data.childrenSnapshot : []
@@ -285,7 +271,9 @@ Component({
             statusClass,
             orderNo,
             totalFee,
-            amountText: formatAmount(totalFee),
+            amountText,
+            amountUnit: amountParts.amountUnit,
+            amountValue: amountParts.amountValue,
             orderTimeText,
             scholarshipCode,
             scholarshipDiscountAmount,
@@ -315,4 +303,3 @@ Component({
     }
   }
 })
-

@@ -102,7 +102,7 @@ Component({
             .map((item) => {
               const summary = getActivitySummary(item.activityId)
               const statusText =
-                item.status === 'paid' ? '已支付' : item.status === 'submitted' ? '未支付' : '已撤销'
+                item.status === 'paid' ? '已支付' : item.status === 'submitted' ? '待支付' : '已撤销'
               return {
                 id: item.id,
                 activityId: item.activityId,

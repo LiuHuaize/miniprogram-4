@@ -14,7 +14,7 @@
 
 解决方案
 - 统一将 `.scroll-area` 从 `height: 0;` 改为 `min-height: 0;`，保留 flex: 1。
-- 涉及页面：index、detail、order-detail、order-form、camper-list、camper-info、my-submissions、pay-success。
+- 涉及页面：index、detail、order-detail、order-form、camper-list、camper-info、my-submissions、registration-payment-success。
 
 注意事项
 - 若页面顶部/底部有自定义导航或 TabBar，scroll-view 高度不要用固定 0，优先 `flex: 1; min-height: 0;`。

@@ -1,6 +1,6 @@
 page {
   height: 100vh;
-  background: linear-gradient(180deg, #f8fafc 0%, #eef3f8 100%);
+  background: linear-gradient(180deg, #f6f8fc 0%, #edf3f8 54%, #eaf0f6 100%);
   color: #1f2a37;
   font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
@@ -64,18 +64,6 @@ page {
   justify-content: flex-end;
 }
 
-.nav-action {
-  width: 30px;
-  height: 30px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f3f6f9;
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  color: #64748b;
-}
-
 .scroll-area {
   flex: 1;
   min-height: 0;
@@ -89,24 +77,25 @@ page {
 
 .card {
   background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  border-radius: 16px;
-  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
-  margin-bottom: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 18px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+  margin-bottom: 14px;
 }
 
 .summary-card {
   display: flex;
   gap: 12px;
   padding: 14px;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .summary-thumb {
   width: 84px;
   height: 64px;
-  border-radius: 12px;
+  border-radius: 8px;
   background: #dbeafe;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12);
 }
 
 .summary-main {
@@ -116,7 +105,7 @@ page {
 
 .summary-title {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   color: #0f172a;
   display: block;
   line-height: 1.4;
@@ -127,13 +116,6 @@ page {
   font-size: 11px;
   color: #94a3b8;
   display: block;
-}
-
-.summary-price {
-  font-size: 15px;
-  font-weight: 700;
-  color: #64748b;
-  white-space: nowrap;
 }
 
 .summary-price-wrap,
@@ -149,15 +131,37 @@ page {
   max-width: 140px;
 }
 
-.summary-price-wrap .summary-price,
-.summary-price-wrap .price-detail {
-  width: 100%;
-  text-align: right;
+.summary-price-line,
+.period-price-line,
+.bottom-price-line {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 2px;
 }
 
-.summary-price-wrap .price-detail {
-  white-space: normal;
-  color: #7b8a99;
+.bottom-price-line {
+  justify-content: flex-start;
+}
+
+.summary-price-unit,
+.period-price-unit,
+.bottom-price-unit {
+  font-size: 14px;
+  font-weight: 700;
+  color: #466f97;
+  line-height: 1.2;
+  padding-top: 4px;
+}
+
+.summary-price-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #466f97;
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  font-family: 'DIN Alternate', 'DIN Condensed', 'Avenir Next', sans-serif;
 }
 
 .period-price-wrap {
@@ -187,7 +191,7 @@ page {
 }
 
 .period-card {
-  padding: 12px 14px;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -201,11 +205,12 @@ page {
 
 .period-label {
   font-size: 11px;
-  color: #a0aec0;
+  color: #9cabba;
 }
 
 .period-value {
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 600;
   color: #0f172a;
   display: block;
 }
@@ -216,13 +221,13 @@ page {
 
 .section-title {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   color: #0f172a;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .count-card {
-  padding: 12px 14px;
+  padding: 14px 16px;
 }
 
 .count-row {
@@ -234,42 +239,46 @@ page {
 .count-label {
   font-size: 13px;
   color: #0f172a;
+  font-weight: 600;
 }
 
 .count-stepper {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  padding: 6px;
+  border-radius: 16px;
+  background: rgba(238, 243, 247, 0.72);
 }
 
 .step-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: #eef3f7;
-  color: #7ca0b0;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #ebeff3;
+  color: #5a6b7c;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .step-btn.disabled {
-  color: #cbd5e1;
-  background: #f5f7fa;
+  color: #c8d2dc;
+  background: #f4f7fa;
 }
 
 .step-value {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   color: #0f172a;
-  width: 18px;
+  width: 24px;
   text-align: center;
 }
 
 .camper-card {
-  padding: 12px 14px;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -293,8 +302,23 @@ page {
   display: block;
 }
 
+.camper-sub-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.camper-sub-wrap.is-empty {
+  color: #4d89ba;
+}
+
+.camper-sub--empty {
+  color: #4d89ba;
+  font-weight: 600;
+}
+
 .form-card {
-  padding: 0 12px;
+  padding: 2px 14px;
 }
 
 .scholarship-card {
@@ -305,10 +329,10 @@ page {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 4px;
+  padding: 14px 2px;
   font-size: 13px;
   border-bottom: 1px solid #edf0f3;
-  gap: 12px;
+  gap: 16px;
 }
 
 .field-row--last {
@@ -321,8 +345,8 @@ page {
 
 .field-label {
   color: #1f2937;
-  font-weight: 500;
-  min-width: 88px;
+  font-weight: 600;
+  min-width: 108px;
   line-height: 1.4;
 }
 
@@ -334,7 +358,7 @@ page {
   flex: 1;
   min-width: 0;
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
 }
 
 .field-value--with-action {
@@ -344,21 +368,21 @@ page {
 
 .field-input {
   width: 100%;
-  text-align: left;
+  text-align: right;
   --td-input-vertical-padding: 6px;
   --td-input-bg-color: transparent;
-  --td-input-placeholder-text-color: #94a3b8;
+  --td-input-placeholder-text-color: #a0aec0;
   --td-input-default-text-color: #1f2937;
 }
 
 .code-action {
   flex: 0 0 auto;
   min-width: 64px;
-  height: 30px;
+  height: 32px;
   border-radius: 999px;
-  background: rgba(124, 160, 176, 0.14);
-  color: #4c7385;
-  border: 1px solid rgba(124, 160, 176, 0.4);
+  background: rgba(77, 137, 186, 0.12);
+  color: #40698d;
+  border: 1px solid rgba(77, 137, 186, 0.26);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -400,8 +424,9 @@ page {
   gap: 12px;
   padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
   border-top: none;
-  background: #ffffff;
-  box-shadow: 0 -12px 26px rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.05);
+  backdrop-filter: blur(16px);
   z-index: 10;
 }
 
@@ -415,38 +440,63 @@ page {
 
 .bottom-label {
   font-size: 11px;
-  color: #a0aec0;
+  color: #99a8b8;
   display: block;
 }
 
-.bottom-price {
-  margin-top: 2px;
-  font-size: 18px;
+.bottom-price-value {
+  font-size: 28px;
   font-weight: 700;
-  color: #0f172a;
-  display: block;
+  color: #21384f;
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  font-family: 'DIN Alternate', 'DIN Condensed', 'Avenir Next', sans-serif;
 }
 
-.discount-note {
+.bottom-price-unit {
+  padding-top: 3px;
+}
+
+.price-detail {
   margin-top: 2px;
   font-size: 10px;
-  color: #4c7385;
+  color: #90a0b3;
   line-height: 1.3;
   display: block;
 }
 
 .submit-btn {
-  --td-button-primary-bg-color: #7ca0b0;
-  --td-button-primary-border-color: #7ca0b0;
-  --td-button-primary-hover-bg-color: #688e9f;
-  --td-button-primary-hover-border-color: #688e9f;
+  position: relative;
   min-width: 168px;
   height: 50px;
   padding: 0 32px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #76b6e1 0%, #4d89ba 52%, #3c73a2 100%);
+  box-shadow: 0 14px 28px rgba(77, 137, 186, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.submit-btn--disabled {
+  background: linear-gradient(135deg, #c3cfdb 0%, #98a6b5 100%);
+  box-shadow: 0 10px 18px rgba(148, 163, 184, 0.22);
+}
+
+.submit-btn-text,
+.submit-btn-arrow {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
   font-size: 16px;
   font-weight: 700;
-  border-radius: 999px;
-  box-shadow: 0 10px 18px rgba(124, 160, 176, 0.24);
+}
+
+.submit-btn-arrow {
+  font-size: 18px;
+  line-height: 1;
 }
 
 .period-mask {
@@ -489,9 +539,11 @@ page {
 }
 
 .period-price {
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 700;
-  color: #64748b;
+  color: #466f97;
+  line-height: 0.92;
+  font-family: 'DIN Alternate', 'DIN Condensed', 'Avenir Next', sans-serif;
   white-space: nowrap;
   display: block;
 }
@@ -551,4 +603,3 @@ page {
   font-size: 13px;
   font-weight: 600;
 }
-

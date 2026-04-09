@@ -1,159 +1,115 @@
 # 新学员奖学金兑换码
 
 - 适用活动：`ai-camp-2026-copy`（2026 夏令营）
-- 抵扣金额：`¥2500`（奖学金 ¥2000 + 面试抵扣 ¥500）
+- 原价：`¥18800`
+- 面试费抵扣：固定 `¥500`
+- 当前兑换码档位：`¥1500 / ¥1000 / ¥500`
+- 最终支付金额：`¥16800 / ¥17300 / ¥17800`
 - 规则：每笔订单最多使用 1 个兑换码；支付成功后才会正式核销；支付失败/取消会自动释放锁定
-- 线上状态：以云数据库集合 `scholarship_codes` 为准，本文件用于初始码表留档
+- 线上状态：以云数据库集合 `scholarship_codes` 为准；本文件用于初始码表留档
+- 说明：历史 2000 档兑换码仍可继续使用，数据库中已有数据；本次新增的是分档兑换码
 
-| 序号 | 兑换码 | 初始状态 |
-| --- | --- | --- |
-| 001 | `RMQAKN` | unused |
-| 002 | `RPRUDE` | unused |
-| 003 | `DPFDAN` | unused |
-| 004 | `RRXCP` | unused |
-| 005 | `MKYSHN` | unused |
-| 006 | `CBXDE` | unused |
-| 007 | `SAAFNQ` | unused |
-| 008 | `DKZVXD` | unused |
-| 009 | `WPFGBW` | unused |
-| 010 | `MWYBK` | unused |
-| 011 | `YKBGR` | unused |
-| 012 | `TXZWT` | unused |
-| 013 | `QRRBQT` | unused |
-| 014 | `QURDSB` | unused |
-| 015 | `KPBUAP` | unused |
-| 016 | `YRDGA` | unused |
-| 017 | `WFUXZ` | unused |
-| 018 | `XHMZC` | unused |
-| 019 | `CDVYPC` | unused |
-| 020 | `SGBARM` | unused |
-| 021 | `UCNSR` | unused |
-| 022 | `BNDQSG` | unused |
-| 023 | `QYQNPQ` | unused |
-| 024 | `PTPXYA` | unused |
-| 025 | `VTRUV` | unused |
-| 026 | `YGJXHV` | unused |
-| 027 | `NHBHN` | unused |
-| 028 | `BDFHWW` | unused |
-| 029 | `BNVFF` | unused |
-| 030 | `HSPUS` | unused |
-| 031 | `NCGSUQ` | unused |
-| 032 | `HCJWGT` | unused |
-| 033 | `GQRUB` | unused |
-| 034 | `PRTPZ` | unused |
-| 035 | `YVVSDG` | unused |
-| 036 | `TXUQK` | unused |
-| 037 | `JDYPP` | unused |
-| 038 | `MMRZFS` | unused |
-| 039 | `QGTFZ` | unused |
-| 040 | `QKUAVU` | unused |
-| 041 | `AESKZ` | unused |
-| 042 | `HSJZG` | unused |
-| 043 | `ZZBVA` | unused |
-| 044 | `SYHFY` | unused |
-| 045 | `NGWSJY` | unused |
-| 046 | `NEBGXW` | unused |
-| 047 | `XQQVK` | unused |
-| 048 | `FMRJME` | unused |
-| 049 | `TRWBF` | unused |
-| 050 | `TAKVE` | unused |
-| 051 | `HTEUEE` | unused |
-| 052 | `MMKNHM` | unused |
-| 053 | `BPHWBZ` | unused |
-| 054 | `QEMJYS` | unused |
-| 055 | `QNZBJM` | unused |
-| 056 | `KNBRWE` | unused |
-| 057 | `HSVAX` | unused |
-| 058 | `DKCGQE` | unused |
-| 059 | `GETHBM` | unused |
-| 060 | `UEPKAP` | unused |
-| 061 | `HWTVM` | unused |
-| 062 | `GVNYB` | unused |
-| 063 | `RKFYQ` | unused |
-| 064 | `DVQPGG` | unused |
-| 065 | `JTDDGU` | unused |
-| 066 | `MDMUPM` | unused |
-| 067 | `PSMDEY` | unused |
-| 068 | `ZMTGU` | unused |
-| 069 | `NDZAT` | unused |
-| 070 | `DMPVXN` | unused |
-| 071 | `AJFCR` | unused |
-| 072 | `PWERK` | unused |
-| 073 | `DNTTXY` | unused |
-| 074 | `SVTQW` | unused |
-| 075 | `GSSTC` | unused |
-| 076 | `EDKJA` | unused |
-| 077 | `XJDYAZ` | unused |
-| 078 | `EWJSTE` | unused |
-| 079 | `MJVBW` | unused |
-| 080 | `HDXQD` | unused |
-| 081 | `ZEEZV` | unused |
-| 082 | `UFFBN` | unused |
-| 083 | `EKTCP` | unused |
-| 084 | `GBKDU` | unused |
-| 085 | `MDXXTB` | unused |
-| 086 | `EQSZEP` | unused |
-| 087 | `FNAFMK` | unused |
-| 088 | `ZNPDWM` | unused |
-| 089 | `BMQBM` | unused |
-| 090 | `UXBAU` | unused |
-| 091 | `KHKYDR` | unused |
-| 092 | `XBAFY` | unused |
-| 093 | `VEDSMT` | unused |
-| 094 | `SGQTWD` | unused |
-| 095 | `PMEXN` | unused |
-| 096 | `FKGVA` | unused |
-| 097 | `NFXMFX` | unused |
-| 098 | `GSWQYA` | unused |
-| 099 | `ABSNXB` | unused |
-| 100 | `UGQGVU` | unused |
-| 101 | `TMQBPN` | unused |
-| 102 | `MXQMQ` | unused |
-| 103 | `CNEYC` | unused |
-| 104 | `UNJNCD` | unused |
-| 105 | `KXNRHE` | unused |
-| 106 | `NJQXH` | unused |
-| 107 | `YQAAYY` | unused |
-| 108 | `VDBZE` | unused |
-| 109 | `BYABDE` | unused |
-| 110 | `WJFQTS` | unused |
-| 111 | `TWWVN` | unused |
-| 112 | `TPKKJ` | unused |
-| 113 | `YZWPZ` | unused |
-| 114 | `QFYFC` | unused |
-| 115 | `VRKFU` | unused |
-| 116 | `CMPVY` | unused |
-| 117 | `UXMWE` | unused |
-| 118 | `PBEKJ` | unused |
-| 119 | `RTDEEC` | unused |
-| 120 | `JPTGYR` | unused |
-| 121 | `BZAFRV` | unused |
-| 122 | `PDRYGV` | unused |
-| 123 | `RBNYT` | unused |
-| 124 | `EJWJK` | unused |
-| 125 | `ZWHJN` | unused |
-| 126 | `RJJXK` | unused |
-| 127 | `YEJSGG` | unused |
-| 128 | `CDQAFC` | unused |
-| 129 | `JSSZQT` | unused |
-| 130 | `NUWGUU` | unused |
-| 131 | `BAKEPS` | unused |
-| 132 | `GFFDK` | unused |
-| 133 | `DYKHVR` | unused |
-| 134 | `HXPMA` | unused |
-| 135 | `GVVNQ` | unused |
-| 136 | `RSYNQ` | unused |
-| 137 | `TGXJN` | unused |
-| 138 | `JNBGA` | unused |
-| 139 | `WBEETH` | unused |
-| 140 | `FPVJM` | unused |
-| 141 | `YEABX` | unused |
-| 142 | `ABRJNG` | unused |
-| 143 | `PJMEK` | unused |
-| 144 | `MYREUQ` | unused |
-| 145 | `PVDKAH` | unused |
-| 146 | `SYDWW` | unused |
-| 147 | `DAEBDM` | unused |
-| 148 | `TVBNXX` | unused |
-| 149 | `YQMHBN` | unused |
-| 150 | `MEDFGT` | unused |
+## 奖学金 ¥1500 档（总抵扣 ¥2000，最终支付 ¥16800）
+
+| 序号 | 兑换码 | 初始状态 | 奖学金 | 面试费抵扣 | 总抵扣 | 最终支付 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 001 | `CDVZN` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 002 | `DUFEUF` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 003 | `CFAYH` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 004 | `HRGCH` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 005 | `BNVML` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 006 | `LDLLVH` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 007 | `NTFFQ` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 008 | `JRHDZ` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 009 | `QYQWCQ` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 010 | `CNUVXN` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 011 | `KXQFZW` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 012 | `NGMWJK` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 013 | `XFSGSH` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 014 | `CEBHKL` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 015 | `HGPMKE` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 016 | `DFPQL` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 017 | `DBFPQG` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 018 | `TGASR` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 019 | `QFDUYF` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 020 | `EBRNZ` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 021 | `JSJZXW` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 022 | `QPCCGG` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 023 | `TNUAY` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 024 | `SLALUB` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 025 | `JNWEBP` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 026 | `MYNQRV` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 027 | `ULBLTK` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 028 | `CMNZAR` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 029 | `DUBSB` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+| 030 | `LTJSL` | unused | ¥1500 | ¥500 | ¥2000 | ¥16800 |
+
+## 奖学金 ¥1000 档（总抵扣 ¥1500，最终支付 ¥17300）
+
+| 序号 | 兑换码 | 初始状态 | 奖学金 | 面试费抵扣 | 总抵扣 | 最终支付 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 001 | `NDNUHU` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 002 | `BLAFJ` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 003 | `HYGCQZ` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 004 | `PXVXM` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 005 | `LTCMW` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 006 | `SLSVR` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 007 | `RWNTBV` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 008 | `LRRAPS` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 009 | `NVNTGQ` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 010 | `VAHJF` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 011 | `KEXTS` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 012 | `LWLYTU` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 013 | `KGTQK` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 014 | `SGAKZY` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 015 | `FVMFYQ` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 016 | `JDFRA` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 017 | `TXVGHZ` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 018 | `HUTAVG` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 019 | `FDVGXQ` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 020 | `GKNQSZ` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 021 | `JCNNAB` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 022 | `HMBUUA` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 023 | `WPJEY` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 024 | `VYNXKP` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 025 | `GBYJUL` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 026 | `WMUTV` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 027 | `XCYZAS` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 028 | `FFQEPP` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 029 | `AABAE` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+| 030 | `RWEXZE` | unused | ¥1000 | ¥500 | ¥1500 | ¥17300 |
+
+## 奖学金 ¥500 档（总抵扣 ¥1000，最终支付 ¥17800）
+
+| 序号 | 兑换码 | 初始状态 | 奖学金 | 面试费抵扣 | 总抵扣 | 最终支付 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 001 | `BUHXT` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 002 | `KSEGSZ` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 003 | `QCAPER` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 004 | `AHMQU` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 005 | `EYMMYS` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 006 | `QVQVFH` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 007 | `WQHVMH` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 008 | `MTDCH` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 009 | `JTSKY` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 010 | `ZBCAYS` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 011 | `QGFLF` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 012 | `JJCVJ` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 013 | `JPFGSS` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 014 | `NTJTY` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 015 | `FQEWWH` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 016 | `KAXZPT` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 017 | `GCMWPF` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 018 | `QGCWF` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 019 | `JHGUE` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 020 | `YCLJE` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 021 | `PYYBT` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 022 | `LNWWCZ` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 023 | `MYSHWJ` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 024 | `JAKREH` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 025 | `QQXTB` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 026 | `ZJQLPU` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 027 | `ZECLUR` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 028 | `AGQEHZ` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 029 | `VAXXBL` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |
+| 030 | `KFYAX` | unused | ¥500 | ¥500 | ¥1000 | ¥17800 |

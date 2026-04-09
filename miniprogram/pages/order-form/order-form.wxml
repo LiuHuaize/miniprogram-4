@@ -9,11 +9,7 @@
       <text class="nav-text">返回</text>
     </view>
     <text class="nav-title">订单详情</text>
-    <view class="nav-right">
-      <view class="nav-action">
-        <t-icon name="ellipsis" size="32rpx" />
-      </view>
-    </view>
+    <view class="nav-right"></view>
   </view>
 
   <scroll-view class="scroll-area" scroll-y show-scrollbar="{{false}}">
@@ -30,10 +26,10 @@
         <text class="summary-sub">{{summary.sub}}</text>
       </view>
       <view class="summary-price-wrap">
-        <text class="summary-price">{{displayPrice}}</text>
-        <text class="price-detail" wx:if="{{summaryPriceDetailText}}">{{summaryPriceDetailText}}</text>
-        <text class="discount-tag" wx:if="{{isAlumniDiscount}}">{{alumniDiscountTagText}}</text>
-        <text class="discount-tag" wx:if="{{hasScholarshipDiscount}}">{{scholarshipDiscountTagText}}</text>
+        <view class="summary-price-line">
+          <text class="summary-price-unit">{{displayPriceUnit}}</text>
+          <text class="summary-price-value">{{displayPriceValue}}</text>
+        </view>
       </view>
     </view>
 
@@ -70,7 +66,10 @@
       >
         <view class="camper-left">
           <text class="camper-title">营员{{index + 1}}</text>
-          <text class="camper-sub">{{item.name || '选择营员'}}</text>
+          <view class="camper-sub-wrap {{item.name ? '' : 'is-empty'}}">
+            <t-icon wx:if="{{!item.name}}" name="add" size="24rpx" color="#4d89ba" />
+            <text class="camper-sub {{item.name ? '' : 'camper-sub--empty'}}">{{item.name || '选择营员'}}</text>
+          </view>
         </view>
         <t-icon name="chevron-right" size="28rpx" />
       </view>
@@ -84,23 +83,22 @@
           <view class="field-value">
             <t-input
               class="field-input"
-              placeholder="请输入"
+              placeholder="姓名"
               borderless
-              align="left"
+              align="right"
               value="{{guardian.name}}"
               bindchange="onGuardianNameChange"
             />
           </view>
         </view>
         <view class="field-row">
-          <view class="field-label">监护人身份证号</view>
+          <view class="field-label">监护人身份证明</view>
           <view class="field-value">
             <t-input
               class="field-input"
-              placeholder="请输入"
+              placeholder="身份证/护照等有效证件"
               borderless
-              align="left"
-              type="idcard"
+              align="right"
               value="{{guardian.idNo}}"
               bindchange="onGuardianIdChange"
             />
@@ -111,9 +109,9 @@
           <view class="field-value">
             <t-input
               class="field-input"
-              placeholder="请输入"
+              placeholder="手机号码"
               borderless
-              align="left"
+              align="right"
               type="number"
               value="{{guardian.phone}}"
               bindchange="onGuardianPhoneChange"
@@ -125,9 +123,9 @@
           <view class="field-value">
             <t-input
               class="field-input"
-              placeholder="请输入"
+              placeholder="微信号"
               borderless
-              align="left"
+              align="right"
               value="{{guardian.wechat}}"
               bindchange="onGuardianWechatChange"
             />
@@ -144,9 +142,9 @@
           <view class="field-value field-value--with-action">
             <t-input
               class="field-input"
-              placeholder="请输入兑换码"
+              placeholder="兑换码"
               borderless
-              align="left"
+              align="right"
               value="{{scholarshipCodeInput}}"
               bindchange="onScholarshipCodeChange"
             />
@@ -165,21 +163,16 @@
   <view class="bottom-bar">
     <view class="bottom-left">
       <text class="bottom-label">活动费用</text>
-      <text class="bottom-price">{{displayPrice}}</text>
+      <view class="bottom-price-line">
+        <text class="bottom-price-unit">{{displayPriceUnit}}</text>
+        <text class="bottom-price-value">{{displayPriceValue}}</text>
+      </view>
       <text class="price-detail" wx:if="{{priceDetailText}}">{{priceDetailText}}</text>
-      <text class="discount-note" wx:if="{{isAlumniDiscount}}">{{alumniDiscountText}}</text>
-      <text class="discount-note" wx:if="{{hasScholarshipDiscount}}">{{scholarshipDiscountText}}</text>
     </view>
-    <t-button
-      class="submit-btn"
-      theme="primary"
-      shape="round"
-      size="large"
-      disabled="{{paying}}"
-      bindtap="onSubmit"
-    >
-      {{submissionStatus === 'paid' ? '再次购买' : '提交订单'}}
-    </t-button>
+    <view class="submit-btn {{paying ? 'submit-btn--disabled' : ''}}" bindtap="onSubmit">
+      <text class="submit-btn-text">{{submissionStatus === 'paid' ? '再次购买' : '提交订单'}}</text>
+      <text class="submit-btn-arrow">›</text>
+    </view>
   </view>
 
   <view class="period-mask" wx:if="{{periodPopupVisible}}" bindtap="onClosePeriods">
@@ -188,10 +181,10 @@
         <view class="period-top">
           <text class="period-title">{{summary.title}}</text>
           <view class="period-price-wrap">
-            <text class="period-price">{{displayPrice}}</text>
-            <text class="price-detail" wx:if="{{summaryPriceDetailText}}">{{summaryPriceDetailText}}</text>
-            <text class="discount-tag" wx:if="{{isAlumniDiscount}}">{{alumniDiscountTagText}}</text>
-            <text class="discount-tag" wx:if="{{hasScholarshipDiscount}}">{{scholarshipDiscountTagText}}</text>
+            <view class="period-price-line">
+              <text class="period-price-unit">{{displayPriceUnit}}</text>
+              <text class="period-price">{{displayPriceValue}}</text>
+            </view>
           </view>
         </view>
         <view class="period-sub">报名截止：{{periods[selectedPeriodIndex].deadline}}</view>

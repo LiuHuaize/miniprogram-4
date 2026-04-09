@@ -1,0 +1,68 @@
+<view class="page">
+  <view class="status-spacer"></view>
+
+  <view class="nav-bar">
+    <view class="nav-left" bindtap="onBack">
+      <view class="nav-icon-wrap">
+        <t-icon name="chevron-left" size="32rpx" />
+      </view>
+      <text class="nav-text">返回</text>
+    </view>
+    <text class="nav-title">能力测评</text>
+    <view class="nav-right"></view>
+  </view>
+
+  <view class="content">
+    <view class="card intro-card">
+      <text class="intro-eyebrow">AI 时代成长能力测评</text>
+      <view class="intro-title-group">
+        <text class="intro-title">「少年独角兽」</text>
+        <text class="intro-title intro-title-sub">五维胜任力测评</text>
+      </view>
+      <text class="intro-desc">支付完成后直接进入问卷，整体流程很短，适合家长快速完成。</text>
+      <view class="intro-tags">
+        <text class="intro-tag">5大维度</text>
+        <text class="intro-tag">多项子能力</text>
+        <text class="intro-tag">1对1解读</text>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-title">你将获得</view>
+      <view class="card benefit-list">
+        <view
+          class="benefit-item"
+          wx:for="{{deliverables}}"
+          wx:key="index"
+        >
+          <view class="benefit-mark"></view>
+          <view class="benefit-main">
+            <text class="benefit-title">{{item.title}}</text>
+            <text class="benefit-desc">{{item.desc}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="bottom-bar">
+    <view class="bottom-left">
+      <text class="bottom-label">应付金额</text>
+      <view class="bottom-price">
+        <text class="price-currency">¥</text>
+        <text class="price-number">9.9</text>
+      </view>
+      <text class="bottom-note">支付后开始测评</text>
+    </view>
+    <t-button
+      class="submit-btn"
+      theme="primary"
+      shape="round"
+      size="large"
+      disabled="{{paying}}"
+      bindtap="onPay"
+    >
+      {{paying ? '支付中...' : '立即支付'}}
+    </t-button>
+  </view>
+</view>

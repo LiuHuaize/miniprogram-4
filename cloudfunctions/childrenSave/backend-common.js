@@ -10,7 +10,6 @@ const maskIdNo = (value) => {
 
 const normalizeText = (value) => (typeof value === 'string' ? value.trim() : '')
 const normalizeScholarshipCode = (value) => normalizeText(value).toUpperCase().replace(/[^A-Z]/g, '')
-const scholarshipDiscountAmount = 250000
 const scholarshipLabel = '新学员奖学金兑换码'
 
 const createGetOrCreateUser = (users) => async (openid, now) => {
@@ -47,7 +46,6 @@ module.exports = {
   maskIdNo,
   normalizeText,
   normalizeScholarshipCode,
-  scholarshipDiscountAmount,
   scholarshipLabel,
   createGetOrCreateUser,
   createGetLatestSubmitted
