@@ -9,14 +9,7 @@
       <text class="nav-text">返回</text>
     </view>
     <text class="nav-title">营会详情</text>
-    <view class="nav-right">
-      <view class="nav-action">
-        <t-icon name="ellipsis" size="32rpx" />
-      </view>
-      <view class="nav-action">
-        <t-icon name="browse" size="32rpx" />
-      </view>
-    </view>
+    <view class="nav-right"></view>
   </view>
 
   <scroll-view
@@ -45,25 +38,38 @@
     <view class="info-card">
       <view class="info-main">
         <view class="info-left">
+          <view class="info-topline">
+            <text class="info-kicker">{{campSeriesLabel}}</text>
+            <text class="info-status {{applyClosed ? 'is-closed' : 'is-open'}}">{{applyClosed ? '报名已结束' : '限额招生中'}}</text>
+          </view>
           <text class="info-title">{{detailTitle}}</text>
           <text class="info-sub">营期时间：{{periods[selectedPeriodIndex].fullDate}}</text>
         </view>
         <view class="info-right">
-          <text class="info-price">{{priceLabel}}</text>
-          <text class="info-tip">{{infoTip}}</text>
+          <view class="price-line">
+            <text class="info-price-unit">{{priceUnit}}</text>
+            <text class="info-price-value">{{priceValue}}</text>
+          </view>
+          <text class="info-price-note">{{priceNote}}</text>
         </view>
       </view>
       <view class="info-meta">
         <view class="meta-item">
-          <t-icon name="time" size="24rpx" />
+          <view class="meta-icon-wrap">
+            <t-icon name="time" size="24rpx" />
+          </view>
           <text>{{durationLabel}}</text>
         </view>
         <view class="meta-item">
-          <t-icon name="user" size="24rpx" />
+          <view class="meta-icon-wrap">
+            <t-icon name="user" size="24rpx" />
+          </view>
           <text>{{ageLabel}}</text>
         </view>
         <view class="meta-item">
-          <t-icon name="location" size="24rpx" />
+          <view class="meta-icon-wrap">
+            <t-icon name="location" size="24rpx" />
+          </view>
           <text>{{periods[selectedPeriodIndex].location}}</text>
         </view>
       </view>
@@ -72,7 +78,10 @@
           <text class="period-label">期数</text>
           <text class="period-value">{{periods[selectedPeriodIndex].name}}（{{periods[selectedPeriodIndex].date}}）</text>
         </view>
-        <t-icon name="chevron-right" size="28rpx" />
+        <view class="period-right">
+          <text class="period-action">切换</text>
+          <t-icon name="chevron-right" size="28rpx" />
+        </view>
       </view>
     </view>
 
@@ -234,13 +243,6 @@
           data-src="{{posterUrls['/assets/poster/youth-content-1.png']}}"
           binderror="onImageError"
         />
-        <image
-          class="poster-image"
-          mode="widthFix"
-          src="{{posterUrls['/assets/poster/youth-content-2.png']}}"
-          data-src="{{posterUrls['/assets/poster/youth-content-2.png']}}"
-          binderror="onImageError"
-        />
       </view>
     </view>
 
@@ -296,6 +298,25 @@
           mode="widthFix"
           src="{{posterUrls['/assets/poster/youth-service.png']}}"
           data-src="{{posterUrls['/assets/poster/youth-service.png']}}"
+          binderror="onImageError"
+        />
+      </view>
+    </view>
+
+    <view class="section-block" id="anchor-itinerary" wx:if="{{isSummerCamp && activeTab === 'itinerary'}}">
+      <view class="section-head">
+        <view class="section-left">
+          <text class="section-title">师资</text>
+          <text class="section-en">MENTORS</text>
+        </view>
+        <text class="section-brand">YOUTH UNICORN</text>
+      </view>
+      <view class="section-card section-card--poster">
+        <image
+          class="poster-image poster-image--first"
+          mode="widthFix"
+          src="{{posterUrls['/assets/poster/youth-content-2.png']}}"
+          data-src="{{posterUrls['/assets/poster/youth-content-2.png']}}"
           binderror="onImageError"
         />
       </view>
@@ -583,16 +604,19 @@
   <view class="bottom-bar">
     <view class="bottom-bar-inner">
       <view class="consult-btn" bindtap="onOpenTeacherPopup">
-        <t-icon name="service" size="44rpx" color="#475569" />
+        <view class="consult-icon-wrap">
+          <t-icon name="service" size="40rpx" color="#315b85" />
+        </view>
         <text class="consult-btn-text">咨询老师</text>
       </view>
       <view class="apply-btn-wrap">
-        <t-button class="apply-btn" theme="primary" shape="round" size="large" bindtap="onApply">{{applyClosed ? '报名已结束' : '我要报名'}}</t-button>
+        <view class="apply-btn {{applyClosed ? 'apply-btn--disabled' : ''}}" bindtap="onApply">
+          <text class="apply-btn-label">{{applyClosed ? '报名已结束' : '我要报名'}}</text>
+        </view>
       </view>
     </view>
   </view>
 
-  <view class="home-indicator"></view>
 
   <view class="period-mask" wx:if="{{periodPopupVisible}}" bindtap="onClosePeriods">
     <view class="period-sheet" catchtap>

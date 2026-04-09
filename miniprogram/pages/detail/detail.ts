@@ -54,7 +54,8 @@ const summerTabs: DetailTab[] = [
   { key: 'content', label: '内容' },
   { key: 'notice', label: '须知' },
   { key: 'schedule', label: '课表' },
-  { key: 'service', label: '服务' }
+  { key: 'service', label: '服务' },
+  { key: 'itinerary', label: '师资介绍' }
 ]
 
 const weekendTabs: DetailTab[] = [
@@ -124,6 +125,37 @@ const getTabsByActivityId = (activityId: string) => {
     return weekendTabs
   }
   return isSummerActivity(activityId) ? summerTabs : winterTabs
+}
+
+const getCampSeriesLabel = (activityId: string) => {
+  if (isFutureActivity(activityId)) {
+    return 'FLAGSHIP CHALLENGE CAMP'
+  }
+  if (isSummerActivity(activityId)) {
+    return 'FLAGSHIP SUMMER CAMP'
+  }
+  if (isWeekendActivity(activityId)) {
+    return 'WEEKEND WORKSHOP'
+  }
+  return 'FLAGSHIP WINTER CAMP'
+}
+
+const getPriceNoteByActivityId = (activityId: string) => {
+  return isWeekendActivity(activityId) ? '/ 场' : '/ 人'
+}
+
+const splitPriceLabel = (priceLabel: string) => {
+  const match = priceLabel.match(/^([^\d]*)([\d.,]+)(.*)$/)
+  if (!match) {
+    return {
+      priceUnit: '',
+      priceValue: priceLabel
+    }
+  }
+  return {
+    priceUnit: match[1] || '',
+    priceValue: match[2] || priceLabel
+  }
 }
 
 const activityConfigMap: Record<string, ActivityConfig> = {
@@ -267,6 +299,7 @@ const getRouteActivityId = () => {
 const defaultConfig = getActivityConfig(defaultActivityId)
 const defaultTabs = getTabsByActivityId(defaultActivityId)
 const defaultWeekendMedia = getWeekendMediaByActivityId(defaultActivityId)
+const defaultPrice = splitPriceLabel(defaultConfig.priceLabel)
 
 Component({
   data: {
@@ -274,11 +307,15 @@ Component({
     posterUrls: getPosterFallbackUrls(),
     heroCoverPath: getHeroCoverPath(defaultActivityId),
     priceLabel: defaultConfig.priceLabel,
+    priceUnit: defaultPrice.priceUnit,
+    priceValue: defaultPrice.priceValue,
+    priceNote: getPriceNoteByActivityId(defaultActivityId),
     applyClosed: defaultConfig.applyClosed,
     detailTitle: defaultConfig.detailTitle,
     durationLabel: defaultConfig.durationLabel,
     ageLabel: defaultConfig.ageLabel,
     infoTip: defaultConfig.infoTip,
+    campSeriesLabel: getCampSeriesLabel(defaultActivityId),
     isFutureCamp: isFutureActivity(defaultActivityId),
     isSummerCamp: isSummerActivity(defaultActivityId),
     isWeekendCamp: isWeekendActivity(defaultActivityId),
@@ -321,6 +358,7 @@ Component({
       const routeActivityId = getRouteActivityId()
       const activityId = routeActivityId || this.data.activityId || defaultActivityId
       const config = getActivityConfig(activityId)
+      const priceParts = splitPriceLabel(config.priceLabel)
       const tabs = getTabsByActivityId(activityId)
       const weekendMedia = getWeekendMediaByActivityId(activityId)
       const activeTabFallback = tabs[0]?.key || 'theme'
@@ -336,11 +374,15 @@ Component({
       this.setData({
         activityId,
         priceLabel: config.priceLabel,
+        priceUnit: priceParts.priceUnit,
+        priceValue: priceParts.priceValue,
+        priceNote: getPriceNoteByActivityId(activityId),
         applyClosed: config.applyClosed,
         detailTitle: config.detailTitle,
         durationLabel: config.durationLabel,
         ageLabel: config.ageLabel,
         infoTip: config.infoTip,
+        campSeriesLabel: getCampSeriesLabel(activityId),
         isFutureCamp: isFutureActivity(activityId),
         isSummerCamp: isSummerActivity(activityId),
         isWeekendCamp: isWeekendActivity(activityId),
@@ -356,10 +398,7 @@ Component({
         heroImageUrl: config.heroImageUrl || ''
       })
     },
-    onImageError(event: WechatMiniprogram.ImageErrorEvent) {
-      const dataset = event.currentTarget.dataset as { src?: string }
-      console.warn('image-load-failed', dataset?.src || '', event.detail?.errMsg || '')
-    },
+    onImageError() {},
     loadPosterUrls() {
       loadPosterUrls().then((posterUrls) => {
         this.setData({ posterUrls })
